@@ -1,6 +1,6 @@
-#Welcome to Graphsphere!
+# Welcome to Graphsphere!
 
-##A tool made for graph creation, analysis and visualization.
+## A tool made for graph creation, analysis and visualization.
 
 
 In order to run this project you need:
