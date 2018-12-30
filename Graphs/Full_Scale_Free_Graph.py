@@ -69,7 +69,6 @@ class Full_Scale_Free_Graph:
 
         # Adding random mo initial nodes to the graph.
         # print("Initial nodes:")
-        # self.g.edge_indices.clear()
 
         for i in range(numOfInitialNodes):
 
@@ -147,9 +146,6 @@ class Full_Scale_Free_Graph:
         # ======================================
         graph_vector.clear()
 
-        # ==============================================================================================================
-        # ==> Simple reference for dictionary sorting, no need though... Things are sorted before printed. <==
-
         # Sort randomized graph order.
 
         # Method 1
@@ -157,12 +153,6 @@ class Full_Scale_Free_Graph:
         self.g.edge_indices = OrderedDict(sorted(self.g.edge_indices.items()))
         self.g.edge_indices = {str(c): v for c, v in self.g.edge_indices.items()}
 
-        # Method 2
-        # self.g.edge_indices = sorted(self.g.edge_indices.items(), key=lambda kv: kv[0])
-        # self.g.edge_indices = dict(self.g.edge_indices)
-        # ==============================================================================================================
-
-        # self.g.print_graph()
         self.g.get_number_of_edges()
 
         generator.generate(adjacency_type, self.g, thread)
