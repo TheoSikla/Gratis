@@ -115,7 +115,6 @@ class ScaleFreeGraphPA:
         # ======================================
 
         self.g.get_number_of_edges()
-        # self.g.print_graph()
 
         generator.generate(adjacency_type, self.g, thread)
 
@@ -215,7 +214,6 @@ class ScaleFreeGraphPA:
         # ======================================
 
         self.g.get_number_of_edges()
-        # self.g.print_graph()
 
         generator.generate(adjacency_type, self.g, thread)
 
