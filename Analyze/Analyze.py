@@ -15,7 +15,7 @@ class Analyze:
         global highest_node_indicator, first
         with open("Output_Files{}graph_analysis_matrix.txt".format(path_escape), "w") as f:
 
-            version = 'NGCE v3.0'
+            version = 'Graph Sphere v1.0'
 
             analysis = {
                         'Graph type: ': graph_type,
@@ -76,7 +76,7 @@ class Analyze:
         global highest_node_indicator, first
         with open("Output_Files{}graph_analysis_list.txt".format(path_escape), "w") as f:
 
-            version = 'NGCE v3.0'
+            version = 'Graph Sphere v1.0'
 
             analysis = {
                 'Graph type: ': graph_type,
