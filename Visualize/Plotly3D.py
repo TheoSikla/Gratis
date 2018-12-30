@@ -197,7 +197,6 @@ class Plotly3D:
         # Plotly Credentials
 
         try:
-            # O4qET8EAgPmPmoWMI8OL
 
             plotly.tools.set_credentials_file(username=username, api_key=api_key)
 
@@ -207,7 +206,7 @@ class Plotly3D:
 
         # ===================================
 
-        # Create a list with all the connections between the nodes with source file: matrix.txt
+        # Create a list with all the connections between the nodes with source file: list.txt
         try:
             with open("Output_Files{}list.txt".format(path_escape), buffering=20000) as f:
                 # Number of Vertices
