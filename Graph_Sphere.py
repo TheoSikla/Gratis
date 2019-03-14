@@ -1227,9 +1227,10 @@ class GraphAnalyzePage(Frame):
             browse_icon = PhotoImage(file='./images{}folder.png'.format(path_escape))
             self.browse_button = Button(self.parameters_frame, image=browse_icon, command=lambda: self.browse())
             self.browse_button.image = browse_icon
+            self.browse_button.config(bg='azure3', relief='sunken', borderwidth=0)
         except TclError:
             self.browse_button = Button(self.parameters_frame, text='Browse', command=lambda: self.browse())
-        self.browse_button.config(bg='azure3', relief='sunken', borderwidth=1)
+            self.browse_button.config(bg='azure3', relief='sunken', borderwidth=1)
 
         # ================================
 
