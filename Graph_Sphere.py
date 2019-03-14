@@ -70,7 +70,7 @@ class App(Tk):
 
         # Initiate the MainFrame
         # self.show_frame(MainPage, transform)
-        self.show_frame(GraphAnalyzePage, transform)
+        self.show_frame(MainPage, transform)
         # =================================
 
     def show_frame(self, cont, size):
