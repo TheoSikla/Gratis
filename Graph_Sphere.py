@@ -1224,7 +1224,7 @@ class GraphAnalyzePage(Frame):
 
         # Browse Button
         try:
-            browse_icon = PhotoImage(file='./image{}folder.png'.format(path_escape))
+            browse_icon = PhotoImage(file='./images{}folder.png'.format(path_escape))
             self.browse_button = Button(self.parameters_frame, image=browse_icon, command=lambda: self.browse())
             self.browse_button.image = browse_icon
         except TclError:
