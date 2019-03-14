@@ -39,7 +39,7 @@ def betweenness_centrality(shortest_paths, num_of_vertices, text_area, thread):
         nodes_betweenness[i] = node_betweenness
 
     for k, v in nodes_betweenness.items():
-        text_area.insert(END, "\nNode {} with betweenness centrality: {:.5f}".format(k, v))
+        text_area.insert(END, "\nNode v{} with betweenness centrality: {:.5f}".format(k+1, v))
         text_area.insert(END, "\n")
         text_area.see("end")
         sleep(.01)  # Do not remove this.

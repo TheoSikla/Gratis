@@ -152,14 +152,10 @@ class Analyze:
             f.close()
 
     @staticmethod
-    def analyze_pajek_file(text_area, path):
+    def pajek_file_to_dict(path):
         try:
-            text_area.delete('1.0', END)
-            text_area.update()
 
-            node_names = []
             nodes_n_edges = {}
-            counter = 1
             with open(path, "r") as f:
                 flag = False
                 # For node names
@@ -181,15 +177,8 @@ class Analyze:
                         flag = True
                         break
 
-                    elif re.search(r'"([A-Za-z0-9]*)"', line) is not None:
-                        nodes_n_edges[str(counter)] = 0
-                        counter += 1
-                        node_names.append(str((re.search(r'"([A-Za-z0-9]*)"', line).group(1))))
-
-                    elif re.search(r'(\b[0-9]*)', line) is not None:
-                        nodes_n_edges[str(counter)] = 0
-                        counter += 1
-                        node_names.append(str((re.search(r'(\b[0-9]*)', line).group(1))))
+                    elif re.search(r'\d+', line) is not None:
+                        nodes_n_edges[str(int(re.search(r'\d+', line).group()) - 1)] = []
 
                     else:
                         messagebox.showerror("Error", "Invalid pajek file format!")
@@ -204,38 +193,105 @@ class Analyze:
                         line = line.replace("\n", "").strip()
                         edge = re.findall(r'(\b[0-9]+)', line)
 
+                        nodes_n_edges[str(int(edge[0]) - 1)].append(str(int(edge[1]) - 1))
+                        nodes_n_edges[str(int(edge[1]) - 1)].append(str(int(edge[0]) - 1))
+
+                    except (IndexError, KeyError):
+                        messagebox.showerror("Error", "Invalid pajek file format!")
+                        break
+
+                return nodes_n_edges
+
+        except FileNotFoundError:
+            message = "File not found!"
+            messagebox.showerror("Error", message)
+
+    @staticmethod
+    def analyze_pajek_file(text_area, path):
+        if len(path) == 0:
+            messagebox.showerror("Error", "Please select a file to import!")
+            return False
+
+        try:
+            re.search(r'\.net$', path).group()
+        except AttributeError:
+            messagebox.showerror("Error", "Invalid file!")
+            return False
+
+        try:
+            text_area.delete('1.0', END)
+            text_area.update()
+
+            node_names = []
+            nodes_n_edges = {}
+            counter = 1
+            with open(path, "r") as f:
+                # For node names
+                for line in f:
+                    line = line.replace("\n", "").strip()
+
+                    if "*Vertices" in str(line):
+                        pass
+
+                    elif "*Edges" in str(line):
+                        break
+
+                    elif re.search(r'(\b[0-9]*)', line) is None and re.search(r'"([A-Za-z0-9]*)"', line) is None \
+                            or re.search(r'(\b[0-9]*)', line).group(1) == "":
+                        messagebox.showerror("Error", "Invalid pajek file format!")
+                        return False
+
+                    elif re.search(r'"([A-Za-z0-9]*)"', line) is not None:
+                        nodes_n_edges[str(counter)] = 0
+                        counter += 1
+                        node_names.append(str((re.search(r'"([A-Za-z0-9]*)"', line).group(1))))
+
+                    elif re.search(r'(\b[0-9]*)', line) is not None:
+                        nodes_n_edges[str(counter)] = 0
+                        counter += 1
+                        node_names.append(str((re.search(r'(\b[0-9]*)', line).group(1))))
+
+                    else:
+                        messagebox.showerror("Error", "Invalid pajek file format!")
+                        return False
+
+                # For edges
+                for line in f:
+                    try:
+                        line = line.replace("\n", "").strip()
+                        edge = re.findall(r'(\b[0-9]+)', line)
+
                         nodes_n_edges[str(edge[0])] += 1
                         nodes_n_edges[str(edge[1])] += 1
 
                     except (IndexError, KeyError):
                         messagebox.showerror("Error", "Invalid pajek file format!")
-                        flag = True
-                        break
+                        return False
 
-                if flag is True:
-                    pass
-                else:
-                    counter = 0
-                    max_edges = 0
-                    node_most_edges = None
-                    for k, v in nodes_n_edges.items():
-                        if max_edges < int(v):
-                            max_edges = int(v)
-                            node_most_edges = counter
-                        text = "Node {:<{}} has {:<{}} edges.\n".format(node_names[counter],
-                                                                        len(node_names[-1]), int(v), len(str(v)))
-                        text_area.insert(END, text)
-                        text_area.update()
-                        counter += 1
-
-                    text = "\nNode {} has the most edges ({})!".format(node_names[node_most_edges], max_edges)
-
+                counter = 0
+                max_edges = 0
+                node_most_edges = None
+                for k, v in nodes_n_edges.items():
+                    if max_edges < int(v):
+                        max_edges = int(v)
+                        node_most_edges = counter
+                    text = "Node {:<{}} has {:<{}} edges.\n".format(node_names[counter],
+                                                                    len(node_names[-1]), int(v), len(str(v)))
                     text_area.insert(END, text)
                     text_area.update()
+                    counter += 1
+
+                text = "\nNode {} has the most edges ({})!\n\n".format(node_names[node_most_edges], max_edges)
+
+                text_area.insert(END, text)
+                text_area.update()
+
+                return True
 
         except FileNotFoundError:
             message = "File not found!"
             messagebox.showerror("Error", message)
+            return False
 
 
 analyzer = Analyze()

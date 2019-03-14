@@ -17,7 +17,7 @@ import webbrowser
 from time import time
 
 
-class Graph_Sphere(Tk):
+class App(Tk):
 
     def __init__(self, *args, **kwargs):
         # Root initiate
@@ -31,7 +31,7 @@ class Graph_Sphere(Tk):
         # ================================
 
         # Root - Frame Configuration
-        self.title("Graph Sphere")
+        # self.title("Graph Sphere")
         self.config(bg="azure3")
         self['padx'] = 20
         self['pady'] = 20
@@ -69,7 +69,8 @@ class Graph_Sphere(Tk):
         # =================================
 
         # Initiate the MainFrame
-        self.show_frame(MainPage, transform)
+        # self.show_frame(MainPage, transform)
+        self.show_frame(GraphAnalyzePage, transform)
         # =================================
 
     def show_frame(self, cont, size):
@@ -125,7 +126,7 @@ class MainPage(Frame):
         # Main Label
         self.main_label = Label(self, bg="azure3", text="Welcome to Graph Sphere\n",
                                 font=("Arial", 20, "bold"))
-        self.main_label.grid(row=1, column=1, columnspan=3)
+        # self.main_label.grid(row=1, column=1, columnspan=3)
         # ================================
 
         # Generate area button
@@ -1158,7 +1159,7 @@ class GraphAnalyzePage(Frame):
         self.graphs.grid(row=3, column=1, sticky="n")
 
         # Parameter's Frame
-        self.parameters_frame = Frame(self, bg="azure3")
+        self.parameters_frame = ttk.Frame(self)
         self.parameters_frame.grid_propagate(0)
         self.parameters_frame.configure(height=205, width=430)
         self.parameters_frame.grid(row=4, column=1, padx=10, pady=10)
@@ -1222,7 +1223,10 @@ class GraphAnalyzePage(Frame):
         # ============================================
 
         # Browse Button
-        self.browse_button = ttk.Button(self.parameters_frame, text="Browse", command=lambda: self.browse())
+        browse_icon = PhotoImage(file='./images{}folder.png'.format(path_escape))
+        self.browse_button = Button(self.parameters_frame, image=browse_icon, command=lambda: self.browse())
+        self.browse_button.image = browse_icon
+        self.browse_button.config(bg='azure3', relief='sunken', borderwidth=0)
         # ================================
 
         # Other Button's Frame
@@ -1256,10 +1260,14 @@ class GraphAnalyzePage(Frame):
             self.closeness_centrality.grid_forget()
             self.betweenness_centrality.grid_forget()
 
-            self.classpath_label.grid(row=0, column=0, pady=10, sticky="e", padx=10)
-            self.classpath_entry_box.grid(row=0, column=1, sticky="w")
-            self.analyze_button.grid(row=1, column=0, sticky="w", ipady=10, ipadx=10, pady=10, padx=30)
-            self.browse_button.grid(row=1, column=1, sticky="w", padx=30, ipady=10, ipadx=10)
+            self.classpath_label.grid(row=0, column=0, pady=10)
+            self.classpath_entry_box.grid(row=0, column=0, columnspan=2, padx=(85, 0), pady=10)
+            self.browse_button.grid(row=0, column=0, columnspan=3, sticky='e', padx=(0, 20), pady=(0, 3))
+            self.metrics_label.grid(row=1, column=0, columnspan=2)
+            self.geodesic_path.grid(row=2, column=0, padx=30, pady=10, sticky="w")
+            self.closeness_centrality.grid(row=2, column=1, padx=30, pady=10, sticky="w")
+            self.betweenness_centrality.grid(row=3, column=0, padx=30, pady=10, sticky="w")
+            self.analyze_button.grid(row=4, column=0, sticky="w", ipady=10, ipadx=10, pady=10, padx=30)
 
         elif self.chosen_file_type.get() == "Last Generated Graph":
             self.classpath_label.grid_forget()
@@ -1441,7 +1449,18 @@ class GraphAnalyzePage(Frame):
                     converted_list.append((str(i), str(neighbor), 1))  # (From, To, Weight)
 
         f.close()
+
         return converted_list, Vertices
+
+    @staticmethod
+    def dict_list_to_tuple_list(dictionary):
+        converted_list = []
+
+        for k, v in dictionary.items():
+            for value in v:
+                converted_list.append((k, value, 1))  # (From, To, Weight)
+
+        return converted_list, len(dictionary)
 
     def tuple_list_to_dict_list(self):
         self.Edges_dict = {}
@@ -1486,6 +1505,7 @@ class GraphAnalyzePage(Frame):
                         try:
                             self.Edges, self.Vertices = self.list_file_to_tuple_list("Output_Files{}list.txt"
                                                                                      .format(path_escape))
+                            print(self.Edges)
 
                         except FileNotFoundError:
                             message = "Please make sure that you have generated a graph!"
@@ -1526,7 +1546,40 @@ class GraphAnalyzePage(Frame):
                 messagebox.showerror("Error!", message)
 
         elif self.chosen_file_type.get() == "Pajek file":
-            analyzer.analyze_pajek_file(self.text_area, self.classpath_result.get())
+            self.adjacency_type_selected.set("List")
+            if analyzer.analyze_pajek_file(self.text_area, self.classpath_result.get()):
+
+                if self.geodesic_path_selected.get() is True or self.closeness_centrality_selected.get() is True \
+                        or self.betweenness_centrality_selected.get() is True:
+
+                    dictionary = analyzer.pajek_file_to_dict(self.classpath_result.get())
+                    self.Edges, self.Vertices = self.dict_list_to_tuple_list(dictionary)
+
+                    if self.Edges is not None and self.Vertices is not None:
+
+                        if self.geodesic_path_selected.get() is True:
+                            self.geodesic_paths = self.calculate_geodesic_paths()
+
+                            if self.closeness_centrality_selected.get() is True:
+                                self.calculate_closeness_centrality(self.geodesic_paths)
+
+                            if self.betweenness_centrality_selected.get() is True:
+                                self.calculate_betweenness_centrality()
+
+                        elif self.closeness_centrality_selected.get() is True:
+                            self.geodesic_paths = self.calculate_geodesic_paths()
+                            self.calculate_closeness_centrality(self.geodesic_paths)
+
+                            if self.betweenness_centrality_selected.get() is True:
+                                self.calculate_betweenness_centrality()
+
+                        elif self.betweenness_centrality_selected.get() is True:
+                            self.calculate_betweenness_centrality()
+
+                        message = "\n[+] Finished last generated graph analysis!\n"
+                        self.text_area.insert(END, message)
+                        self.text_area.see("end")
+                        self.text_area.update()
 
         self.cancel_button.grid_forget()
         self.analyze_button.config(state=NORMAL)
@@ -1668,7 +1721,7 @@ class GraphVisualizePage(Frame):
 
         else:
             root2 = Toplevel()
-            creds_GUI = Login_Creds(root2)
+            creds_GUI = LoginCreds(root2)
             self.master.wait_window(root2)
 
             if creds_GUI.username_entry_result == "" or creds_GUI.api_key_entry_result == "":
@@ -1774,12 +1827,12 @@ class GraphVisualizePage(Frame):
 
     def Spawn_Custom_Popup(self, url):
         root3 = Toplevel()
-        custom_popup = Custom_PopUp(root3)
+        custom_popup = CustomPopUp(root3)
         custom_popup.Plotly_popup(url)
         self.master.wait_window(root3)
 
 
-class Login_Creds:
+class LoginCreds:
 
     def __init__(self, master):
         self.master = master
@@ -1882,7 +1935,6 @@ class Login_Creds:
             self.api_key_entry.delete(0, 'end')
             self.credential_spawn()
 
-
         else:
             self.username_entry_result = self.username_entry.get()
             self.api_key_entry_result = self.api_key_entry.get()
@@ -1954,7 +2006,7 @@ class Login_Creds:
         master.geometry("%dx%d+%d+%d" % (size + (x, y)))
 
 
-class Custom_PopUp:
+class CustomPopUp:
 
     def __init__(self, master):
         self.master = master
@@ -2035,7 +2087,7 @@ class Custom_PopUp:
 
 
 if __name__ == "__main__":
-    GUI = Graph_Sphere()
+    GUI = App()
     GUI.center()
     connection_handler = Connection()
     GUI.mainloop()
