@@ -173,8 +173,7 @@ class Plotly3D:
             fig = go.Figure(data=data, layout=layout)
 
             try:
-
-                self.link = py.iplot(fig, filename=output_filename).resource
+                self.link = py.plot(fig, filename=output_filename, auto_open=False)
 
                 return True
 
@@ -345,7 +344,7 @@ class Plotly3D:
 
             try:
 
-                self.link = py.iplot(fig, filename=output_filename).resource
+                self.link = py.plot(fig, filename=output_filename, auto_open=False)
 
                 return True
 
