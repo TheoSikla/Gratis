@@ -1,12 +1,17 @@
-# Welcome to Graphsphere!
+# Welcome to Gratis!
 
 ## A tool made for graph creation, analysis and visualization.
 
 
-In order to run this project you need:
-1) To download all the files and folders exactly how they are.
-2) You will need a python interpreter (Python 3.6 or more) and install all the possible missing packages
-   for example python-igraph etc.
+1. In order to run this project you need:
+* Python3 or above
 
-Note that this tool is and will be under development from now on, we appreciate and take into consideration every opinion
-and idea for code improvment or new features.
+2. To install all needed packages:
+- Linux based systems:
+1. '''
+apt install -y build-essential libxml2-dev libglpk-dev libgmp3-dev libblas-dev liblapack-dev libarpack2-dev python3-dev
+'''
+2. '''
+cd Gratis/
+python3 -m pip install requirements.txt
+'''

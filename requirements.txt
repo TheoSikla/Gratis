@@ -1,0 +1,4 @@
+matplotlib
+plotly
+cryptography
+python-igraph
