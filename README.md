@@ -16,6 +16,7 @@
   1.Download and install python3 and above from [https://www.python.org/](https://www.python.org/) (python3.6 is the safe choice)  
   2.Download the appropriate python-igraph module for your windows system with the appropriate python version you installed. (e.g. if you have python3.6 and windows 64-bit you will download the file `python_igraph‑0.7.1.post6‑cp36‑cp36m‑win_amd64.whl` from [https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-igraph](https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-igraph).  
   3.Install the python-igraph module with `python -m pip install <module_name.whl>`  
-  4.`cd Gratis\`  
-  5.`python -m pip install requirements.txt`  
-  6.`python Gratis.py`  
+  4.Clone or download zip and extract the project.  
+  5.`cd Gratis\`  
+  6.`python -m pip install requirements.txt`  
+  7.`python Gratis.py`  
