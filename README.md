@@ -18,5 +18,5 @@
   3.Install the python-igraph module with `python -m pip install <module_name.whl>`  
   4.Clone or download zip and extract the project.  
   5.`cd Gratis\`  
-  6.`python -m pip install requirements.txt`  
+  6.`python -m pip install -r requirements.txt`  
   7.`python Gratis.py`  
