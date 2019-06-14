@@ -6,8 +6,9 @@ import matplotlib.ticker
 from math import pow
 
 
-class Plot_2D:
+class Plot2D:
     """ Extracts the probabilities and creates a plot (Distribution plot) of the graph chosen by the UI. """
+
     def __init__(self):
         self.num_of_vertices = None
 
@@ -176,18 +177,18 @@ class Plot_2D:
             number_of_vertices = 100
 
         if len(str(connections[0])) == 1:
-            plt.xticks(range(0, Plot_2D.intRound(connections[0], 5) + 1, 1))
+            plt.xticks(range(0, Plot2D.intRound(connections[0], 5) + 1, 1))
         elif len(str(connections[0])) == 2:
             if connections[0] < 20:
-                plt.xticks(range(0, Plot_2D.intRound(connections[0], 5) + 1, 1))
+                plt.xticks(range(0, Plot2D.intRound(connections[0], 5) + 1, 1))
             else:
-                plt.xticks(range(0, Plot_2D.intRound(connections[0], 5) + 1, 5))
+                plt.xticks(range(0, Plot2D.intRound(connections[0], 5) + 1, 5))
         elif len(str(connections[0])) == 3:
-            plt.xticks(range(0, Plot_2D.intRound(connections[0], 5) + 1, 100))
+            plt.xticks(range(0, Plot2D.intRound(connections[0], 5) + 1, 100))
         elif len(str(connections[0])) == 4:
-            plt.xticks(range(0, Plot_2D.intRound(connections[0], 5) + 1, 1000))
+            plt.xticks(range(0, Plot2D.intRound(connections[0], 5) + 1, 1000))
         elif len(str(connections[0])) == 5:
-            plt.xticks(range(0, Plot_2D.intRound(connections[0], 5) + 1, 10000))
+            plt.xticks(range(0, Plot2D.intRound(connections[0], 5) + 1, 10000))
 
         if "Scale-Free" in graph_type:
             plt.xscale("log")
