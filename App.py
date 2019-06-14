@@ -1804,7 +1804,7 @@ class GraphVisualizePage(Frame):
     def Plot_2D(self):
         import Visualize.Plot_2D
 
-        plot = Visualize.Plot_2D.Plot_2D()
+        plot = Visualize.Plot_2D.Plot2D()
 
         if self.adjacency_type_selected.get() == "":
             message = "You must choose visualisation via matrix or list generated!"

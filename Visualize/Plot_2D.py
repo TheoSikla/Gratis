@@ -13,75 +13,59 @@ class Plot2D:
         self.num_of_vertices = None
 
     def graph_topology_matrix(self):
-        graph_topology = open("Output_Files{}Graph_topology.txt".format(path_escape), "w")
+        file_output = ''
+        with open(f"Output_Files{path_escape}Graph_topology.txt", "w") as graph_topology:
 
-        try:
-            with open("Output_Files{}matrix.txt".format(path_escape), buffering=20000) as f:
-                # Number of Vertices
-                first_row = f.readline()
-                counter = 0
-                for char in first_row:
-                    if char != "\n":
-                        counter += 1
+            try:
+                with open(f"Output_Files{path_escape}matrix.txt", buffering=20000) as f:
+                    # Number of Vertices
 
-                self.num_of_vertices = counter
-                f.seek(0)
+                    self.num_of_vertices = len(f.readline().replace("\n", ""))
+                    f.seek(0)
 
-                # ===============================================
-
-                i = 0
-                j = 0
-                for line in f:
-                    for char in line:
-                        if str(char) == '1' and i < j:
-                            graph_topology.write("{} {}\n".format(i, j))
-                        j += 1
+                    i = 0
                     j = 0
-                    i += 1
+                    for line in f:
+                        for char in line:
+                            if str(char) == '1' and i < j:
+                                file_output += f"{i} {j}\n"
+                            j += 1
+                        j = 0
+                        i += 1
 
-                f.close()
-                graph_topology.close()
-
-            return True
-        except FileNotFoundError:
-            graph_topology.close()
-            return False
+                graph_topology.write(file_output)
+                del file_output
+                return True
+            except FileNotFoundError:
+                return False
 
     def graph_topology_list(self):
-        graph_topology = open("Output_Files{}Graph_topology.txt".format(path_escape), "w")
+        file_output = ''
+        with open(f"Output_Files{path_escape}Graph_topology.txt", "w") as graph_topology:
 
-        try:
-            with open("Output_Files{}list.txt".format(path_escape), buffering=20000) as f:
-                # Number of Vertices
-                self.num_of_vertices = int(f.readlines()[-1].split(':')[0]) + 1
-                f.seek(0)
-                # ===============================================
+            try:
+                with open(f"Output_Files{path_escape}list.txt", buffering=20000) as f:
+                    # Number of Vertices
+                    self.num_of_vertices = int(f.readlines()[-1].split(':')[0]) + 1
+                    f.seek(0)
+                    # ===============================================
 
-                for i in range(self.num_of_vertices):
-                    node = f.readline().split(':')[1]
+                    for i in range(self.num_of_vertices):
+                        neighbors = re.findall(r'(\d*[^,\n])', f.readline().split(':')[1])
+                        if len(neighbors) > 0:
+                            for neighbor in neighbors:
+                                if i < int(neighbor):
+                                    file_output += f"{i} {neighbor}\n"
 
-                    neighbors = re.findall(r'(\d*[^,\n])', node)
-                    for neighbor in neighbors:
-                        try:
-                            if i != int(neighbor) and i < int(neighbor):
-                                graph_topology.write("{} {}\n".format(i, neighbor))
-                        except ValueError:
-                            pass
-
-                f.close()
-                graph_topology.close()
-
-            return True
-        except FileNotFoundError:
-            graph_topology.close()
-            return False
+                graph_topology.write(file_output)
+                del file_output
+                return True
+            except FileNotFoundError:
+                return False
 
     def extract_possibilities(self):
-        with open("Output_Files{}Graph_topology.txt".format(path_escape)) as f:
-            num_of_edges = {}
-
-            for i in range(self.num_of_vertices):
-                num_of_edges[i] = 0
+        with open(f"Output_Files{path_escape}Graph_topology.txt") as f:
+            num_of_edges = {i: 0 for i in range(self.num_of_vertices)}
 
             line = f.readline()
             while line:
@@ -90,7 +74,6 @@ class Plot2D:
                     num_of_edges[int(line[0])] += 1
                     num_of_edges[int(line[1])] += 1
                     line = f.readline()
-            f.close()
 
             # for key, value in num_of_edges.items():
             #     print("Node {} has {} edges.".format(key, value))
@@ -109,10 +92,10 @@ class Plot2D:
         # for key, value in edges_n_nodes.items():
         #     print("{} nodes has {} edges.".format(value, key))
 
-        with open("Output_Files{}2D_data.txt".format(path_escape), "w") as f:
+        with open(f"Output_Files{path_escape}2D_data.txt", "w") as f:
             for key, value in sorted(edges_n_nodes.items(), key=operator.itemgetter(0), reverse=True):
                 if value != 0:
-                    f.write("{} {}\n".format(key, value / self.num_of_vertices))
+                    f.write(f"{key} {value / self.num_of_vertices}\n")
 
             f.close()
 
@@ -122,7 +105,7 @@ class Plot2D:
 
     @staticmethod
     def plot_2d(graph_adjacency_type):
-        with open("Output_Files{}2D_data.txt".format(path_escape)) as f:
+        with open(f"Output_Files{path_escape}2D_data.txt") as f:
             connections = []
             probabilities = []
             graph_type = None
@@ -138,10 +121,10 @@ class Plot2D:
             f.close()
 
         if graph_adjacency_type == "Matrix":
-            f = open("Output_Files{}graph_analysis_matrix.txt".format(path_escape))
+            f = open(f"Output_Files{path_escape}graph_analysis_matrix.txt")
 
         elif graph_adjacency_type == "List":
-            f = open("Output_Files{}graph_analysis_list.txt".format(path_escape))
+            f = open(f"Output_Files{path_escape}graph_analysis_list.txt")
 
         try:
             line = f.readline().replace("\n", "")

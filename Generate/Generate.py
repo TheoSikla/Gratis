@@ -15,7 +15,6 @@ class Generate:
             for i in range(len(graph.edges)):
                 if thread.isStopped():
                     graph.reset_graph()
-                    f.close()
                     sys.exit(0)
 
                 for j in range(len(graph.edges)):
@@ -26,31 +25,29 @@ class Generate:
                 file_output += '\n'
             
         else:
-
             for vertex, neighbors in graph.neighbors.items():
                 if thread.isStopped():
                     graph.reset_graph()
-                    f.close()
                     sys.exit(0)
 
                 file_output += f"{vertex}:"
+                if len(neighbors) > 0:
+                    for node in graph.neighbors[vertex]:
+                        file_output += f"{node},"
 
-                for node in graph.neighbors[vertex]:
-                    file_output += f"{node},"
-                
-                file_output = file_output[:-1]
+                    file_output = file_output[:-1]
                 file_output += "\n"
         
         if adjacency_type == "Matrix":
 
-            with open("Output_Files{}matrix.txt".format(path_escape), "w") as f:
+            with open(f"Output_Files{path_escape}matrix.txt", "w") as f:
                 f.write(file_output)
-                f.close()
         else:
             
-            with open("Output_Files{}list.txt".format(path_escape), "w") as f:
+            with open(f"Output_Files{path_escape}list.txt", "w") as f:
                 f.write(file_output)
-                f.close()
+
+        del file_output
 
 
 generator = Generate()

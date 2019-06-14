@@ -2,83 +2,73 @@ import re
 from os_recon.define_os import path_escape
 
 
-class Pajek_Visualize:
+class PajekVisualize:
+    """ This class creates a .net file from either an adjacency matrix or an adjacency list. """
 
     @staticmethod
     def pajek_visualize_matrix():
-        pajek_file = open("Output_Files{}Visualized_Graph.net".format(path_escape), "w")
+        file_output = ''
+        with open(f"Output_Files{path_escape}Visualized_Graph.net", "w") as pajek_file:
 
-        try:
-            with open("Output_Files{}matrix.txt".format(path_escape), buffering=20000) as f:
-                # Number of Vertices
-                first_row = f.readline()
-                counter = 0
-                for char in first_row:
-                    if char != "\n":
-                        counter += 1
-                Vertices = counter
-                f.seek(0)
-                # ===============================================
+            try:
+                with open(f"Output_Files{path_escape}matrix.txt") as f:
+                    # Number of Vertices
 
-                pajek_file.write("*Vertices {}\n".format(Vertices))
-                for i in range(0, int(Vertices)):
-                    pajek_file.write('  {} "v{}"\n'.format(i + 1, i + 1))
+                    vertices = len(f.readline().replace("\n", ""))
+                    f.seek(0)
 
-                pajek_file.write("*Edges\n")
+                    file_output += f"*Vertices {vertices}\n"
+                    for i in range(0, int(vertices)):
+                        file_output += f'  {i + 1} "v{i + 1}"\n'
 
-                i = 1
-                j = 1
-                for line in f:
-                    for char in line:
-                        if str(char) == '1' and i < j:
-                            pajek_file.write("  {} {}\n".format(i, j))
-                        j += 1
+                    file_output += "*Edges\n"
+                    i = 1
                     j = 1
-                    i += 1
+                    for line in f:
+                        for char in line:
+                            if char == '1' and i < j:
+                                file_output += f"  {i} {j}\n"
+                            j += 1
+                        j = 1
+                        i += 1
 
-                f.close()
-                pajek_file.close()
-
-            return True
-        except FileNotFoundError:
-            pajek_file.close()
-            return False
+                pajek_file.write(file_output)
+                del file_output
+                return True
+            except FileNotFoundError:
+                return False
 
     @staticmethod
     def pajek_visualize_list():
-        pajek_file = open("Output_Files{}Visualized_Graph.net".format(path_escape), "w")
+        file_output = ''
+        with open(f"Output_Files{path_escape}Visualized_Graph.net", "w") as pajek_file:
 
-        try:
-            with open("Output_Files{}list.txt".format(path_escape), buffering=20000) as f:
-                # Number of Vertices
-                Vertices = int(f.readlines()[-1].split(':')[0]) + 1
-                f.seek(0)
-                # ===============================================
+            try:
+                with open(f"Output_Files{path_escape}list.txt", buffering=20000) as f:
+                    # Number of Vertices
+                    vertices = int(f.readlines()[-1].split(':')[0]) + 1
+                    f.seek(0)
 
-                pajek_file.write("*Vertices {}\n".format(Vertices))
-                for i in range(0, Vertices):
-                    pajek_file.write('  {} "v{}"\n'.format(i + 1, i + 1))
+                    # ===============================================
 
-                pajek_file.write("*Edges\n")
+                    file_output += f"*Vertices {vertices}\n"
+                    for i in range(0, vertices):
+                        file_output += f'  {i + 1} "v{i + 1}"\n'
 
-                for i in range(Vertices):
-                    node = f.readline().split(':')[1]
+                    file_output += "*Edges\n"
 
-                    neighbors = re.findall(r'(\d*[^,\n])', node)
-                    for neighbor in neighbors:
-                        try:
-                            if i != int(neighbor) and i < int(neighbor):
-                                pajek_file.write("  {} {}\n".format(i + 1, int(neighbor) + 1))
-                        except ValueError:
-                            pass
+                    for i in range(vertices):
+                        neighbors = re.findall(r'(\d*[^,\n])', f.readline().split(':')[1])
+                        if len(neighbors) > 0:
+                            for neighbor in neighbors:
+                                if i < int(neighbor):
+                                    file_output += f"  {i + 1} {int(neighbor) + 1}\n"
 
-                f.close()
-                pajek_file.close()
-
-            return True
-        except FileNotFoundError:
-            pajek_file.close()
-            return False
+                pajek_file.write(file_output)
+                del file_output
+                return True
+            except FileNotFoundError:
+                return False
 
 
-Visualizer = Pajek_Visualize()
+Visualizer = PajekVisualize()
