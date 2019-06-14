@@ -7,6 +7,8 @@ import re
 from os_recon.define_os import path_escape
 import igraph.vendor.texttable
 
+import sys
+
 
 class Plotly3D:
 
@@ -14,11 +16,9 @@ class Plotly3D:
         self.link = None
 
     def plotly_visualize_matrix(self, username, api_key, output_filename):
-
         global f
 
         # Plotly Credentials
-
         try:
 
             plotly.tools.set_credentials_file(username=username, api_key=api_key)
@@ -27,20 +27,12 @@ class Plotly3D:
             messagebox.showerror("Error!", e)
             return False
 
-        # ===================================
-
         # Create a list with all the connections between the nodes with source file: matrix.txt
         try:
-            with open("Output_Files{}matrix.txt".format(path_escape), buffering=20000) as f:
+            with open(f"Output_Files{path_escape}matrix.txt", buffering=20000) as f:
                 # Number of Vertices
-                first_row = f.readline()
-                counter = 0
-                for char in first_row:
-                    if char != "\n":
-                        counter += 1
-                Vertices = counter
+                vertices = len(f.readline().replace("\n", ""))
                 f.seek(0)
-                # ===============================================
 
                 i = 0
                 j = 0
@@ -53,14 +45,8 @@ class Plotly3D:
                     j = 0
                     i += 1
 
-                f.close()
-
             # Create a list with all node names
-            Nodes = []
-            for i in range(1, int(Vertices) + 1):
-                Nodes.append("v{}".format(i))
-
-            # ===================================
+            Nodes = [i for i in range(1, int(vertices) + 1)]
 
             # print(Edges)
             # print(Nodes)
@@ -71,11 +57,13 @@ class Plotly3D:
             # ===================================
 
             # Create the appropriate labels for the nodes
-            labels = []
-            # group=[]
-            for name in Nodes:
-                labels.append(name)
-                # group.append(node['group'])
+            # labels = []
+            # # group=[]
+            # for name in Nodes:
+            #     labels.append(name)
+            #     # group.append(node['group'])
+
+            labels = [name for name in Nodes]
 
             # ===================================
 
@@ -207,30 +195,23 @@ class Plotly3D:
 
         # Create a list with all the connections between the nodes with source file: list.txt
         try:
-            with open("Output_Files{}list.txt".format(path_escape), buffering=20000) as f:
+            with open(f"Output_Files{path_escape}list.txt", buffering=20000) as f:
                 # Number of Vertices
-                Vertices = int(f.readlines()[-1].split(':')[0]) + 1
+                vertices = int(f.readlines()[-1].split(':')[0]) + 1
                 f.seek(0)
                 # ===============================================
 
                 Edges = []
-                for i in range(Vertices):
+                for i in range(vertices):
                     node_neighbors = f.readline().split(':')
 
                     node = node_neighbors[0]
-                    neighbors = re.findall(r'[0-9]', node_neighbors[1])
+                    neighbors = re.findall(r'[\d]+', node_neighbors[1])
 
-                    for neighbor in neighbors:
-                        Edges.append((int(node), int(neighbor)))
-
-                f.close()
+                    Edges += [(int(node), int(neighbor)) for neighbor in neighbors]
 
             # Create a list with all node names
-            Nodes = []
-            for i in range(1, int(Vertices) + 1):
-                Nodes.append("v{}".format(i))
-
-            # ===================================
+            Nodes = [i for i in range(1, int(vertices) + 1)]
 
             # print(Edges)
             # print(Nodes)
@@ -241,11 +222,13 @@ class Plotly3D:
             # ===================================
 
             # Create the appropriate labels for the nodes
-            labels = []
-            # group=[]
-            for name in Nodes:
-                labels.append(name)
-                # group.append(node['group'])
+            # labels = []
+            # # group=[]
+            # for name in Nodes:
+            #     labels.append(name)
+            #     # group.append(node['group'])
+
+            labels = [name for name in Nodes]
 
             # ===================================
 
