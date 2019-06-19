@@ -834,14 +834,14 @@ class GraphGeneratePage(Frame):
                     else:
                         self.text_area.insert(END, message1)
                         self.text_area.update()
-                        from Graphs.Full_Scale_Free_Graph import Full_Scale_Free_Graph
+                        from Graphs.Full_Scale_Free_Graph import FullScaleFreeGraph
                         self.cancel_button.configure(state=NORMAL)
                         self.generate_button.config(state=DISABLED)
 
                         start = time()
 
-                        Full_Scale_Free_Graph = Full_Scale_Free_Graph()
-                        Full_Scale_Free_Graph.create_full_scale_free_graph(self.adjacency_type_selected.get(),
+                        FullScaleFreeGraph = FullScaleFreeGraph()
+                        FullScaleFreeGraph.create_full_scale_free_graph(self.adjacency_type_selected.get(),
                                                                            self.number_of_vertices_entry_result.get(),
                                                                            self.number_of_initial_nodes_result.get(),
                                                                            self.seed_result.get(), self.thread)
@@ -859,15 +859,15 @@ class GraphGeneratePage(Frame):
                 else:
                     self.text_area.insert(END, message1)
                     self.text_area.update()
-                    from Graphs.ER_Graph import ER_Graph
+                    from Graphs.ER_Graph import ErdosRenyiGraph
                     self.cancel_button.configure(state=NORMAL)
                     self.generate_button.config(state=DISABLED)
                     self.back_button.configure(state=DISABLED)
 
                     start = time()
 
-                    ER_Graph = ER_Graph()
-                    ER_Graph.create_er_graph(self.adjacency_type_selected.get(),
+                    ErdosRenyiGraph = ErdosRenyiGraph()
+                    ErdosRenyiGraph.create_er_graph(self.adjacency_type_selected.get(),
                                              self.number_of_vertices_entry_result.get(),
                                              float(self.probability_result.get()), self.seed_result.get(), self.thread)
 
@@ -915,15 +915,15 @@ class GraphGeneratePage(Frame):
                 self.text_area.insert(END, message1)
                 self.text_area.update()
 
-                from Graphs.ER_Graph import ER_Graph
+                from Graphs.ErdosRenyiGraph import ErdosRenyiGraph
                 self.cancel_button.configure(state=NORMAL)
                 self.generate_button.config(state=DISABLED)
                 self.back_button.configure(state=DISABLED)
 
                 start = time()
 
-                ER_Graph = ER_Graph()
-                ER_Graph.create_custom_er_graph(self.adjacency_type_selected.get(),
+                ErdosRenyiGraph = ErdosRenyiGraph()
+                ErdosRenyiGraph.create_custom_ErdosRenyiGraph(self.adjacency_type_selected.get(),
                                                 self.number_of_vertices_entry_result.get(),
                                                 self.number_of_edges_result.get(),
                                                 float(self.probability_result.get()),
@@ -1014,14 +1014,14 @@ class GraphGeneratePage(Frame):
                     else:
                         self.text_area.insert(END, message1)
                         self.text_area.update()
-                        from Graphs.Full_Scale_Free_Graph import Full_Scale_Free_Graph
+                        from Graphs.Full_Scale_Free_Graph import FullScaleFreeGraph
                         self.cancel_button.configure(state=NORMAL)
                         self.generate_button.config(state=DISABLED)
 
                         start = time()
 
-                        Full_Scale_Free_Graph = Full_Scale_Free_Graph()
-                        Full_Scale_Free_Graph.create_full_scale_free_graph(self.adjacency_type_selected.get(),
+                        FullScaleFreeGraph = FullScaleFreeGraph()
+                        FullScaleFreeGraph.create_full_scale_free_graph(self.adjacency_type_selected.get(),
                                                                            self.number_of_vertices_entry_result.get(),
                                                                            self.number_of_initial_nodes_result.get(),
                                                                            self.seed_result.get(), self.thread,

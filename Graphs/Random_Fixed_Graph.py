@@ -1,3 +1,4 @@
+from Support_Folders.camel_case_spliter import *
 from Generate.Generate import *
 from Analyze.Analyze import *
 import random
@@ -22,11 +23,11 @@ class RandomFixedGraph:
     def __init__(self):
         self.g = None
 
-    def create_random_fixed_graph(self, adjacency_type, numOfVertices, connectivity, seed, thread):
+    def create_random_fixed_graph(self, graph_respresentation_type, numOfVertices, connectivity, seed, thread):
 
         """ Commented lines of code serve debugging purposes. """
 
-        if adjacency_type == "Matrix":
+        if graph_respresentation_type == "Matrix":
             from Graphs.graph_adjacency_matrix import Graph, Vertex
         else:
             from Graphs.graph_adjacency_list import Graph, Vertex
@@ -126,11 +127,11 @@ class RandomFixedGraph:
 
         self.g.get_number_of_edges()
 
-        generator.generate(adjacency_type, self.g, thread)
+        generator.generate(graph_respresentation_type, self.g, thread)
 
-        if adjacency_type == "Matrix":
-            analyzer.analyze_matrix(self.g.edges, 'Random Fixed Graph', numOfVertices, connectivity,
-                                    None, None, None, None, seed)
+        if graph_respresentation_type == "Matrix":
+            analyzer.analyze_generated_graph(self.g.edges, graph_respresentation_type, camel_case_split(self.__class__.__name__), numOfVertices, connectivity,
+                                             None, None, None, None, seed)
         else:
-            analyzer.analyze_list(self.g.neighbors, 'Random Fixed Graph', numOfVertices, connectivity,
-                                  None, None, None, None, seed)
+            analyzer.analyze_generated_graph(self.g.neighbors, graph_respresentation_type, camel_case_split(self.__class__.__name__), numOfVertices, connectivity,
+                                             None, None, None, None, seed)

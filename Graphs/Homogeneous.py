@@ -13,8 +13,8 @@ class Homogeneous:
     def __init__(self):
         self.g = None
 
-    def create_homogeneous_graph(self, adjacency_type, numOfVertices, thread):
-        if adjacency_type == "Matrix":
+    def create_homogeneous_graph(self, graph_respresentation_type, numOfVertices, thread):
+        if graph_respresentation_type == "Matrix":
             from Graphs.graph_adjacency_matrix import Graph, Vertex
         else:
             from Graphs.graph_adjacency_list import Graph, Vertex
@@ -34,9 +34,9 @@ class Homogeneous:
                     if thread.isStopped():
                         sys.exit(0)
 
-        generator.generate(adjacency_type, self.g, thread)
+        generator.generate(graph_respresentation_type, self.g, thread)
 
-        if adjacency_type == "Matrix":
-            analyzer.analyze_matrix(self.g.edges, 'Homogeneous', numOfVertices)
+        if graph_respresentation_type == "Matrix":
+            analyzer.analyze_generated_graph(self.g.edges, graph_respresentation_type, self.__class__.__name__.replace("_", " "), numOfVertices)
         else:
-            analyzer.analyze_list(self.g.neighbors, 'Homogeneous', numOfVertices)
+            analyzer.analyze_generated_graph(self.g.neighbors, graph_respresentation_type, self.__class__.__name__.replace("_", " "), numOfVertices)

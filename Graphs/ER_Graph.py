@@ -1,10 +1,11 @@
+from Support_Folders.camel_case_spliter import *
 from Generate.Generate import *
 from Analyze.Analyze import *
 import random
 import sys
 
 
-class ER_Graph:
+class ErdosRenyiGraph:
     """
 
         This class creates a Erdős–Rényi Graph (ER Graph) and a Custom ER Graph with specified connection probability.
@@ -82,10 +83,11 @@ class ER_Graph:
         generator.generate(adjacency_type, self.g, thread)
 
         if adjacency_type == "Matrix":
-            analyzer.analyze_matrix(self.g.edges, 'ER Graph', numOfVertices, None, None, None, None, probability, seed)
+            analyzer.analyze_generated_graph(self.g.edges, adjacency_type, camel_case_split(self.__class__.__name__), numOfVertices, None,
+                                            None, None, None, probability, seed)
         else:
-            analyzer.analyze_list(self.g.neighbors, 'ER Graph', numOfVertices, None, None, None, None,
-                                  probability, seed)
+            analyzer.analyze_generated_graph(self.g.neighbors, adjacency_type, camel_case_split(self.__class__.__name__), numOfVertices, None,
+                                            None, None, None, probability, seed)
 
     def create_custom_er_graph(self, adjacency_type, numOfVertices, totalNumOfEdges, probability, seed, thread):
 

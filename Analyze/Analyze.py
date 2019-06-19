@@ -7,38 +7,50 @@ from os_recon.define_os import path_escape
 
 class Analyze:
 
-    @staticmethod
-    def analyze_matrix(adjacency_matrix, graph_type, numOfVertices, graphDegree=None, numOfEdges=None,
-                       numOfInitialNodes=None, initialConnectionsPerNode=None, probability=None, seed=None):
+    def __init__(self):
+        self.version = 'Gratis v1.0'
+
+
+    def analyze_generated_graph(self, graph_respresentation, graph_respresentation_type, graph_type, numOfVertices, graphDegree=None,
+                                numOfEdges=None, numOfInitialNodes=None, initialConnectionsPerNode=None, probability=None, seed=None):
+        
         """ Analyzes a generated graph. """
 
-        global highest_node_indicator, first
-        with open(f"Output_Files{path_escape}graph_analysis_matrix.txt", "w") as f:
-
-            version = 'Gratis v1.0'
+        with open(f'Output_Files{path_escape}graph_analysis_{graph_respresentation_type.lower()}.txt', "w") as f:
 
             analysis = {
-                        'Graph type: ': graph_type,
-                        'Number of Vertices: ': numOfVertices,
-                        'Graph Degree: ': graphDegree,
-                        'Number of maximum Edges: ': numOfEdges,
-                        'Number of Initial Nodes: ': numOfInitialNodes,
-                        'Initial Connections Per Node: ': initialConnectionsPerNode,
-                        'Probability: ': probability,
-                        'Seed: ': seed
+                        'Graph type': graph_type,
+                        'Number of Vertices': numOfVertices,
+                        'Graph Degree': graphDegree,
+                        'Number of maximum Edges': numOfEdges,
+                        'Number of Initial Nodes': numOfInitialNodes,
+                        'Initial Connections Per Node': initialConnectionsPerNode,
+                        'Probability': probability,
+                        'Seed': seed
                         }
 
-            # Matrix Analysis
+            # Graph Analysis
             connections = 0
             numOfEdgesPerNode = [0] * numOfVertices
 
-            for i in range(len(adjacency_matrix)):
-                for j in range(len(adjacency_matrix)):
-                    if i != j and i < j:
-                        if adjacency_matrix[i][j] >= 1:
-                            numOfEdgesPerNode[i] += 1
-                            numOfEdgesPerNode[j] += 1
-                            connections += 1
+            if graph_respresentation_type == "Matrix":
+                for i in range(len(graph_respresentation)):
+                    for j in range(len(graph_respresentation)):
+                        if i != j and i < j:
+                            if graph_respresentation[i][j] >= 1:
+                                numOfEdgesPerNode[i] += 1
+                                numOfEdgesPerNode[j] += 1
+                                connections += 1
+            else:
+                for vertex, neighbors in graph_respresentation.items():
+                    number_of_edges = 0
+                    for _ in neighbors:
+                        number_of_edges += 1
+
+                    numOfEdgesPerNode[int(vertex)] = number_of_edges
+                    connections += number_of_edges
+
+                connections = connections // 2
 
             first = 0
             highest_node_indicator = 0
@@ -47,17 +59,17 @@ class Analyze:
                     highest_node_indicator = i
                     first = numOfEdgesPerNode[i]
 
-            analysis['Total number of Edges: '] = connections
+            analysis['Total number of Edges'] = connections
 
             # ====================================================
             output = ''
-            output += "[*] Starting last generated Graph Analysis (Matrix)...\n"
+            output += f"[*] Starting last generated Graph Analysis ({graph_respresentation_type})...\n"
             output += "===================================\n"
-            output += f"Version: {version}\n"
+            output += f"Version: {self.version}\n"
 
             for k, v in analysis.items():
                 if v is not None:
-                    output += "{k}{v}\n"
+                    output += f"{k}: {v}\n"
 
             try:
                 output += f"Node {highest_node_indicator + 1} has the most edges ({first})\n"
@@ -71,72 +83,6 @@ class Analyze:
             f.write(output)
             del output
 
-
-    @staticmethod
-    def analyze_list(adjacency_list, graph_type, numOfVertices, graphDegree=None, numOfEdges=None,
-                     numOfInitialNodes=None, initialConnectionsPerNode=None, probability=None, seed=None):
-        """ Analyzes a generated graph. """
-
-        global highest_node_indicator, first
-        with open(f"Output_Files{path_escape}graph_analysis_list.txt", "w") as f:
-
-            version = 'Graph Sphere v1.0'
-
-            analysis = {
-                'Graph type: ': graph_type,
-                'Number of Vertices: ': numOfVertices,
-                'Graph Degree: ': graphDegree,
-                'Number of maximum Edges: ': numOfEdges,
-                'Number of Initial Nodes: ': numOfInitialNodes,
-                'Initial Connections Per Node: ': initialConnectionsPerNode,
-                'Probability: ': probability,
-                'Seed: ': seed
-            }
-
-            # Matrix Analysis
-            connections = 0
-
-            numOfEdgesPerNode = [0] * numOfVertices
-
-            for vertex, neighbors in adjacency_list.items():
-                number_of_edges = 0
-                for _ in neighbors:
-                    number_of_edges += 1
-
-                numOfEdgesPerNode[int(vertex)] = number_of_edges
-                connections += number_of_edges
-
-            connections = connections // 2
-
-            first = 0
-            highest_node_indicator = 0
-            for i in range(numOfVertices):
-                if numOfEdgesPerNode[i] > first:
-                    highest_node_indicator = i
-                    first = numOfEdgesPerNode[i]
-
-            analysis['Total number of Edges: '] = connections
-
-            # ====================================================
-            output = ''
-            output += "[*] Starting last generated Graph Analysis (List)...\n"
-            output += "===================================\n"
-            output += f"Version: {version}\n"
-
-            for k, v in analysis.items():
-                if v is not None:
-                    output += f"{k}{v}\n"
-
-            try:
-                output += f"Node {highest_node_indicator + 1} has the most edges ({first})\n"
-
-            except NameError:
-                pass
-
-            output += f"The date is: {datetime.datetime.today().strftime('%m/%d/%Y')}\n"
-            output += "===================================\n\n"
-            f.write(output)
-            del output
 
     @staticmethod
     def read_analysis(adjacency_type, text_area):
@@ -286,7 +232,7 @@ class Analyze:
                     text_area.update()
                     counter += 1
 
-                text = f"\nNode {node_names[node_most_edges]} has the most edges ({max_edges})!\n\n"=
+                text = f"\nNode {node_names[node_most_edges]} has the most edges ({max_edges})!\n\n"
 
                 text_area.insert(END, text)
                 text_area.update()

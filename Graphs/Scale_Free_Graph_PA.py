@@ -1,3 +1,4 @@
+from Support_Folders.camel_case_spliter import *
 from Generate.Generate import *
 from Analyze.Analyze import *
 import random
@@ -7,7 +8,7 @@ import sys
 class ScaleFreeGraphPA:
     """
         This class creates a Barabási-Albert Scale-Free or Custom Scale-Free graph who's nodes use
-        the Preferential Attachment mechanism.
+        the Preferential Attachment (PA) mechanism.
 
         |----------------------------------------------------------------------------------------------------|
         | The algorithm follows the following steps:                                                         |
@@ -119,10 +120,13 @@ class ScaleFreeGraphPA:
         generator.generate(adjacency_type, self.g, thread)
 
         if adjacency_type == "Matrix":
-            analyzer.analyze_matrix(self.g.edges, 'Scale-Free Graph', numOfVertices, None, None, None, None, None, seed)
+            analyzer.analyze_generated_graph(self.g.edges, adjacency_type,
+                                            f'{camel_case_split(self.__class__.__name__[:-2])} with Preferential Attachment', numOfVertices, None,
+                                            None, None, None, None, seed)
         else:
-            analyzer.analyze_list(self.g.neighbors, 'Scale-Free Graph', numOfVertices,
-                                  None, None, None, None, None, seed)
+            analyzer.analyze_generated_graph(self.g.neighbors, adjacency_type,
+                                             f'{camel_case_split(self.__class__.__name__[:-2])} with Preferential Attachment', numOfVertices, None,
+                                             None, None, None, None, seed)
 
     def create_custom_scale_free_graph(self, adjacency_type, numOfVertices, totalNumOfEdges, seed, thread):
 
@@ -218,8 +222,10 @@ class ScaleFreeGraphPA:
         generator.generate(adjacency_type, self.g, thread)
 
         if adjacency_type == "Matrix":
-            analyzer.analyze_matrix(self.g.edges, 'Custom Scale-Free Graph', numOfVertices, None, totalNumOfEdges,
-                                    None, None, None, seed)
+            analyzer.analyze_generated_graph(self.g.edges, adjacency_type,
+                                            f'Custom {camel_case_split(self.__class__.__name__[:-2])} with Preferential Attachment', numOfVertices, None,
+                                            totalNumOfEdges, None, None, None, seed)
         else:
-            analyzer.analyze_list(self.g.neighbors, 'Custom Scale-Free Graph', numOfVertices, None, totalNumOfEdges,
-                                  None, None, None, seed)
+            analyzer.analyze_generated_graph(self.g.neighbors, adjacency_type,
+                                            f'Custom {camel_case_split(self.__class__.__name__[:-2])} with Preferential Attachment', numOfVertices, None,
+                                            totalNumOfEdges, None, None, None, seed)

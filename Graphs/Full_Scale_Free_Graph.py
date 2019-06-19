@@ -1,3 +1,4 @@
+from Support_Folders.camel_case_spliter import *
 from Generate.Generate import *
 from Analyze.Analyze import *
 import random
@@ -5,7 +6,7 @@ from collections import OrderedDict
 import sys
 
 
-class Full_Scale_Free_Graph:
+class FullScaleFreeGraph:
     """
         This class creates a Barabási-Albert Full Scale-Free graph who's nodes use the preferential attachment and
         incremental growth mechanism.
@@ -158,8 +159,8 @@ class Full_Scale_Free_Graph:
         generator.generate(adjacency_type, self.g, thread)
 
         if adjacency_type == "Matrix":
-            analyzer.analyze_matrix(self.g.edges, 'Full Scale-Free Graph', numOfVertices, None, None, numOfInitialNodes,
-                                    numOfInitialEdges, None, seed)
+            analyzer.analyze_generated_graph(self.g.edges, adjacency_type, f'{"Custom " if numOfInitialEdges is not None else ""}{camel_case_split(self.__class__.__name__)}', numOfVertices, None,
+                                            None, numOfInitialEdges, None, None, seed)
         else:
-            analyzer.analyze_list(self.g.neighbors, 'Full Scale-Free Graph', numOfVertices, None, None,
-                                  numOfInitialNodes, numOfInitialEdges, None, seed)
+            analyzer.analyze_generated_graph(self.g.neighbors, adjacency_type, f'{"Custom " if numOfInitialEdges is not None else ""}{camel_case_split(self.__class__.__name__)}', numOfVertices, None,
+                                            None, numOfInitialEdges, None, None, seed)
