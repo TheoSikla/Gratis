@@ -13,9 +13,9 @@ class Analyze:
         """ Analyzes a generated graph. """
 
         global highest_node_indicator, first
-        with open("Output_Files{}graph_analysis_matrix.txt".format(path_escape), "w") as f:
+        with open(f"Output_Files{path_escape}graph_analysis_matrix.txt", "w") as f:
 
-            version = 'Graph Sphere v1.0'
+            version = 'Gratis v1.0'
 
             analysis = {
                         'Graph type: ': graph_type,
@@ -50,23 +50,27 @@ class Analyze:
             analysis['Total number of Edges: '] = connections
 
             # ====================================================
+            output = ''
+            output += "[*] Starting last generated Graph Analysis (Matrix)...\n"
+            output += "===================================\n"
+            output += f"Version: {version}\n"
 
-            f.write("[*] Starting last generated Graph Analysis (Matrix)...\n")
-            f.write("===================================\n")
-            f.write("Version: {}\n".format(version))
             for k, v in analysis.items():
                 if v is not None:
-                    f.write("{}{}\n".format(k, v))
+                    output += "{k}{v}\n"
 
             try:
-                f.write("Node {} has the most edges ({})\n".format(highest_node_indicator + 1, first))
+                output += f"Node {highest_node_indicator + 1} has the most edges ({first})\n"
 
             except NameError:
                 pass
 
-            f.write("The date is: {}\n".format(datetime.datetime.today().strftime('%m/%d/%Y')))
-            f.write("===================================\n\n")
-            f.close()
+            output += f"The date is: {datetime.datetime.today().strftime('%m/%d/%Y')}\n"
+            output += "===================================\n\n"
+            
+            f.write(output)
+            del output
+
 
     @staticmethod
     def analyze_list(adjacency_list, graph_type, numOfVertices, graphDegree=None, numOfEdges=None,
@@ -74,7 +78,7 @@ class Analyze:
         """ Analyzes a generated graph. """
 
         global highest_node_indicator, first
-        with open("Output_Files{}graph_analysis_list.txt".format(path_escape), "w") as f:
+        with open(f"Output_Files{path_escape}graph_analysis_list.txt", "w") as f:
 
             version = 'Graph Sphere v1.0'
 
@@ -114,23 +118,25 @@ class Analyze:
             analysis['Total number of Edges: '] = connections
 
             # ====================================================
+            output = ''
+            output += "[*] Starting last generated Graph Analysis (List)...\n"
+            output += "===================================\n"
+            output += f"Version: {version}\n"
 
-            f.write("[*] Starting last generated Graph Analysis (List)...\n")
-            f.write("===================================\n")
-            f.write("Version: {}\n".format(version))
             for k, v in analysis.items():
                 if v is not None:
-                    f.write("{}{}\n".format(k, v))
+                    output += f"{k}{v}\n"
 
             try:
-                f.write("Node {} has the most edges ({})\n".format(highest_node_indicator + 1, first))
+                output += f"Node {highest_node_indicator + 1} has the most edges ({first})\n"
 
             except NameError:
                 pass
 
-            f.write("The date is: {}\n".format(datetime.datetime.today().strftime('%m/%d/%Y')))
-            f.write("===================================\n\n")
-            f.close()
+            output += f"The date is: {datetime.datetime.today().strftime('%m/%d/%Y')}\n"
+            output += "===================================\n\n"
+            f.write(output)
+            del output
 
     @staticmethod
     def read_analysis(adjacency_type, text_area):
@@ -139,17 +145,16 @@ class Analyze:
         text_area.update()
 
         if adjacency_type == "Matrix":
-            with open("Output_Files{}graph_analysis_matrix.txt".format(path_escape), "r") as f:
+            with open(f"Output_Files{path_escape}graph_analysis_matrix.txt", "r") as f:
                 for line in f:
                     text_area.insert(END, line)
                 text_area.update()
-            f.close()
+
         elif adjacency_type == "List":
-            with open("Output_Files{}graph_analysis_list.txt".format(path_escape), "r") as f:
+            with open(f"Output_Files{path_escape}graph_analysis_list.txt", "r") as f:
                 for line in f:
                     text_area.insert(END, line)
                 text_area.update()
-            f.close()
 
     @staticmethod
     def pajek_file_to_dict(path):
@@ -281,7 +286,7 @@ class Analyze:
                     text_area.update()
                     counter += 1
 
-                text = "\nNode {} has the most edges ({})!\n\n".format(node_names[node_most_edges], max_edges)
+                text = f"\nNode {node_names[node_most_edges]} has the most edges ({max_edges})!\n\n"=
 
                 text_area.insert(END, text)
                 text_area.update()
