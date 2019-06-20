@@ -112,8 +112,8 @@ class FullScaleFreeGraph:
                 break
             # ======================================
 
-        #             print("Connected node {} ({}) edges with node {} ({}) edges with probability 1.0"
-        #                   .format(int(v)+1, numOfEdges[int(v)], int(b)+1, numOfEdges[int(b)]))
+        #         print(f"""Connected node {int(v) + 1} ({numOfEdges[int(v)]}) edges with """
+        #                 f"""node {int(b) + 1} ({numOfEdges[int(b)]}) edges with probability 1.0""")
         # print("Finished initial nodes.")
 
         # ======================================
@@ -140,9 +140,8 @@ class FullScaleFreeGraph:
                         numOfEdges[int(v)] += 1
                         numOfConnectedEdges += 1
 
-                        # print("Connected node {} ({}) edges with node {} ({}) edges with probability {}"
-                        #       .format(int(random_node)+1, numOfEdges[int(random_node)],
-                        #               int(v)+1, numOfEdges[int(v)], P))
+                        # print(f"""Connected node {int(random_node) + 1} ({numOfEdges[int(random_node)]}) edges with """
+                        #       f"""node {int(v) + 1} ({numOfEdges[int(v)]}) edges with probability {P}""")
 
         # ======================================
         graph_vector.clear()
