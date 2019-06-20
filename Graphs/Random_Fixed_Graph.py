@@ -51,7 +51,7 @@ class RandomFixedGraph:
 
             if v in graph_vector:
 
-                # print("Connecting node {} with others...".format(int(v)))
+                # print(f"Connecting node {int(v)} with others...")
 
                 while numOfEdges[int(v)] < connectivity and len(graph_vector) != 0:
 
@@ -66,13 +66,13 @@ class RandomFixedGraph:
 
                     if numOfEdges[int(random_node)] >= connectivity:
                         del graph_vector[random_node]
-                        # print("Removed node {} from play.".format(int(random_node)))
+                        # print(f"Removed node {int(random_node)} from play.")
                         # print(graph_vector)
 
                     if numOfEdges[int(v)] >= connectivity:
                         try:
                             del graph_vector[v]
-                            # print("Removed node {} from play.".format(int(v) + 1))
+                            # print(f"Removed node {int(v) + 1} from play.")
                             # print(graph_vector)
 
                         except KeyError:
@@ -85,13 +85,13 @@ class RandomFixedGraph:
                         numOfEdges[int(v)] += 1
                         numOfEdges[int(random_node)] += 1
 
-                        # print("Connected node {} ({}) edges with node {} ({}) edges."
-                        #       .format(int(v), numOfEdges[int(v)], int(random_node), numOfEdges[int(random_node)]))
+                        # print(f"""Connected node {int(v)} ({numOfEdges[int(v)]}) """
+                        #       f"""edges with node {int(random_node)} ({numOfEdges[int(random_node)]}) edges.""")
 
                         if numOfEdges[int(v)] >= connectivity:
                             try:
                                 del graph_vector[v]
-                                # print("Removed node {} from play.".format(int(v)))
+                                # print(f"Removed node {int(v)} from play.")
                                 # print(graph_vector)
 
                             except KeyError:
@@ -99,7 +99,7 @@ class RandomFixedGraph:
 
                         if numOfEdges[int(random_node)] >= connectivity:
                             del graph_vector[random_node]
-                            # print("Removed node {} from play.".format(int(random_node)))
+                            # print(f"Removed node {int(random_node)} from play.")
                             # print(graph_vector)
 
                     elif len(graph_vector) == 1:
@@ -120,10 +120,10 @@ class RandomFixedGraph:
                         numOfEdges[int(v)] += 1
                         numOfEdges[int(random_node)] += 1
 
-                        print("Connected node {} ({}) edges with node {} ({}) edges."
-                              .format(int(v), numOfEdges[int(v)], int(random_node), numOfEdges[int(random_node)]))
+        #                 print(f"""Connected node {int(v)} ({numOfEdges[int(v)]}) edges with """
+        #                       f"""node {int(random_node)} ({numOfEdges[int(random_node)]}) edges.""")
 
-        print()
+        # print()
 
         self.g.get_number_of_edges()
 
