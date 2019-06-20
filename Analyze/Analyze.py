@@ -90,17 +90,11 @@ class Analyze:
         text_area.delete('1.0', END)
         text_area.update()
 
-        if adjacency_type == "Matrix":
-            with open(f"Output_Files{path_escape}graph_analysis_matrix.txt", "r") as f:
+        with open(f"Output_Files{path_escape}graph_analysis_{adjacency_type.lower()}.txt", "r") as f:
                 for line in f:
                     text_area.insert(END, line)
                 text_area.update()
 
-        elif adjacency_type == "List":
-            with open(f"Output_Files{path_escape}graph_analysis_list.txt", "r") as f:
-                for line in f:
-                    text_area.insert(END, line)
-                text_area.update()
 
     @staticmethod
     def pajek_file_to_dict(path):
