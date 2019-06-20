@@ -99,7 +99,6 @@ class Analyze:
     @staticmethod
     def pajek_file_to_dict(path):
         try:
-
             nodes_n_edges = {}
             with open(path, "r") as f:
                 flag = False
@@ -220,8 +219,9 @@ class Analyze:
                     if max_edges < int(v):
                         max_edges = int(v)
                         node_most_edges = counter
-                    text = "Node {:<{}} has {:<{}} edges.\n".format(node_names[counter],
-                                                                    len(node_names[-1]), int(v), len(str(v)))
+
+                    text = f"Node {node_names[counter]:<{len(node_names[-1])}} has {int(v):<{len(str(v))}} edges.\n"
+                    
                     text_area.insert(END, text)
                     text_area.update()
                     counter += 1
