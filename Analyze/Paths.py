@@ -27,8 +27,7 @@ def find_all_paths(graph, start, end, thread, path=None):
     for node in graph[start]:
         if node not in path:
             newpaths = find_all_paths(graph, node, end, thread, path)
-            for newpath in newpaths:
-                paths.append(newpath)
+            paths += [newpath for newpath in newpaths]
     return paths
 
 
