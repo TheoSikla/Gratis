@@ -21,13 +21,12 @@ def closeness_centrality(Vertices, geodesic_paths, text_area, thread):
 
         node_avg_distances[i] = avg_distance
 
-        text_area.insert(END, "\nAverage distance of node v{} to all others is: {:.5}"
-                              .format(i + 1, float(avg_distance)))
+        text_area.insert(END, f"\nAverage distance of node v{i + 1} to all others is: {float(avg_distance):.5}")
         text_area.insert(END, "\n")
         text_area.see("end")
         sleep(.01)  # Do not remove this.
 
-        # print("Average distance of node v{} to all others is: {}".format(i+1, avg_distance))
+        # print(f"Average distance of node v{i + 1} to all others is: {avg_distance}")
 
         if maximum < node_avg_distances[i] not in [0, 1]:
             maximum = node_avg_distances[i]
@@ -35,8 +34,7 @@ def closeness_centrality(Vertices, geodesic_paths, text_area, thread):
         else:
             pass
 
-    message = "\nGraph Centrality: Node v{} with maximum average distance: {:.5}\n".format(maximum_node + 1,
-                                                                                           float(maximum))
+    message = f"\nGraph Centrality: Node v{maximum_node + 1} with maximum average distance: {float(maximum):.5}\n"
     text_area.insert(END, message)
     text_area.see("end")
     sleep(.01)  # Do not remove this.

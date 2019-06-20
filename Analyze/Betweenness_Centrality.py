@@ -43,7 +43,7 @@ def betweenness_centrality(shortest_paths, num_of_vertices, text_area, thread):
         text_area.see("end")
         sleep(.01)  # Do not remove this.
 
-        # print("Node {} with betweenness centrality: {}".format(k, v))
+        # print(f"Node {k} with betweenness centrality: {v}")
 
     message = "\n[+] Finished Betweenness Centrality analysis.\n"
     text_area.insert(END, message)

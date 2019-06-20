@@ -1510,7 +1510,6 @@ class GraphAnalyzePage(Frame):
                         try:
                             self.Edges, self.Vertices = self.list_file_to_tuple_list("Output_Files{}list.txt"
                                                                                      .format(path_escape))
-                            print(self.Edges)
 
                         except FileNotFoundError:
                             message = "Please make sure that you have generated a graph!"
