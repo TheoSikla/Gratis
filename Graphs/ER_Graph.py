@@ -188,8 +188,8 @@ class ErdosRenyiGraph:
         generator.generate(adjacency_type, self.g, thread)
 
         if adjacency_type == "Matrix":
-            analyzer.analyze_matrix(self.g.edges, 'Custom ER Graph', numOfVertices, None, totalNumOfEdges, None, None,
-                                    probability, seed)
+            analyzer.analyze_generated_graph(self.g.edges, adjacency_type, f'Custom {camel_case_split(self.__class__.__name__)}', numOfVertices, None,
+                                            totalNumOfEdges, None, None, probability, seed)
         else:
-            analyzer.analyze_list(self.g.neighbors, 'Custom ER Graph', numOfVertices, None, totalNumOfEdges, None, None,
-                                  probability, seed)
+            analyzer.analyze_generated_graph(self.g.neighbors, adjacency_type, f'Custom {camel_case_split(self.__class__.__name__)}', numOfVertices, None,
+                                            totalNumOfEdges, None, None, probability, seed)

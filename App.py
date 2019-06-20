@@ -915,7 +915,7 @@ class GraphGeneratePage(Frame):
                 self.text_area.insert(END, message1)
                 self.text_area.update()
 
-                from Graphs.ErdosRenyiGraph import ErdosRenyiGraph
+                from Graphs.ER_Graph import ErdosRenyiGraph
                 self.cancel_button.configure(state=NORMAL)
                 self.generate_button.config(state=DISABLED)
                 self.back_button.configure(state=DISABLED)
@@ -923,7 +923,7 @@ class GraphGeneratePage(Frame):
                 start = time()
 
                 ErdosRenyiGraph = ErdosRenyiGraph()
-                ErdosRenyiGraph.create_custom_ErdosRenyiGraph(self.adjacency_type_selected.get(),
+                ErdosRenyiGraph.create_custom_er_graph(self.adjacency_type_selected.get(),
                                                 self.number_of_vertices_entry_result.get(),
                                                 self.number_of_edges_result.get(),
                                                 float(self.probability_result.get()),

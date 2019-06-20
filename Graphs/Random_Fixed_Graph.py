@@ -120,10 +120,10 @@ class RandomFixedGraph:
                         numOfEdges[int(v)] += 1
                         numOfEdges[int(random_node)] += 1
 
-                        # print("Connected node {} ({}) edges with node {} ({}) edges."
-                        #       .format(int(v), numOfEdges[int(v)], int(random_node), numOfEdges[int(random_node)]))
+                        print("Connected node {} ({}) edges with node {} ({}) edges."
+                              .format(int(v), numOfEdges[int(v)], int(random_node), numOfEdges[int(random_node)]))
 
-        # print()
+        print()
 
         self.g.get_number_of_edges()
 
