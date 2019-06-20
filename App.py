@@ -1477,7 +1477,7 @@ class GraphAnalyzePage(Frame):
             self.Edges_dict[str(tup[0])].append(str(tup[1]))
 
     def browse(self):
-        filename = filedialog.askopenfilename(initialdir="/", title="Select file", filetypes=(("net files", "*.net"),
+        filename = filedialog.askopenfilename(initialdir=".", title="Select file", filetypes=(("net files", "*.net"),
                                                                                               ("all files", "*.*")))
         self.classpath_result.set(filename)
 
