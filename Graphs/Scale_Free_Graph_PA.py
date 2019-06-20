@@ -75,9 +75,8 @@ class ScaleFreeGraphPA:
         del graph_vector[random_node2]
 
         print("Initial connection: ")
-        print("Connected node {} ({}) edges with node {} ({}) edges.\n"
-              .format(int(random_node1) + 1, numOfEdges[int(random_node1)],
-                      int(random_node2) + 1, numOfEdges[int(random_node2)]))
+        print(f"""Connected node {int(random_node1) + 1} ({numOfEdges[int(random_node1)]}) edges with """
+              f"""node {int(random_node2) + 1} ({numOfEdges[int(random_node2)]}) edges.\n""")
 
         # ======================================
 
@@ -89,7 +88,7 @@ class ScaleFreeGraphPA:
 
             random_node3 = random.choice(list(graph_vector.keys()))
 
-            # print("Connecting node {} with others...".format(int(random_node3) + 1))
+            # print(f"Connecting node {int(random_node3) + 1} with others...")
 
             for j in range(numOfVertices):
 
@@ -106,9 +105,8 @@ class ScaleFreeGraphPA:
                         numOfEdges[j] += 1
                         numOfConnectedEdges += 1
 
-            #         print("Connected node {} ({}) edges with node {} ({}) edges with probability {}"
-            #               .format(int(random_node3) + 1, numOfEdges[int(random_node3)],
-            #                       j + 1, numOfEdges[j], P))
+            #         print(f"""Connected node {int(random_node3) + 1} ({numOfEdges[int(random_node3)]}) edges with """
+            #               f"""node {j + 1} ({numOfEdges[j]}) edges with probability {P}""")
             # print()
 
             del graph_vector[random_node3]
@@ -176,9 +174,8 @@ class ScaleFreeGraphPA:
         del graph_vector[random_node2]
 
         print("Initial connection: ")
-        print("Connected node {} ({}) edges with node {} ({}) edges.\n"
-              .format(int(random_node1) + 1, numOfEdges[int(random_node1)],
-                      int(random_node2) + 1, numOfEdges[int(random_node2)]))
+        print(f"""Connected node {int(random_node1) + 1} ({numOfEdges[int(random_node1)]}) edges with """
+              f"""node {int(random_node2) + 1} ({numOfEdges[int(random_node2)]}) edges.\n""")
 
         # ======================================
 
@@ -190,7 +187,7 @@ class ScaleFreeGraphPA:
 
             random_node3 = random.choice(list(graph_vector.keys()))
 
-            # print("Connecting node {} with others...".format(int(random_node3) + 1))
+            # print(f"Connecting node {int(random_node3) + 1} with others...")
 
             for j in range(numOfVertices):
 
@@ -208,9 +205,8 @@ class ScaleFreeGraphPA:
 
                         numOfConnectedEdges += 1
 
-            #         print("Connected node {} ({}) edges with node {} ({}) edges with probability {}"
-            #               .format(int(random_node3) + 1, numOfEdges[int(random_node3)],
-            #                       j + 1, numOfEdges[j], P))
+            #         print(f"""Connected node {int(random_node3) + 1} ({numOfEdges[int(random_node3)]}) edges with """
+            #               f"""node {j + 1} ({numOfEdges[j]}) edges with probability {P}""")
             # print()
 
             del graph_vector[random_node3]

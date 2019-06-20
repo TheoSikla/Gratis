@@ -73,9 +73,8 @@ class ErdosRenyiGraph:
                         numOfEdges[newNode] += 1
                         numOfEdges[adjacency_vertex] += 1
 
-        #                 print("Connected node {} ({}) edges with node {} ({}) edges with probability {} > {}"
-        #                       .format(newNode, numOfEdges[newNode], adjacency_vertex, numOfEdges[adjacency_vertex],
-        #                               probability, Per))
+        #                 print(f"""Connected node {newNode} ({numOfEdges[newNode]}) edges with """
+        #                       f"""node {adjacency_vertex} ({numOfEdges[adjacency_vertex]}) edges with probability {probability} > {Per}""")
         # print()
 
         self.g.get_number_of_edges()
@@ -149,16 +148,15 @@ class ErdosRenyiGraph:
 
                 numOfConnectedEdges += 1
 
-                # print("Connected node {} ({}) edges with node {} ({}) edges with probability {} > {}"
-                #       .format(newNode, numOfEdges[newNode], adjacency_vertex, numOfEdges[adjacency_vertex],
-                #               probability, Per))
-                #
-                # print("Number of connected edges {}".format(numOfConnectedEdges))
+                # print(f"""Connected node {newNode} ({numOfEdges[newNode]}) edges with """
+                #       f"""node {adjacency_vertex} ({numOfEdges[adjacency_vertex]}) edges with probability {probability} > {Per}""")
+                
+                # print(f"Number of connected edges {numOfConnectedEdges}")
 
             if numOfEdges[newNode] >= numOfVertices - 1:
                 try:
                     del graph_vector[str(newNode)]
-                    # print("Removed node {} from play.".format(newNode))
+                    # print(f"Removed node {newNode} from play.")
                     # print(graph_vector)
 
                 except KeyError:
@@ -167,7 +165,7 @@ class ErdosRenyiGraph:
             elif numOfEdges[adjacency_vertex] >= numOfVertices - 1:
                 try:
                     del graph_vector[str(adjacency_vertex)]
-                    # print("Removed node {} from play.".format(adjacency_vertex))
+                    # print(f"Removed node {adjacency_vertex} from play.")
                     # print(graph_vector)
 
                 except KeyError:
@@ -176,7 +174,7 @@ class ErdosRenyiGraph:
             elif len(graph_vector) == 1:
                 last_node = random.choice(list(graph_vector.keys()))
                 del graph_vector[last_node]
-                # print("Removed node {} from play.".format(adjacency_vertex))
+                # print(f"Removed node {adjacency_vertex} from play.")
                 # print(graph_vector)
                 # print("Terminating...")
                 break
