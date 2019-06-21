@@ -1945,10 +1945,10 @@ class LoginCreds:
             self.filename_entry_result = self.filename_entry.get()
 
             if self.remember_me_variable.get():
-                connection_handler.Insert(self.username_entry_result, self.api_key_entry_result)
+                user_connection_handler.create(self.username_entry_result, self.api_key_entry_result)
 
             if self.forget_credentials_variable.get():
-                connection_handler.Delete()
+                user_connection_handler.delete()
 
             self.username_entry.delete(0, 'end')
             self.api_key_entry.delete(0, 'end')
@@ -1956,17 +1956,17 @@ class LoginCreds:
             self.master.destroy()
 
             if self.remember_me_variable.get():
-                connection_handler.Insert(self.username_entry_result, self.api_key_entry_result)
+                user_connection_handler.create(self.username_entry_result, self.api_key_entry_result)
 
     def x_button(self):
         self.username_entry_result = self.username_entry.get()
         self.api_key_entry_result = self.api_key_entry.get()
 
         if self.remember_me_variable.get() and self.username_entry.get() != "" and self.api_key_entry.get() != "":
-            connection_handler.Insert(self.username_entry_result, self.api_key_entry_result)
+            user_connection_handler.create(self.username_entry_result, self.api_key_entry_result)
 
         if self.forget_credentials_variable.get():
-            connection_handler.Delete()
+            user_connection_handler.delete()
 
         self.username_entry.delete(0, 'end')
         self.api_key_entry.delete(0, 'end')
@@ -1977,8 +1977,8 @@ class LoginCreds:
         self.master.destroy()
 
     def credential_spawn(self):
-        credentials = connection_handler.Get_creds()
-        if connection_handler.Db_check():
+        credentials = user_connection_handler.get_credentials()
+        if user_connection_handler.check_user():
             self.username_entry.insert(END, credentials[0])
             self.api_key_entry.insert(END, credentials[1])
             return True
@@ -2093,5 +2093,10 @@ class CustomPopUp:
 if __name__ == "__main__":
     GUI = App()
     GUI.center()
-    connection_handler = Connection()
+    user_connection_handler = User()
+    graph_connection_handler = Graph()
     GUI.mainloop()
+    user_connection_handler.close()
+    graph_connection_handler.close()
+
+    

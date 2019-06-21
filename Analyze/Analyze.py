@@ -3,6 +3,7 @@ from tkinter import END
 from tkinter import messagebox
 import re
 from os_recon.define_os import path_escape
+from sqlite3_db.Database import Graph
 
 
 class Analyze:
@@ -19,12 +20,13 @@ class Analyze:
         with open(f'Output_Files{path_escape}graph_analysis_{graph_respresentation_type.lower()}.txt', "w") as f:
 
             analysis = {
-                        'Graph type': graph_type,
-                        'Number of Vertices': numOfVertices,
-                        'Graph Degree': graphDegree,
-                        'Number of maximum Edges': numOfEdges,
-                        'Number of Initial Nodes': numOfInitialNodes,
-                        'Initial Connections Per Node': initialConnectionsPerNode,
+                        'Graph_Respresentation_Type': graph_respresentation_type,
+                        'Graph_Type': graph_type,
+                        'Number_Of_Vertices': numOfVertices,
+                        'Graph_Degree': graphDegree,
+                        'Number_Of_Maximum_Edges': numOfEdges,
+                        'Number_Of_Initial_Nodes': numOfInitialNodes,
+                        'Initial_Connections_Per_Node': initialConnectionsPerNode,
                         'Probability': probability,
                         'Seed': seed
                         }
@@ -59,17 +61,17 @@ class Analyze:
                     highest_node_indicator = i
                     first = numOfEdgesPerNode[i]
 
-            analysis['Total number of Edges'] = connections
+            analysis['Total_Number_Of_Edges'] = connections
 
             # ====================================================
             output = ''
-            output += f"[*] Starting last generated Graph Analysis ({graph_respresentation_type})...\n"
+            output += f"[*] Starting last generated Graph Analysis...\n"
             output += "===================================\n"
             output += f"Version: {self.version}\n"
 
             for k, v in analysis.items():
                 if v is not None:
-                    output += f"{k}: {v}\n"
+                    output += f"{k.replace('_', ' ')}: {v}\n"
 
             try:
                 output += f"Node {highest_node_indicator + 1} has the most edges ({first})\n"
@@ -82,6 +84,10 @@ class Analyze:
             
             f.write(output)
             del output
+
+            graph_connection_handler = Graph()
+            graph_connection_handler.create(analysis)
+            graph_connection_handler.close()
 
 
     @staticmethod
