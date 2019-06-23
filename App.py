@@ -57,19 +57,18 @@ class App(Tk):
         container.grid_columnconfigure(0, weight=1)
         # =================================
 
-        # List with all the Frames of the application
+        # Dictionary with all the Frames of the application
         self.frames = {}
         # =================================
 
         # Load all the Frames
-        for F in (MainPage, GraphGeneratePage, GraphAnalyzePage, GraphVisualizePage):
+        for F in (MainPage, GraphGeneratePage, GraphAnalyzePage, GraphVisualizePage, GraphHistoryPage):
             frame = F(container, self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky='nsew')
         # =================================
 
         # Initiate the MainFrame
-        # self.show_frame(MainPage, transform)
         self.show_frame(MainPage, transform)
         # =================================
 
@@ -82,18 +81,12 @@ class App(Tk):
         frame.tkraise()
 
     def center(self):
-
         size_x = self.winfo_width()
-
         size_y = self.winfo_height()
-
         w = self.winfo_screenwidth()
-
         h = self.winfo_screenheight()
-
         size = (size_x, size_y)
         x = w / 2 - size[0] / 2
-
         y = h / 2 - size[1] / 2
 
         self.geometry("%dx%d+%d+%d" % (size + (x, y)))
@@ -147,9 +140,15 @@ class MainPage(Frame):
         self.visualise_area.grid(row=2, column=3, ipady=self.ipady, padx=30)
         # ================================
 
+        # Graph History area button
+        self.graph_history_area = ttk.Button(self, text="Graph History",
+                                         command=lambda: [controller.show_frame(GraphHistoryPage, transform), controller.frames[GraphHistoryPage].fecth_fresh_data()])
+        self.graph_history_area.grid(row=2, column=4, ipady=self.ipady, padx=30)
+        # ================================
+
         # Exit button
         self.exit = ttk.Button(self, text="Exit", command=lambda: sys.exit(0))
-        self.exit.grid(row=3, column=3, ipady=self.ipady, pady=20)
+        self.exit.grid(row=3, column=4, ipady=self.ipady, pady=20)
         # ================================
 
 
@@ -328,34 +327,34 @@ class GraphGeneratePage(Frame):
         # ==============================================================================================================
 
         # Buttons Frame
-        self.buttons_frame = ttk.Frame(self)
-        self.buttons_frame.grid_propagate(0)
+        self.buttons_frames = ttk.Frame(self)
+        self.buttons_frames.grid_propagate(0)
         if platform_type == "Windows":
-            self.buttons_frame.configure(height=50, width=560)
+            self.buttons_frames.configure(height=50, width=560)
         else:
-            self.buttons_frame.configure(height=50, width=670)
-        self.buttons_frame.grid(row=7, column=1, padx=10)
+            self.buttons_frames.configure(height=50, width=670)
+        self.buttons_frames.grid(row=7, column=1, padx=10)
         # ================================
 
         # ================================
 
         # Generate button
-        self.generate_button = ttk.Button(self.buttons_frame, text="GENERATE", command=self.thread_generate)
+        self.generate_button = ttk.Button(self.buttons_frames, text="GENERATE", command=self.thread_generate)
         self.generate_button.grid(row=0, column=0, ipady=10, ipadx=10, padx=10)
         # ================================
 
         # Back button
-        self.back_button = ttk.Button(self.buttons_frame, text="BACK", command=lambda: self.back(controller))
+        self.back_button = ttk.Button(self.buttons_frames, text="BACK", command=lambda: self.back(controller))
         self.back_button.grid(row=0, column=1, ipady=10, ipadx=10, padx=10)
         # ================================
 
         # Exit Button
-        self.exit_button = ttk.Button(self.buttons_frame, text="EXIT", command=self.exit)
+        self.exit_button = ttk.Button(self.buttons_frames, text="EXIT", command=self.exit)
         self.exit_button.grid(row=0, column=2, ipady=10, ipadx=10, padx=10)
         # ============================================
 
         # Cancel Button
-        self.cancel_button = ttk.Button(self.buttons_frame, text="Cancel", command=self.cancel)
+        self.cancel_button = ttk.Button(self.buttons_frames, text="Cancel", command=self.cancel)
         self.cancel_button.grid(row=0, column=3, ipady=10, ipadx=10, padx=10)
         self.cancel_button.configure(state=DISABLED)
         # ============================================
@@ -1638,46 +1637,46 @@ class GraphVisualizePage(Frame):
         # ================================
 
         # Buttons Frame
-        self.buttons_frame = Frame(self, bg="azure3")
-        self.buttons_frame.grid_propagate(0)
-        self.buttons_frame.configure(height=250, width=400)
-        self.buttons_frame.grid(row=2, column=1, padx=10)
+        self.buttons_frames = Frame(self, bg="azure3")
+        self.buttons_frames.grid_propagate(0)
+        self.buttons_frames.configure(height=250, width=400)
+        self.buttons_frames.grid(row=2, column=1, padx=10)
         # ================================
 
         self.adjacency_type_selected = StringVar()
-        self.matrix = ttk.Radiobutton(self.buttons_frame, text="Adjacency Matrix", value="Matrix",
+        self.matrix = ttk.Radiobutton(self.buttons_frames, text="Adjacency Matrix", value="Matrix",
                                       variable=self.adjacency_type_selected)
         self.matrix.grid(row=0, column=0, padx=30, pady=10, sticky="w")
 
-        self.list = ttk.Radiobutton(self.buttons_frame, text="Adjacency List", value="List",
+        self.list = ttk.Radiobutton(self.buttons_frames, text="Adjacency List", value="List",
                                     variable=self.adjacency_type_selected)
         self.list.grid(row=0, column=1, padx=30, pady=10, sticky="w")
 
         # Pajek Visualize Button
-        self.pajek_visualize_button = ttk.Button(self.buttons_frame, text="Pajek Visualize",
+        self.pajek_visualize_button = ttk.Button(self.buttons_frames, text="Pajek Visualize",
                                                  command=self.pajek_visualize)
         self.pajek_visualize_button.grid(row=1, column=0, ipady=10, ipadx=15)
         # ============================================
 
         # Plotly Visualize Button
-        self.plotly_visualize_button = ttk.Button(self.buttons_frame, text="Plotly 3D Visualize",
+        self.plotly_visualize_button = ttk.Button(self.buttons_frames, text="Plotly 3D Visualize",
                                                   command=self.Spawn_Login_Creds)
         self.plotly_visualize_button.grid(row=1, column=1, ipady=10, ipadx=15)
         # ============================================
 
         # 2D Matplotlib Visualize Button
-        self.matplotlib_visualize_button = ttk.Button(self.buttons_frame, text="2D Matplotlib\nVisualize",
+        self.matplotlib_visualize_button = ttk.Button(self.buttons_frames, text="2D Matplotlib\nVisualize",
                                                       command=self.Plot_2D)
         self.matplotlib_visualize_button.grid(row=2, column=0, ipady=10, ipadx=15, pady=10)
         # ============================================
 
         # Back Button
-        self.back_button = ttk.Button(self.buttons_frame, text="Back", command=lambda: self.back(controller))
+        self.back_button = ttk.Button(self.buttons_frames, text="Back", command=lambda: self.back(controller))
         self.back_button.grid(row=3, column=0, ipady=10, ipadx=15, pady=10)
         # ================================
 
         # Exit Button
-        self.exit_button = ttk.Button(self.buttons_frame, text="Exit", command=lambda: sys.exit(0))
+        self.exit_button = ttk.Button(self.buttons_frames, text="Exit", command=lambda: sys.exit(0))
         self.exit_button.grid(row=3, column=1, ipady=10, ipadx=15, pady=10, padx=45)
         # ================================
 
@@ -1835,6 +1834,152 @@ class GraphVisualizePage(Frame):
         custom_popup.Plotly_popup(url)
         self.master.wait_window(root3)
 
+
+class GraphHistoryPage(Frame):
+    def __init__(self, parent, controller):
+        Frame.__init__(self, parent)
+
+        self.configure(bg="azure3")
+        self.rowconfigure(0, weight=1)
+        self.columnconfigure(0, weight=1)
+
+        self.graph_connection_handler = Graph()
+
+        self.graphs = []
+        self.graph_mini_frames = []
+        self.graph_label_id = []
+        self.buttons_frames = []
+        self.delete_buttons = []
+        self.more_buttons = []
+        self.less_buttons = []
+
+        self.canvas = Canvas(self, borderwidth=0, background="azure3", highlightthickness=1, highlightbackground="azure3")
+        self.graphs_frame = Frame(self.canvas, background="azure3")
+        self.vsb = Scrollbar(self, orient="vertical", command=self.canvas.yview, bg="black")
+        self.canvas.configure(yscrollcommand=self.vsb.set)
+
+        self.vsb.grid(row=0, column=1, sticky="ns")
+        self.canvas.grid(row=0, column=0, sticky="news")
+        self.canvas.create_window((4,4), window=self.graphs_frame, anchor="nw", 
+                                  tags="self.graphs_frame")
+
+        self.graphs_frame.bind("<Configure>", self.onFrameConfigure)
+
+        self.back_button = ttk.Button(self, text="Back", command=lambda: self.back(controller))
+        self.back_button.grid(row=1, column=0, ipady=10, ipadx=15, pady=10, sticky="e")
+    
+    def grid_data(self):
+        for i in range(len(self.graph_mini_frames)):
+            self.graph_mini_frames[i].grid(pady=10, padx=10, sticky="news")
+            self.graph_label_id[i].grid(row=0, column=0, sticky="news")
+            self.graphs[i].grid(row=0, column=1, sticky='nesw')
+            self.buttons_frames[i].grid(row=0, column=2, sticky="news")
+            self.delete_buttons[i].grid(row=0, column=0, sticky="n")
+            self.more_buttons[i].grid(row=0, column=1, sticky="ne", padx=(0, 20))
+            self.update()
+            self.update_idletasks()
+
+    def data(self):
+        graph_connection_handler = Graph()
+        self.graph_objects = graph_connection_handler.all()
+        counter = 0
+        for graph in self.graph_objects:
+            graph_contents = ''
+
+            self.graph_mini_frames.append(Frame(self.graphs_frame, bg="azure3", width=1000, height=77, borderwidth="1", relief="solid"))
+            self.graph_mini_frames[-1].grid_propagate(False)
+            self.graph_mini_frames[-1].rowconfigure(0, weight=1)
+            self.graph_mini_frames[-1].columnconfigure(1, weight=1)
+
+            self.graph_label_id.append(Label(self.graph_mini_frames[-1], text=f"{counter + 1}", bg="azure3", width=5, height=10, font='Arial 18 bold'))
+            self.graph_label_id[-1].grid_propagate(0)
+
+            graph_contents += f"Generated at: {graph[2]}\n"
+
+            for k, v in json.loads(graph[1]).items():
+                graph_contents += f"{k.replace('_', ' ')}: {v}\n"
+
+           
+            self.graphs.append(Label(self.graph_mini_frames[-1], text=graph_contents, width=10, bg="azure3", justify="left", anchor="nw", font='Arial 15'))
+
+            self.buttons_frames.append(Frame(self.graph_mini_frames[-1], bg="azure3", width=300))
+            self.buttons_frames[-1].grid_propagate(False)
+            self.buttons_frames[-1].rowconfigure(0, weight=1)
+            self.buttons_frames[-1].columnconfigure(0, weight=1)
+            self.buttons_frames[-1].columnconfigure(1, weight=1)
+
+            try:
+                delete_graph = PhotoImage(file='./images{}delete.png'.format(path_escape))
+                self.delete_buttons.append(Button(self.buttons_frames[-1], image=delete_graph, highlightthickness=1, highlightbackground="azure3", command=lambda x=(int(counter), graph[0]): self.delete_button_func(x[0], x[1])))
+                self.delete_buttons[-1].image = delete_graph
+                self.delete_buttons[-1].config(bg='azure3', relief='sunken', borderwidth=0)
+
+                more_graph = PhotoImage(file='./images{}down.png'.format(path_escape))
+                self.more_buttons.append(Button(self.buttons_frames[-1], image=more_graph, text=counter, highlightthickness=1, highlightbackground="azure3", command=lambda x=int(counter): self.more_button_func(x)))
+                self.more_buttons[-1].image = more_graph
+                self.more_buttons[-1].config(bg='azure3', relief='sunken', borderwidth=0)
+
+                less_graph = PhotoImage(file='./images{}up.png'.format(path_escape))
+                self.less_buttons.append(Button(self.buttons_frames[-1], image=less_graph, text=counter, highlightthickness=1, highlightbackground="azure3", command=lambda x=int(counter): self.less_button_func(x)))
+                self.less_buttons[-1].image = less_graph
+                self.less_buttons[-1].config(bg='azure3', relief='sunken', borderwidth=0)
+            except TclError:
+                self.delete_buttons[-1] = Button(self.buttons_frames[-1], text='Delete')
+                self.delete_buttons[-1].config(bg='azure3', relief='sunken', borderwidth=1)
+                self.more_buttons[-1] = Button(self.buttons_frames[-1], text='More')
+                self.more_buttons[-1].config(bg='azure3', relief='sunken', borderwidth=1)
+                self.less_buttons[-1] = Button(self.buttons_frames[-1], text='More')
+                self.less_buttons[-1].config(bg='azure3', relief='sunken', borderwidth=1)
+            
+            graph_contents = ''
+            counter += 1
+        graph_connection_handler.close()
+        self.grid_data()
+        # StoppableThread(target=self.grid_data, daemon=True).start()
+
+    def more_button_func(self, button_id):
+        self.graph_mini_frames[button_id].configure(height=270)
+        self.less_buttons[button_id].grid(row=0, column=1, sticky="ne", padx=(0, 20))
+    
+    def less_button_func(self, button_id):
+        self.graph_mini_frames[button_id].configure(height=77)
+        self.less_buttons[button_id].grid_forget()
+    
+    def delete_button_func(self, button_id, graph_id):
+        if self.graph_connection_handler.delete(graph_id):
+            self.graph_mini_frames[button_id].grid_forget()
+
+    def onFrameConfigure(self, event):
+        '''Reset the scroll region to encompass the inner frame'''
+        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+
+    def back(self, controller):
+        self.canvas.yview_moveto(0)
+        controller.show_frame(MainPage, transform)
+
+    def start_data_thread(self):
+        self.current_thread = StoppableThread(target=self.data, daemon=True)
+        self.current_thread.start()
+
+    def clean_old_data(self):
+        for frame in self.graph_mini_frames:
+            frame.grid_forget()
+        # del self.graphs, self.graph_mini_frames, self.graph_label_id, self.buttons_frames, self.delete_buttons, self.more_buttons, self.less_buttons
+        self.graphs.clear()
+        self.graph_mini_frames.clear()
+        self.graph_label_id.clear()
+        self.buttons_frames.clear()
+        self.delete_buttons.clear()
+        self.more_buttons.clear()
+        self.less_buttons.clear()
+
+    def fecth_fresh_data(self):
+        count = self.graph_connection_handler.count()
+        frame_len = len(self.graph_mini_frames)
+        if frame_len < count or frame_len > count:
+            self.clean_old_data()
+            # self.start_data_thread()
+            self.data()
 
 class LoginCreds:
 
@@ -2094,9 +2239,8 @@ if __name__ == "__main__":
     GUI = App()
     GUI.center()
     user_connection_handler = User()
-    graph_connection_handler = Graph()
+    # Graph().populate(50)
     GUI.mainloop()
     user_connection_handler.close()
-    graph_connection_handler.close()
 
     
