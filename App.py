@@ -1897,7 +1897,11 @@ class GraphHistoryPage(Frame):
         for graph in self.graph_objects:
             graph_contents = ''
 
-            self.graph_mini_frames.append(Frame(self.graphs_frame, bg="azure3", width=1000, height=77, borderwidth="1", relief="solid"))
+            self.graph_mini_frames.append(Frame(self.graphs_frame, bg="azure3", height=77, borderwidth="1", relief="solid"))
+            if platform_type == "Windows":
+                self.graph_mini_frames[-1].config(width=900)
+            else:
+                self.graph_mini_frames[-1].config(width=1000)
             self.graph_mini_frames[-1].grid_propagate(False)
             self.graph_mini_frames[-1].rowconfigure(0, weight=1)
             self.graph_mini_frames[-1].columnconfigure(1, weight=1)
@@ -1935,18 +1939,17 @@ class GraphHistoryPage(Frame):
                 self.less_buttons[-1].image = less_graph
                 self.less_buttons[-1].config(bg='azure3', relief='sunken', borderwidth=0)
             except TclError:
-                self.delete_buttons[-1] = Button(self.buttons_frames[-1], text='Delete')
+                self.delete_buttons.append(Button(self.buttons_frames[-1], text='Delete', command=lambda x=(int(counter), graph[0]): self.delete_button_func(x[0], x[1])))
                 self.delete_buttons[-1].config(bg='azure3', relief='sunken', borderwidth=1)
-                self.more_buttons[-1] = Button(self.buttons_frames[-1], text='More')
+                self.more_buttons.append(Button(self.buttons_frames[-1], text='More', command=lambda x=int(counter): self.more_button_func(x)))
                 self.more_buttons[-1].config(bg='azure3', relief='sunken', borderwidth=1)
-                self.less_buttons[-1] = Button(self.buttons_frames[-1], text='More')
+                self.less_buttons.append(Button(self.buttons_frames[-1], text='Less', command=lambda x=int(counter): self.less_button_func(x)))
                 self.less_buttons[-1].config(bg='azure3', relief='sunken', borderwidth=1)
             
             graph_contents = ''
             counter += 1
         graph_connection_handler.close()
         self.grid_data()
-        # StoppableThread(target=self.grid_data, daemon=True).start()
 
     def more_button_func(self, button_id):
         self.graph_mini_frames[button_id].configure(height=270)
@@ -1967,10 +1970,6 @@ class GraphHistoryPage(Frame):
     def back(self, controller):
         # self.canvas.yview_moveto(1)
         controller.show_frame(MainPage, transform)
-
-    def start_data_thread(self):
-        self.current_thread = StoppableThread(target=self.data, daemon=True)
-        self.current_thread.start()
 
     def clean_old_data(self):
         for frame in self.graph_mini_frames:
@@ -2252,7 +2251,7 @@ if __name__ == "__main__":
     GUI = App()
     GUI.center()
     user_connection_handler = User()
-    # Graph().populate(50)
+    # Graph().populate(500)
     GUI.mainloop()
     user_connection_handler.close()
 
