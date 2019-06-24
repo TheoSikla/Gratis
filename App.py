@@ -14,7 +14,7 @@ from Analyze.Betweenness_Centrality import betweenness_centrality
 from sqlite3_db.Database import *
 import webbrowser
 
-from time import time
+from time import time, sleep
 
 
 class App(Tk):
@@ -1852,6 +1852,7 @@ class GraphHistoryPage(Frame):
         self.delete_buttons = []
         self.more_buttons = []
         self.less_buttons = []
+        self.load_counter = 0
 
         self.canvas = Canvas(self, borderwidth=0, background="azure3", highlightthickness=1, highlightbackground="azure3")
         self.graphs_frame = Frame(self.canvas, background="azure3")
@@ -1864,12 +1865,21 @@ class GraphHistoryPage(Frame):
                                   tags="self.graphs_frame")
 
         self.graphs_frame.bind("<Configure>", self.onFrameConfigure)
-
+        
         self.back_button = ttk.Button(self, text="Back", command=lambda: self.back(controller))
         self.back_button.grid(row=1, column=0, ipady=10, ipadx=15, pady=10, sticky="e")
+        
+    def scroll_possition_check(self):
+        try:
+            if self.vsb.get()[1] == 1.0 and len(self.graph_mini_frames) > 0:
+                self.grid_data()
+        except IndexError:
+            if self.scroll_possition_check is not None:
+                self.after_cancel(self.scroll_possition_check)
+        self.after(200, self.scroll_possition_check)
     
     def grid_data(self):
-        for i in range(len(self.graph_mini_frames)):
+        for i in range(self.load_counter, self.load_counter + 5):
             self.graph_mini_frames[i].grid(pady=10, padx=10, sticky="news")
             self.graph_label_id[i].grid(row=0, column=0, sticky="news")
             self.graphs[i].grid(row=0, column=1, sticky='nesw')
@@ -1878,6 +1888,7 @@ class GraphHistoryPage(Frame):
             self.more_buttons[i].grid(row=0, column=1, sticky="ne", padx=(0, 20))
             self.update()
             self.update_idletasks()
+        self.load_counter += 5
 
     def data(self):
         graph_connection_handler = Graph()
@@ -1954,7 +1965,7 @@ class GraphHistoryPage(Frame):
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
     def back(self, controller):
-        self.canvas.yview_moveto(0)
+        # self.canvas.yview_moveto(1)
         controller.show_frame(MainPage, transform)
 
     def start_data_thread(self):
@@ -1964,7 +1975,6 @@ class GraphHistoryPage(Frame):
     def clean_old_data(self):
         for frame in self.graph_mini_frames:
             frame.grid_forget()
-        # del self.graphs, self.graph_mini_frames, self.graph_label_id, self.buttons_frames, self.delete_buttons, self.more_buttons, self.less_buttons
         self.graphs.clear()
         self.graph_mini_frames.clear()
         self.graph_label_id.clear()
@@ -1972,14 +1982,17 @@ class GraphHistoryPage(Frame):
         self.delete_buttons.clear()
         self.more_buttons.clear()
         self.less_buttons.clear()
+        self.load_counter = 0
+        self.canvas.yview_moveto(0)
 
     def fecth_fresh_data(self):
         count = self.graph_connection_handler.count()
         frame_len = len(self.graph_mini_frames)
         if frame_len < count or frame_len > count:
             self.clean_old_data()
-            # self.start_data_thread()
             self.data()
+            self.scroll_possition_check()
+
 
 class LoginCreds:
 
