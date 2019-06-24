@@ -136,7 +136,7 @@ class Plot2D:
             try:
                 line_split = line.split(":")[0]
 
-                if line_split == "Graph type":
+                if line_split == "Graph Type":
                     graph_type = line.split(":")[1].strip()
                     plt.title(line.split(":")[1].strip())
 
@@ -145,8 +145,8 @@ class Plot2D:
 
             except IndexError:
                 pass
-
-        if "Scale-Free" in graph_type:
+        
+        if "Scale Free" in graph_type:
             plt.plot(connections, probabilities, ".")
         else:
             plt.plot(connections, probabilities, marker=".")
@@ -173,7 +173,7 @@ class Plot2D:
         elif len(str(connections[0])) == 5:
             plt.xticks(range(0, Plot2D.intRound(connections[0], 5) + 1, 10000))
 
-        if "Scale-Free" in graph_type:
+        if "Scale Free" in graph_type:
             plt.xscale("log")
             plt.yscale("log")
             plt.xlim(0, pow(10, len(str(connections[0]))))
