@@ -31,7 +31,7 @@ class App(Tk):
         # ================================
 
         # Root - Frame Configuration
-        # self.title("Graph Sphere")
+        self.title("Gratis")
         self.config(bg="azure3")
         self['padx'] = 20
         self['pady'] = 20
