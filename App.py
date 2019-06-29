@@ -1101,12 +1101,13 @@ class GraphAnalyzePage(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
 
-        # MainPage Frame configuration
+        # Graph Analyze Frame configuration
         self.configure(bg="azure3")
-        self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
-        self.grid_rowconfigure(20, weight=1)
-        self.grid_columnconfigure(20, weight=1)
+        self.grid_columnconfigure(1, weight=1)
+        self.rowconfigure(0, weight=1)
+
+        self.widget_pady = 10
         # ================================
 
         # Thread define
@@ -1117,34 +1118,66 @@ class GraphAnalyzePage(Frame):
         self.button_font = ("Dialog", 9, "bold italic")
         # ================================
 
+        # Define Frames
+        # Parameter's Frame
+        self.parameters_frame = Frame(self, bg="azure3", width=300)
+        self.parameters_frame.grid_propagate(0)
+        self.parameters_frame.columnconfigure(0, weight=1)
+        self.parameters_frame.columnconfigure(1, weight=1)
+        self.parameters_frame.rowconfigure(4, weight=1)
+        self.parameters_frame.grid(row=0, column=0, sticky="news")
+
+        self.parameters_frame_row_0_column_0 = Frame(self.parameters_frame, height=170, bg="azure3")
+        self.parameters_frame_row_0_column_0.grid_propagate(0)
+        self.parameters_frame_row_0_column_0.columnconfigure(0, weight=1)
+        self.parameters_frame_row_0_column_0.grid(row=0, column=0, columnspan=2, padx=5, pady=5, sticky='news')
+
+        self.parameters_frame_row_1_column_0 = Frame(self.parameters_frame, width=30, height=50, bg="azure3")
+        self.parameters_frame_row_1_column_0.grid_propagate(0)
+        self.parameters_frame_row_1_column_0.columnconfigure(0, weight=1)
+        self.parameters_frame_row_1_column_0.rowconfigure(0, weight=1)
+        self.parameters_frame_row_1_column_0.grid(row=1, column=0, padx=5, sticky='news')
+
+        self.parameters_frame_row_1_column_1 = Frame(self.parameters_frame, width=30, height=50, bg="azure3")
+        self.parameters_frame_row_1_column_1.grid_propagate(0)
+        self.parameters_frame_row_1_column_1.columnconfigure(0, weight=1)
+        self.parameters_frame_row_1_column_1.rowconfigure(0, weight=1)
+        self.parameters_frame_row_1_column_1.grid(row=1, column=1, padx=5, sticky='news')
+
+        self.parameters_frame_row_2_column_0 = Frame(self.parameters_frame, bg="azure3")
+        self.parameters_frame_row_2_column_0.columnconfigure(0, weight=1)
+        self.parameters_frame_row_2_column_0.grid(row=2, column=0, columnspan=2, sticky='news')
+
+        self.parameters_frame_row_3_column_0 = Frame(self.parameters_frame, bg="azure3")
+        self.parameters_frame_row_3_column_0.columnconfigure(0, weight=1)
+        self.parameters_frame_row_3_column_0.grid(row=3, column=0, padx=5, pady=5, sticky='news')
+
+        self.parameters_frame_row_3_column_1 = Frame(self.parameters_frame, bg="azure3")
+        self.parameters_frame_row_3_column_1.columnconfigure(0, weight=1)
+        self.parameters_frame_row_3_column_1.grid(row=3, column=1, padx=5, pady=5, sticky='news')
+
+        self.buttons_frame = Frame(self.parameters_frame, bg="azure3")
+        self.buttons_frame.columnconfigure(0, weight=1)
+        self.buttons_frame.columnconfigure(1, weight=1)
+        self.buttons_frame.rowconfigure(0, weight=1)
+        self.buttons_frame.rowconfigure(1, weight=1)
+        self.buttons_frame.grid(row=4, columnspan=2, sticky="news")
+
+        self.scroll_area_frame = ttk.Frame(self)
+        self.scroll_area_frame.columnconfigure(0, weight=1)
+        self.scroll_area_frame.rowconfigure(0, weight=1)
+        self.scroll_area_frame.grid(row=0, column=1, sticky='news')
+
         # Main Label
-        self.main_label = Label(self, bg="azure3", text="Analyze a graph\n",
+        self.main_label = Label(self.parameters_frame_row_0_column_0, bg="azure3", text="Analyze a graph",
                                 font=("Arial", 20, "bold"))
-        self.main_label.grid(row=1, column=1, padx=20)
-        # ================================
-
-        # Text Area Frame
-        # create a Frame for the Text and Scrollbar
-        self.my_frame_inner = ttk.Frame(self)
-        # create a Scrollbar and associate it with txt
-        self.my_scroll = Scrollbar(self.my_frame_inner, orient='vertical')
-        # create a Text widget
-        self.text_area = Text(self.my_frame_inner, background="lavender blush", yscrollcommand=self.my_scroll.set,
-                              width=60,
-                              height=23, relief=FLAT, borderwidth=5)
-        self.text_area.bind("<FocusIn>", self.defocus)
-        self.text_area.config(font=("consolas", 11), undo=True, wrap='word')
-        self.my_scroll.config(command=self.text_area.yview)
-
-        self.my_frame_inner.grid(row=1, column=2, rowspan=13, columnspan=2, sticky='nesw')
-        self.text_area.grid(row=1, column=2, rowspan=13)
-        self.my_scroll.grid(row=1, column=3, rowspan=13, columnspan=2, sticky='nesw')
+        self.main_label.grid(row=0, column=0, pady=self.widget_pady)
         # ================================
 
         # Type Label
-        self.main_label = Label(self, bg="azure3", text="Select type of file:\n",
+        self.main_label = Label(self.parameters_frame_row_0_column_0, bg="azure3", text="Select type of file",
                                 font=("Arial", 10, "bold"))
-        self.main_label.grid(row=2, column=1)
+        self.main_label.grid(row=1, column=0, pady=self.widget_pady)
         # ================================
 
         # Type of graph being generated
@@ -1154,35 +1187,29 @@ class GraphAnalyzePage(Frame):
         self.chosen_file_type = StringVar()
         self.chosen_file_type.set(self.file_types[1])
 
-        self.graphs = ttk.OptionMenu(self, self.chosen_file_type, *self.file_types, command=self.show_parameters)
-        self.graphs.grid(row=3, column=1, sticky="n")
+        self.graphs = ttk.OptionMenu(self.parameters_frame_row_0_column_0, self.chosen_file_type, *self.file_types, command=self.show_parameters)
+        self.graphs.grid(row=2, column=0, pady=self.widget_pady)
 
-        # Parameter's Frame
-        self.parameters_frame = ttk.Frame(self)
-        self.parameters_frame.grid_propagate(0)
-        self.parameters_frame.configure(height=205, width=430)
-        self.parameters_frame.grid(row=4, column=1, padx=10, pady=10)
-
-        self.classpath_label = Label(self.parameters_frame, bg="azure3", text="Classpath:", font=self.button_font)
+        self.classpath_label = Label(self.parameters_frame_row_0_column_0, bg="azure3", text="Classpath:", font=self.button_font)
 
         self.classpath_result = StringVar()
-        self.classpath_entry_box = ttk.Entry(self.parameters_frame, textvariable=self.classpath_result, width=35)
+        self.classpath_entry_box = ttk.Entry(self.parameters_frame_row_1_column_0, textvariable=self.classpath_result, width=25)
         # ==============================================================================================================
 
         # Adjacency Matrix, List Radiobuttons
         self.adjacency_type_selected = StringVar()
-        self.matrix = ttk.Radiobutton(self.parameters_frame, text="Adjacency Matrix", value="Matrix",
+        self.matrix = ttk.Radiobutton(self.parameters_frame_row_1_column_0, text="Adjacency Matrix", value="Matrix",
                                       variable=self.adjacency_type_selected)
-        self.matrix.grid(row=0, column=0, padx=30, pady=10, sticky="w")
+        self.matrix.grid(row=3, column=0)
 
-        self.list = ttk.Radiobutton(self.parameters_frame, text="Adjacency List", value="List",
+        self.list = ttk.Radiobutton(self.parameters_frame_row_1_column_1, text="Adjacency List", value="List",
                                     variable=self.adjacency_type_selected)
-        self.list.grid(row=0, column=1, padx=30, pady=10, sticky="w")
+        self.list.grid(row=3, column=0)
         # ==============================================================================================================
 
-        self.metrics_label = Label(self.parameters_frame, bg="azure3", text="Calculate metrics",
+        self.metrics_label = Label(self.parameters_frame_row_2_column_0, bg="azure3", text="Calculate metrics",
                                    font=("Arial", 10, "bold"))
-        self.metrics_label.grid(row=1, column=0, columnspan=2)
+        self.metrics_label.grid(row=0, column=0, pady=self.widget_pady)
 
         # Geodesic path, closeness centrality, betweenness centrality
         self.Edges = None
@@ -1191,62 +1218,68 @@ class GraphAnalyzePage(Frame):
         self.geodesic_paths = None
 
         self.geodesic_path_selected = BooleanVar(False)
-        self.geodesic_path = ttk.Checkbutton(self.parameters_frame, text="Geodesic Paths",
+        self.geodesic_path = ttk.Checkbutton(self.parameters_frame_row_3_column_0, text="Geodesic Paths",
                                              variable=self.geodesic_path_selected)
-        self.geodesic_path.grid(row=2, column=0, padx=30, pady=10, sticky="w")
+        self.geodesic_path.grid(row=0, column=0, pady=self.widget_pady)
 
         self.closeness_centrality_selected = BooleanVar(False)
-        self.closeness_centrality = ttk.Checkbutton(self.parameters_frame, text="Closeness Centrality",
+        self.closeness_centrality = ttk.Checkbutton(self.parameters_frame_row_3_column_1, text="Closeness Centrality",
                                                     variable=self.closeness_centrality_selected)
-        self.closeness_centrality.grid(row=2, column=1, padx=30, pady=10, sticky="w")
+        self.closeness_centrality.grid(row=0, column=0, pady=self.widget_pady)
 
         self.betweenness_centrality_selected = BooleanVar(False)
-        self.betweenness_centrality = ttk.Checkbutton(self.parameters_frame, text="Betweenness Centrality",
+        self.betweenness_centrality = ttk.Checkbutton(self.parameters_frame_row_3_column_0, text="Betweenness Centrality",
                                                       variable=self.betweenness_centrality_selected)
-        self.betweenness_centrality.grid(row=3, column=0, padx=30, pady=10, sticky="w")
+        self.betweenness_centrality.grid(row=1, column=0, pady=self.widget_pady)
         # ==============================================================================================================
 
         # Analyze Button
-        self.analyze_button = ttk.Button(self.parameters_frame, text="Analyze",
+        self.analyze_button = ttk.Button(self.buttons_frame, text="Analyze",
                                          command=lambda: self.thread_generate())
-        self.analyze_button.grid(row=4, column=0, sticky="w", ipady=10, ipadx=10, pady=10, padx=30)
+        self.analyze_button.grid(row=0, column=0, ipady=10, ipadx=10, pady=self.widget_pady)
         # ============================================
 
         # Log Button
-        self.log_button = ttk.Button(self.parameters_frame, text="Save output", command=self.save_output)
-        self.log_button.grid(row=4, column=1, sticky="w", ipady=10, ipadx=10, pady=10, padx=30)
+        self.log_button = ttk.Button(self.buttons_frame, text="Save output", command=self.save_output)
+        self.log_button.grid(row=0, column=1, ipady=10, ipadx=10, pady=self.widget_pady)
         # ============================================
 
+        # Back Button
+        self.back_button = ttk.Button(self.buttons_frame, text="Back", command=lambda: self.back(controller))
+        self.back_button.grid(row=1, column=0, ipady=10, ipadx=10, pady=self.widget_pady)
+        # ================================
+
+        # Exit Button
+        self.exit_button = ttk.Button(self.buttons_frame, text="Exit", command=lambda: sys.exit(0))
+        self.exit_button.grid(row=1, column=1, ipady=10, ipadx=10, pady=self.widget_pady)
+        # ================================
+
         # Cancel Button
-        self.cancel_button = ttk.Button(self.parameters_frame, text="Cancel", command=self.cancel)
+        self.cancel_button = ttk.Button(self.buttons_frame, text="Cancel", command=self.cancel)
         # ============================================
 
         # Browse Button
         try:
             browse_icon = PhotoImage(file='./images{}folder.png'.format(path_escape))
-            self.browse_button = Button(self.parameters_frame, image=browse_icon, command=lambda: self.browse())
+            self.browse_button = Button(self.parameters_frame_row_1_column_1, image=browse_icon, command=lambda: self.browse())
             self.browse_button.image = browse_icon
-            self.browse_button.config(bg='azure3', relief='sunken', borderwidth=0)
+            self.browse_button.config(bg='azure3', relief='flat', borderwidth=0, highlightbackground="azure3")
         except TclError:
-            self.browse_button = Button(self.parameters_frame, text='Browse', command=lambda: self.browse())
-            self.browse_button.config(bg='azure3', relief='sunken', borderwidth=1)
-
+            self.browse_button = Button(self.parameters_frame_row_1_column_1, text='Browse', command=lambda: self.browse())
+            self.browse_button.config(bg='azure3', relief='flat', borderwidth=1)
         # ================================
 
-        # Other Button's Frame
-        self.rest_button_frame = Frame(self, bg="azure3")
-        self.rest_button_frame.grid_propagate(0)
-        self.rest_button_frame.configure(height=90, width=430)
-        self.rest_button_frame.grid(row=5, column=1, padx=10, pady=20)
-
-        # Back Button
-        self.back_button = ttk.Button(self.rest_button_frame, text="Back", command=lambda: self.back(controller))
-        self.back_button.grid(row=1, column=0, sticky="w", ipady=10, ipadx=10, pady=10, padx=(30, 70))
-        # ================================
-
-        # Exit Button
-        self.exit_button = ttk.Button(self.rest_button_frame, text="Exit", command=lambda: sys.exit(0))
-        self.exit_button.grid(row=1, column=1, sticky="w", ipady=10, ipadx=10, pady=10, padx=30)
+        # Text Area Frame
+        # create a Scrollbar and associate it with txt
+        self.my_scroll = Scrollbar(self.scroll_area_frame, orient='vertical')
+        # create a Text widget
+        self.text_area = Text(self.scroll_area_frame, background="lavender blush", yscrollcommand=self.my_scroll.set, relief=FLAT, 
+                              width=35)
+        self.text_area.bind("<FocusIn>", self.defocus)
+        self.text_area.config(font=("consolas", 11), undo=True, wrap='word')
+        self.my_scroll.config(command=self.text_area.yview)
+        self.text_area.grid(row=0, column=0, sticky='news')
+        self.my_scroll.grid(row=0, column=1, sticky='news')
         # ================================
 
     @staticmethod
@@ -1259,32 +1292,18 @@ class GraphAnalyzePage(Frame):
 
             self.matrix.grid_forget()
             self.list.grid_forget()
-            self.metrics_label.grid_forget()
-            self.geodesic_path.grid_forget()
-            self.closeness_centrality.grid_forget()
-            self.betweenness_centrality.grid_forget()
 
-            self.classpath_label.grid(row=0, column=0, pady=10)
-            self.classpath_entry_box.grid(row=0, column=0, columnspan=2, padx=(85, 0), pady=10)
-            self.browse_button.grid(row=0, column=0, columnspan=3, sticky='e', padx=(0, 20), pady=(0, 3))
-            self.metrics_label.grid(row=1, column=0, columnspan=2)
-            self.geodesic_path.grid(row=2, column=0, padx=30, pady=10, sticky="w")
-            self.closeness_centrality.grid(row=2, column=1, padx=30, pady=10, sticky="w")
-            self.betweenness_centrality.grid(row=3, column=0, padx=30, pady=10, sticky="w")
-            self.analyze_button.grid(row=4, column=0, sticky="w", ipady=10, ipadx=10, pady=10, padx=30)
+            self.classpath_label.grid(row=3, column=0)
+            self.classpath_entry_box.grid(row=0, column=0, sticky="e")
+            self.browse_button.grid(row=0, column=0, sticky="w")
 
         elif self.chosen_file_type.get() == "Last Generated Graph":
             self.classpath_label.grid_forget()
             self.classpath_entry_box.grid_forget()
             self.browse_button.grid_forget()
 
-            self.matrix.grid(row=0, column=0, padx=30, pady=10, sticky="w")
-            self.list.grid(row=0, column=1, padx=30, pady=10, sticky="w")
-            self.metrics_label.grid(row=1, column=0, columnspan=2)
-            self.geodesic_path.grid(row=2, column=0, padx=30, pady=10, sticky="w")
-            self.closeness_centrality.grid(row=2, column=1, padx=30, pady=10, sticky="w")
-            self.betweenness_centrality.grid(row=3, column=0, padx=30, pady=10, sticky="w")
-            self.analyze_button.grid(row=4, column=0, ipady=10, ipadx=10, pady=10)
+            self.matrix.grid(row=3, column=0)
+            self.list.grid(row=3, column=0)
 
     def calculate_geodesic_paths(self):
         geodesic_paths = None
@@ -1481,8 +1500,7 @@ class GraphAnalyzePage(Frame):
         self.classpath_result.set(filename)
 
     def analyze_button_func(self):
-        self.cancel_button.grid(row=4, column=1, sticky="w", ipady=10, ipadx=10, pady=10, padx=30)
-        self.analyze_button.config(state=DISABLED)
+        self.cancel_button.grid(row=0, column=0, ipady=10, ipadx=10, pady=self.widget_pady)
         self.back_button.config(state=DISABLED)
 
         if self.chosen_file_type.get() == "Last Generated Graph":
@@ -1585,7 +1603,6 @@ class GraphAnalyzePage(Frame):
                         self.text_area.update()
 
         self.cancel_button.grid_forget()
-        self.analyze_button.config(state=NORMAL)
         self.back_button.config(state=NORMAL)
 
     def back(self, controller):
