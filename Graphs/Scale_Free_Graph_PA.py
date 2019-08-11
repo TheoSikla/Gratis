@@ -1,3 +1,8 @@
+__author__ = "Theodoros Siklafidis"
+__name__ = "Gratis"
+__version__ = "1.0"
+__license__ = "GNU General Public License v3.0"
+
 from Support_Folders.camel_case_spliter import *
 from Generate.Generate import *
 from Analyze.Analyze import *
