@@ -51,7 +51,7 @@ class MainPage(Page):
                                              command=lambda: [controller.show_frame(
                                                  self.retrieve_frame(controller, 'GraphHistoryPage'), transform
                                              ),
-                                                 self.retrieve_frame(controller, 'GraphHistoryPage').fecth_fresh_data()]
+                                                 controller.frames[self.retrieve_frame(controller, 'GraphHistoryPage')].fecth_fresh_data()]
                                              )
         self.graph_history_area.grid(row=2, column=4, ipady=self.ipady, padx=30)
         # ================================
