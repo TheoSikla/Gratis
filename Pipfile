@@ -1,0 +1,15 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+matplotlib = "==3.1.0"
+plotly = "==3.10.0"
+cryptography = "==2.7"
+python-igraph = "==0.7.1.post6"
+
+[requires]
+python_version = "3.6"
