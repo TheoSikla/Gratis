@@ -3,16 +3,14 @@ __name__ = "Gratis"
 __version__ = "1.0"
 __license__ = "GNU General Public License v3.0"
 
-import igraph as ig
+import re
 import plotly
+import igraph as ig
 import plotly.plotly as py
 import plotly.graph_objs as go
 from tkinter import messagebox
-import re
-from os_recon.define_os import path_escape
 import igraph.vendor.texttable
-
-import sys
+from os_recon.define_os import path_escape
 
 
 class Plotly3D:
