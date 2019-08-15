@@ -4,7 +4,7 @@
 
 
 1. In order to run this project you need:
- * Python3 or above
+   * Python3 or above
 
 2. To install all needed packages and run the project:
  - Debian and Ubuntu based systems:  
