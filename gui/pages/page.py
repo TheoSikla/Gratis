@@ -1,8 +1,8 @@
 from tkinter import *
-from gui.pages.mousewheel import *
 from tkinter import ttk
 from tkinter import messagebox
 from sqlite3_db.Database import *
+from gui.pages.mousewheel import *
 from os_recon.define_os import transform, platform_type
 from Support_Folders.multithreading import StoppableThread
 
