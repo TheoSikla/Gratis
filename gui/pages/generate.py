@@ -1,5 +1,5 @@
-from gui.pages.page import *
 from time import time
+from gui.pages.page import *
 
 
 class GraphGeneratePage(Page):

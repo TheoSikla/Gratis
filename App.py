@@ -3,18 +3,11 @@
 # __version__ = "1.0"
 # __license__ = "GNU General Public License v3.0"
 
+import os
 from tkinter import *
 from tkinter import ttk
-import os
+from gui.pages import *
 from os_recon.define_os import transform
-
-
-from gui.pages.main import MainPage
-from gui.pages.analyze import GraphAnalyzePage
-from gui.pages.generate import GraphGeneratePage
-from gui.pages.history import GraphHistoryPage
-from gui.pages.visualize import GraphVisualizePage
-
 
 
 class App(Tk):
