@@ -22,9 +22,9 @@
   7.`python App.py`
 
 3. To install and run through pipenv:
- 1. Download and install python3 or above.
- 2. `python3.x -m pip install pipenv`
- 3. `cd Gratis`
- 4. `pipenv install`
- 5. `pipenv shell`
- 6. `python App.py`
+   1. Download and install python3 or above.
+   2. `python3.x -m pip install pipenv`
+   3. `cd Gratis`
+   4. `pipenv install`
+   5. `pipenv shell`
+   6. `python App.py`
