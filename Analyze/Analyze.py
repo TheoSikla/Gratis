@@ -3,12 +3,12 @@ __name__ = "Gratis"
 __version__ = "1.0"
 __license__ = "GNU General Public License v3.0"
 
+import re
 import datetime
 from tkinter import END
 from tkinter import messagebox
-import re
-from os_recon.define_os import path_escape
 from sqlite3_db.Database import Graph
+from os_recon.define_os import path_escape
 
 
 class Analyze:
@@ -16,9 +16,10 @@ class Analyze:
     def __init__(self):
         self.version = 'Gratis v1.0'
 
-
-    def analyze_generated_graph(self, graph_respresentation, graph_respresentation_type, graph_type, numOfVertices, graphDegree=None,
-                                numOfEdges=None, numOfInitialNodes=None, initialConnectionsPerNode=None, probability=None, seed=None):
+    def analyze_generated_graph(self, graph_respresentation, graph_respresentation_type,
+                                graph_type, numOfVertices, graphDegree=None,
+                                numOfEdges=None, numOfInitialNodes=None,
+                                initialConnectionsPerNode=None, probability=None, seed=None):
         
         """ Analyzes a generated graph. """
 
@@ -94,7 +95,6 @@ class Analyze:
             graph_connection_handler.create(analysis)
             graph_connection_handler.close()
 
-
     @staticmethod
     def read_analysis(adjacency_type, text_area):
 
@@ -105,7 +105,6 @@ class Analyze:
                 for line in f:
                     text_area.insert(END, line)
                 text_area.update()
-
 
     @staticmethod
     def pajek_file_to_dict(path):

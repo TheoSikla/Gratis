@@ -3,8 +3,8 @@ __name__ = "Gratis"
 __version__ = "1.0"
 __license__ = "GNU General Public License v3.0"
 
-from sys import maxsize
 import sys
+from sys import maxsize
 
 
 def find_all_paths(graph, start, end, thread, path=None):

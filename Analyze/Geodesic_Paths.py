@@ -3,10 +3,10 @@ __name__ = "Gratis"
 __version__ = "1.0"
 __license__ = "GNU General Public License v3.0"
 
-from Analyze.Dijkstra import dijkstra
-from tkinter import END
 import sys
 from time import sleep
+from tkinter import END
+from Analyze.Dijkstra import dijkstra
 
 
 def find_geodesics(edges, num_of_vertices, text_area, thread):

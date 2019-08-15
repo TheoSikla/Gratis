@@ -3,8 +3,8 @@ __name__ = "Gratis"
 __version__ = "1.0"
 __license__ = "GNU General Public License v3.0"
 
-from collections import defaultdict
 from heapq import *
+from collections import defaultdict
 
 
 def dijkstra(edges, f, t):

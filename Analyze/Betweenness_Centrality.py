@@ -3,9 +3,9 @@ __name__ = "Gratis"
 __version__ = "1.0"
 __license__ = "GNU General Public License v3.0"
 
-from tkinter import END
-from time import sleep
 import sys
+from time import sleep
+from tkinter import END
 
 
 def betweenness_centrality(shortest_paths, num_of_vertices, text_area, thread):
