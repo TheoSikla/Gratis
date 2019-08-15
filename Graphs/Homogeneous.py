@@ -3,9 +3,9 @@ __name__ = "Gratis"
 __version__ = "1.0"
 __license__ = "GNU General Public License v3.0"
 
-from Generate.Generate import *
-from Analyze.Analyze import *
 import sys
+from Analyze.Analyze import *
+from Generate.Generate import *
 
 
 class Homogeneous:

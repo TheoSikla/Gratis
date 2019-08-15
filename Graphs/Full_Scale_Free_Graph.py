@@ -3,12 +3,12 @@ __name__ = "Gratis"
 __version__ = "1.0"
 __license__ = "GNU General Public License v3.0"
 
-from Support_Folders.camel_case_spliter import *
-from Generate.Generate import *
-from Analyze.Analyze import *
-import random
-from collections import OrderedDict
 import sys
+import random
+from Analyze.Analyze import *
+from Generate.Generate import *
+from collections import OrderedDict
+from Support_Folders.camel_case_spliter import *
 
 
 class FullScaleFreeGraph:
