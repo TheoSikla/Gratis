@@ -1,4 +1,5 @@
 from tkinter import *
+from gui.pages.mousewheel import *
 from tkinter import ttk
 from tkinter import messagebox
 from sqlite3_db.Database import *

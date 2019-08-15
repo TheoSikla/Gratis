@@ -188,6 +188,8 @@ class GraphAnalyzePage(Page):
         self.text_area.bind("<FocusIn>", self.defocus)
         self.text_area.config(font=("consolas", 11), undo=True, wrap='word')
         self.my_scroll.config(command=self.text_area.yview)
+        MousewheelSupport(self).add_support_to(self.text_area, yscrollbar=self.my_scroll, what="units")
+
         self.text_area.grid(row=0, column=0, sticky='news')
         self.my_scroll.grid(row=0, column=1, sticky='news')
         # ================================

@@ -37,6 +37,8 @@ class GraphHistoryPage(Page):
 
         self.graphs_frame.bind("<Configure>", self.onFrameConfigure)
 
+        MousewheelSupport(self).add_support_to(self.canvas, yscrollbar=self.vsb, what="units")
+
         self.back_button = ttk.Button(self, text="Back", command=lambda: self.back(self.controller))
         self.back_button.grid(row=1, column=0, ipady=10, ipadx=15, pady=10, sticky="e")
 
@@ -150,7 +152,7 @@ class GraphHistoryPage(Page):
             self.graph_mini_frames[button_id].grid_forget()
 
     def onFrameConfigure(self, event):
-        '''Reset the scroll region to encompass the inner frame'''
+        """Reset the scroll region to encompass the inner frame"""
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
     def back(self, controller):
