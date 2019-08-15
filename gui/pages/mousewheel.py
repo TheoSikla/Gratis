@@ -6,6 +6,7 @@ OS = platform.system()
 class MousewheelSupport:
     """
     http://code.activestate.com/recipes/578894-mousewheel-binding-to-scrolling-area-tkinter-multi/
+    https://github.com/ActiveState/code/tree/master/recipes/Python/578894_Mousewheel_binding_scrolling_areTkinter
     usage:
         mousewheel_support = MousewheelSupport(root)
         mousewheel_support.add_support_to(widget, xscrollbar=, yscrollbar=, what="units")
