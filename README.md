@@ -30,3 +30,5 @@
    4. `pipenv install`
    5. `pipenv shell`
    6. `python App.py`
+
+* Note: For a stable version of the tool work with the master branch.
