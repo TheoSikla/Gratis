@@ -1,8 +1,9 @@
-# from Graphs.cython.netx import generate_graph
+from Graphs.cython.homogeneous import generate_graph
 from Graphs.cython.pp import generate_graph_pure
 from Support_Folders.timer import timeit
 import sys
 import re
+
 
 
 REPEATS_RE = re.compile(r'(.)\1*')
@@ -27,8 +28,8 @@ def encode(string):
 
 
 def decode(string):
-    return NUMBERS_RE.sub(from_numbers, string)
-
+    # NUMBERS_RE.sub(from_numbers, string)
+    return ''.join([''.join(str(ord(digit))) for digit in NUMBERS_RE.sub(from_numbers, string)])
 
 x = 10000
 
@@ -38,12 +39,13 @@ def t():
     string = generate_graph(x)
     # print(a[0])
     print(sys.getsizeof(string))
+    # print(string[0])
     enc = encode([''.join(str(_) for _ in string[0])][0])
     print(enc)
     dec = decode(enc)
     print(dec)
-    print(len(dec))
-    print(sys.getsizeof(encode([''.join(str(_) for _ in string[0])][0])))
+    # print(len(dec))
+    # print(sys.getsizeof(encode([''.join(str(_) for _ in string[0])][0])))
     # import zib
     #     # print([''.join(str(_) for _ in string[0])][0].encode("utf-8"))
     #     # # print(type([''.join(str(_) for _ in string[0])][0]))
@@ -65,8 +67,27 @@ def r():
 # t()
 # r()
 
-import demo
+import random
+random_string = ''
+for j in range(10):
+    for i in range(100):
+        random_string += chr(random.randint(0, 1))
 
-if __name__ == '__main__':
+    print(random_string)
+    enc = encode(random_string)
+    print(enc)
+    # print(len(enc))
+    dec = decode(enc)
+    # print(dec)
+    # print(len(dec))
+    print(''.join([''.join(str(ord(digit))) for digit in random_string]))
+    assert ''.join([''.join(str(ord(digit))) for digit in random_string]) == dec
+    random_string = ''
 
-    print(demo.fib("ttairaram"))
+
+# random_string = 'aaaaabbhhnaaasssdd'
+# print(random_string)
+# enc = encode(random_string)
+# print(enc)
+# dec = decode(enc)
+# print(dec)

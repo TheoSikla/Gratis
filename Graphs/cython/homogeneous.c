@@ -3,12 +3,12 @@
 /* BEGIN: Cython Metadata
 {
     "distutils": {
-        "name": "netx",
+        "name": "homogeneous",
         "sources": [
-            "netx.pyx"
+            "homogeneous.pyx"
         ]
     },
-    "module_name": "netx"
+    "module_name": "homogeneous"
 }
 END: Cython Metadata */
 
@@ -602,8 +602,8 @@ static CYTHON_INLINE float __PYX_NAN() {
   #endif
 #endif
 
-#define __PYX_HAVE__netx
-#define __PYX_HAVE_API__netx
+#define __PYX_HAVE__homogeneous
+#define __PYX_HAVE_API__homogeneous
 /* Early includes */
 #ifdef _OPENMP
 #include <omp.h>
@@ -813,7 +813,7 @@ static const char *__pyx_filename;
 
 
 static const char *__pyx_f[] = {
-  "netx.pyx",
+  "homogeneous.pyx",
 };
 
 /*--- Type declarations ---*/
@@ -1029,13 +1029,13 @@ static int __Pyx_check_binary_version(void);
 static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 
 
-/* Module declarations from 'netx' */
-static PyObject *__pyx_f_4netx_generate_graph(int, int __pyx_skip_dispatch); /*proto*/
-#define __Pyx_MODULE_NAME "netx"
-extern int __pyx_module_is_main_netx;
-int __pyx_module_is_main_netx = 0;
+/* Module declarations from 'homogeneous' */
+static PyObject *__pyx_f_11homogeneous_generate_graph(int, int __pyx_skip_dispatch); /*proto*/
+#define __Pyx_MODULE_NAME "homogeneous"
+extern int __pyx_module_is_main_homogeneous;
+int __pyx_module_is_main_homogeneous = 0;
 
-/* Implementation of 'netx' */
+/* Implementation of 'homogeneous' */
 static PyObject *__pyx_builtin_range;
 static const char __pyx_k_[] = "";
 static const char __pyx_k_main[] = "__main__";
@@ -1050,20 +1050,20 @@ static PyObject *__pyx_n_s_main;
 static PyObject *__pyx_n_s_name;
 static PyObject *__pyx_n_s_range;
 static PyObject *__pyx_n_s_test;
-static PyObject *__pyx_pf_4netx_generate_graph(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_number_of_vertices); /* proto */
+static PyObject *__pyx_pf_11homogeneous_generate_graph(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_number_of_vertices); /* proto */
 static PyObject *__pyx_int_1;
 /* Late includes */
 
-/* "netx.pyx":110
- * # print(headers[0])
+/* "homogeneous.pyx":76
+ * 
  * 
  * cpdef list generate_graph(int number_of_vertices):             # <<<<<<<<<<<<<<
  *     cdef int i, j
- *     # cdef char* outout
+ *     cdef list arr=[]
  */
 
-static PyObject *__pyx_pw_4netx_1generate_graph(PyObject *__pyx_self, PyObject *__pyx_arg_number_of_vertices); /*proto*/
-static PyObject *__pyx_f_4netx_generate_graph(int __pyx_v_number_of_vertices, CYTHON_UNUSED int __pyx_skip_dispatch) {
+static PyObject *__pyx_pw_11homogeneous_1generate_graph(PyObject *__pyx_self, PyObject *__pyx_arg_number_of_vertices); /*proto*/
+static PyObject *__pyx_f_11homogeneous_generate_graph(int __pyx_v_number_of_vertices, CYTHON_UNUSED int __pyx_skip_dispatch) {
   CYTHON_UNUSED int __pyx_v_i;
   CYTHON_UNUSED int __pyx_v_j;
   PyObject *__pyx_v_arr = 0;
@@ -1081,43 +1081,43 @@ static PyObject *__pyx_f_4netx_generate_graph(int __pyx_v_number_of_vertices, CY
   int __pyx_t_8;
   __Pyx_RefNannySetupContext("generate_graph", 0);
 
-  /* "netx.pyx":119
- *     # arr[0][0] = 'TAIRARAM'
- *     # print(arr[0][0])
+  /* "homogeneous.pyx":78
+ * cpdef list generate_graph(int number_of_vertices):
+ *     cdef int i, j
  *     cdef list arr=[]             # <<<<<<<<<<<<<<
  *     cdef list outout=[]
  *     cdef str outout2= ''
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 119, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 78, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_arr = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "netx.pyx":120
- *     # print(arr[0][0])
+  /* "homogeneous.pyx":79
+ *     cdef int i, j
  *     cdef list arr=[]
  *     cdef list outout=[]             # <<<<<<<<<<<<<<
  *     cdef str outout2= ''
- *     # from libc.string cimport memset
+ * 
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 120, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 79, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_outout = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "netx.pyx":121
+  /* "homogeneous.pyx":80
  *     cdef list arr=[]
  *     cdef list outout=[]
  *     cdef str outout2= ''             # <<<<<<<<<<<<<<
- *     # from libc.string cimport memset
- *     # cdef char outout[5]
+ * 
+ *     for i in range(number_of_vertices):
  */
   __Pyx_INCREF(__pyx_kp_s_);
   __pyx_v_outout2 = __pyx_kp_s_;
 
-  /* "netx.pyx":129
- *     # cdef char arr[NUMBER_OF_STRING][MAX_STRING_SIZE]
- *     # out = []
+  /* "homogeneous.pyx":82
+ *     cdef str outout2= ''
+ * 
  *     for i in range(number_of_vertices):             # <<<<<<<<<<<<<<
  *         outout=[]
  *         # outout2=''
@@ -1127,19 +1127,19 @@ static PyObject *__pyx_f_4netx_generate_graph(int __pyx_v_number_of_vertices, CY
   for (__pyx_t_4 = 0; __pyx_t_4 < __pyx_t_3; __pyx_t_4+=1) {
     __pyx_v_i = __pyx_t_4;
 
-    /* "netx.pyx":130
- *     # out = []
+    /* "homogeneous.pyx":83
+ * 
  *     for i in range(number_of_vertices):
  *         outout=[]             # <<<<<<<<<<<<<<
  *         # outout2=''
  *         for j in range(number_of_vertices):
  */
-    __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 130, __pyx_L1_error)
+    __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 83, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF_SET(__pyx_v_outout, ((PyObject*)__pyx_t_1));
     __pyx_t_1 = 0;
 
-    /* "netx.pyx":132
+    /* "homogeneous.pyx":85
  *         outout=[]
  *         # outout2=''
  *         for j in range(number_of_vertices):             # <<<<<<<<<<<<<<
@@ -1151,27 +1151,27 @@ static PyObject *__pyx_f_4netx_generate_graph(int __pyx_v_number_of_vertices, CY
     for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
       __pyx_v_j = __pyx_t_7;
 
-      /* "netx.pyx":133
+      /* "homogeneous.pyx":86
  *         # outout2=''
  *         for j in range(number_of_vertices):
  *             outout.append(1)             # <<<<<<<<<<<<<<
  *             # outout2 += '1'
  *         # print(outout2)
  */
-      __pyx_t_8 = __Pyx_PyList_Append(__pyx_v_outout, __pyx_int_1); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 133, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyList_Append(__pyx_v_outout, __pyx_int_1); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 86, __pyx_L1_error)
     }
 
-    /* "netx.pyx":136
+    /* "homogeneous.pyx":89
  *             # outout2 += '1'
  *         # print(outout2)
  *         arr.append(outout)             # <<<<<<<<<<<<<<
  *         # arr.append(outout2)
  *     return arr
  */
-    __pyx_t_8 = __Pyx_PyList_Append(__pyx_v_arr, __pyx_v_outout); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 136, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyList_Append(__pyx_v_arr, __pyx_v_outout); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 89, __pyx_L1_error)
   }
 
-  /* "netx.pyx":138
+  /* "homogeneous.pyx":91
  *         arr.append(outout)
  *         # arr.append(outout2)
  *     return arr             # <<<<<<<<<<<<<<
@@ -1183,18 +1183,18 @@ static PyObject *__pyx_f_4netx_generate_graph(int __pyx_v_number_of_vertices, CY
   __pyx_r = __pyx_v_arr;
   goto __pyx_L0;
 
-  /* "netx.pyx":110
- * # print(headers[0])
+  /* "homogeneous.pyx":76
+ * 
  * 
  * cpdef list generate_graph(int number_of_vertices):             # <<<<<<<<<<<<<<
  *     cdef int i, j
- *     # cdef char* outout
+ *     cdef list arr=[]
  */
 
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("netx.generate_graph", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("homogeneous.generate_graph", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_arr);
@@ -1206,35 +1206,35 @@ static PyObject *__pyx_f_4netx_generate_graph(int __pyx_v_number_of_vertices, CY
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_4netx_1generate_graph(PyObject *__pyx_self, PyObject *__pyx_arg_number_of_vertices); /*proto*/
-static PyObject *__pyx_pw_4netx_1generate_graph(PyObject *__pyx_self, PyObject *__pyx_arg_number_of_vertices) {
+static PyObject *__pyx_pw_11homogeneous_1generate_graph(PyObject *__pyx_self, PyObject *__pyx_arg_number_of_vertices); /*proto*/
+static PyObject *__pyx_pw_11homogeneous_1generate_graph(PyObject *__pyx_self, PyObject *__pyx_arg_number_of_vertices) {
   int __pyx_v_number_of_vertices;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("generate_graph (wrapper)", 0);
   assert(__pyx_arg_number_of_vertices); {
-    __pyx_v_number_of_vertices = __Pyx_PyInt_As_int(__pyx_arg_number_of_vertices); if (unlikely((__pyx_v_number_of_vertices == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 110, __pyx_L3_error)
+    __pyx_v_number_of_vertices = __Pyx_PyInt_As_int(__pyx_arg_number_of_vertices); if (unlikely((__pyx_v_number_of_vertices == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 76, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
-  __Pyx_AddTraceback("netx.generate_graph", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("homogeneous.generate_graph", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_4netx_generate_graph(__pyx_self, ((int)__pyx_v_number_of_vertices));
+  __pyx_r = __pyx_pf_11homogeneous_generate_graph(__pyx_self, ((int)__pyx_v_number_of_vertices));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_4netx_generate_graph(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_number_of_vertices) {
+static PyObject *__pyx_pf_11homogeneous_generate_graph(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_number_of_vertices) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("generate_graph", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_4netx_generate_graph(__pyx_v_number_of_vertices, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 110, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_11homogeneous_generate_graph(__pyx_v_number_of_vertices, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 76, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -1243,7 +1243,7 @@ static PyObject *__pyx_pf_4netx_generate_graph(CYTHON_UNUSED PyObject *__pyx_sel
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("netx.generate_graph", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("homogeneous.generate_graph", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -1252,24 +1252,24 @@ static PyObject *__pyx_pf_4netx_generate_graph(CYTHON_UNUSED PyObject *__pyx_sel
 }
 
 static PyMethodDef __pyx_methods[] = {
-  {"generate_graph", (PyCFunction)__pyx_pw_4netx_1generate_graph, METH_O, 0},
+  {"generate_graph", (PyCFunction)__pyx_pw_11homogeneous_1generate_graph, METH_O, 0},
   {0, 0, 0, 0}
 };
 
 #if PY_MAJOR_VERSION >= 3
 #if CYTHON_PEP489_MULTI_PHASE_INIT
 static PyObject* __pyx_pymod_create(PyObject *spec, PyModuleDef *def); /*proto*/
-static int __pyx_pymod_exec_netx(PyObject* module); /*proto*/
+static int __pyx_pymod_exec_homogeneous(PyObject* module); /*proto*/
 static PyModuleDef_Slot __pyx_moduledef_slots[] = {
   {Py_mod_create, (void*)__pyx_pymod_create},
-  {Py_mod_exec, (void*)__pyx_pymod_exec_netx},
+  {Py_mod_exec, (void*)__pyx_pymod_exec_homogeneous},
   {0, NULL}
 };
 #endif
 
 static struct PyModuleDef __pyx_moduledef = {
     PyModuleDef_HEAD_INIT,
-    "netx",
+    "homogeneous",
     __pyx_k_from_math_import_exp_import_num, /* m_doc */
   #if CYTHON_PEP489_MULTI_PHASE_INIT
     0, /* m_size */
@@ -1307,7 +1307,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 129, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 82, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -1409,11 +1409,11 @@ static int __Pyx_modinit_function_import_code(void) {
 
 
 #if PY_MAJOR_VERSION < 3
-__Pyx_PyMODINIT_FUNC initnetx(void) CYTHON_SMALL_CODE; /*proto*/
-__Pyx_PyMODINIT_FUNC initnetx(void)
+__Pyx_PyMODINIT_FUNC inithomogeneous(void) CYTHON_SMALL_CODE; /*proto*/
+__Pyx_PyMODINIT_FUNC inithomogeneous(void)
 #else
-__Pyx_PyMODINIT_FUNC PyInit_netx(void) CYTHON_SMALL_CODE; /*proto*/
-__Pyx_PyMODINIT_FUNC PyInit_netx(void)
+__Pyx_PyMODINIT_FUNC PyInit_homogeneous(void) CYTHON_SMALL_CODE; /*proto*/
+__Pyx_PyMODINIT_FUNC PyInit_homogeneous(void)
 #if CYTHON_PEP489_MULTI_PHASE_INIT
 {
   return PyModuleDef_Init(&__pyx_moduledef);
@@ -1480,7 +1480,7 @@ bad:
 }
 
 
-static CYTHON_SMALL_CODE int __pyx_pymod_exec_netx(PyObject *__pyx_pyinit_module)
+static CYTHON_SMALL_CODE int __pyx_pymod_exec_homogeneous(PyObject *__pyx_pyinit_module)
 #endif
 #endif
 {
@@ -1489,7 +1489,7 @@ static CYTHON_SMALL_CODE int __pyx_pymod_exec_netx(PyObject *__pyx_pyinit_module
   #if CYTHON_PEP489_MULTI_PHASE_INIT
   if (__pyx_m) {
     if (__pyx_m == __pyx_pyinit_module) return 0;
-    PyErr_SetString(PyExc_RuntimeError, "Module 'netx' has already been imported. Re-initialisation is not supported.");
+    PyErr_SetString(PyExc_RuntimeError, "Module 'homogeneous' has already been imported. Re-initialisation is not supported.");
     return -1;
   }
   #elif PY_MAJOR_VERSION >= 3
@@ -1504,7 +1504,7 @@ if (!__Pyx_RefNanny) {
       Py_FatalError("failed to import 'refnanny' module");
 }
 #endif
-  __Pyx_RefNannySetupContext("__Pyx_PyMODINIT_FUNC PyInit_netx(void)", 0);
+  __Pyx_RefNannySetupContext("__Pyx_PyMODINIT_FUNC PyInit_homogeneous(void)", 0);
   if (__Pyx_check_binary_version() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #ifdef __Pxy_PyFrame_Initialize_Offsets
   __Pxy_PyFrame_Initialize_Offsets();
@@ -1543,7 +1543,7 @@ if (!__Pyx_RefNanny) {
   Py_INCREF(__pyx_m);
   #else
   #if PY_MAJOR_VERSION < 3
-  __pyx_m = Py_InitModule4("netx", __pyx_methods, __pyx_k_from_math_import_exp_import_num, 0, PYTHON_API_VERSION); Py_XINCREF(__pyx_m);
+  __pyx_m = Py_InitModule4("homogeneous", __pyx_methods, __pyx_k_from_math_import_exp_import_num, 0, PYTHON_API_VERSION); Py_XINCREF(__pyx_m);
   #else
   __pyx_m = PyModule_Create(&__pyx_moduledef);
   #endif
@@ -1561,14 +1561,14 @@ if (!__Pyx_RefNanny) {
   #if PY_MAJOR_VERSION < 3 && (__PYX_DEFAULT_STRING_ENCODING_IS_ASCII || __PYX_DEFAULT_STRING_ENCODING_IS_DEFAULT)
   if (__Pyx_init_sys_getdefaultencoding_params() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
-  if (__pyx_module_is_main_netx) {
+  if (__pyx_module_is_main_homogeneous) {
     if (PyObject_SetAttr(__pyx_m, __pyx_n_s_name, __pyx_n_s_main) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   }
   #if PY_MAJOR_VERSION >= 3
   {
     PyObject *modules = PyImport_GetModuleDict(); if (unlikely(!modules)) __PYX_ERR(0, 1, __pyx_L1_error)
-    if (!PyDict_GetItemString(modules, "netx")) {
-      if (unlikely(PyDict_SetItemString(modules, "netx", __pyx_m) < 0)) __PYX_ERR(0, 1, __pyx_L1_error)
+    if (!PyDict_GetItemString(modules, "homogeneous")) {
+      if (unlikely(PyDict_SetItemString(modules, "homogeneous", __pyx_m) < 0)) __PYX_ERR(0, 1, __pyx_L1_error)
     }
   }
   #endif
@@ -1589,7 +1589,7 @@ if (!__Pyx_RefNanny) {
   if (__Pyx_patch_abc() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
 
-  /* "netx.pyx":1
+  /* "homogeneous.pyx":1
  * """             # <<<<<<<<<<<<<<
  * from math import exp
  * import numpy as np
@@ -1606,11 +1606,11 @@ if (!__Pyx_RefNanny) {
   __Pyx_XDECREF(__pyx_t_1);
   if (__pyx_m) {
     if (__pyx_d) {
-      __Pyx_AddTraceback("init netx", __pyx_clineno, __pyx_lineno, __pyx_filename);
+      __Pyx_AddTraceback("init homogeneous", __pyx_clineno, __pyx_lineno, __pyx_filename);
     }
     Py_CLEAR(__pyx_m);
   } else if (!PyErr_Occurred()) {
-    PyErr_SetString(PyExc_ImportError, "init netx");
+    PyErr_SetString(PyExc_ImportError, "init homogeneous");
   }
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
