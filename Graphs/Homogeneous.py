@@ -18,7 +18,7 @@ class Homogeneous:
     def __init__(self):
         self.g = None
 
-    def create_homogeneous_graph(self, graph_respresentation_type, numOfVertices, thread):
+    def create_homogeneous_graph(self, graph_respresentation_type, numOfVertices, thread, **kwargs):
         if graph_respresentation_type == "Matrix":
             from Graphs.graph_adjacency_matrix import Graph, Vertex
         else:
@@ -26,6 +26,10 @@ class Homogeneous:
 
         self.g = Graph()
         self.g.reset_graph()
+
+        if graph_respresentation_type == "Matrix":
+            if kwargs.get('rle'):
+                self.g.mode = "memory efficient"
 
         for i in range(numOfVertices):
             self.g.add_vertex(Vertex(str(i)))

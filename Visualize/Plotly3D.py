@@ -11,6 +11,7 @@ import plotly.graph_objs as go
 from tkinter import messagebox
 import igraph.vendor.texttable
 from os_recon.define_os import path_escape
+from Support_Folders.run_length_encoder import RunLengthEncoder
 
 
 class Plotly3D:
@@ -34,13 +35,20 @@ class Plotly3D:
         try:
             with open(f"Output_Files{path_escape}matrix.txt", buffering=20000) as f:
                 # Number of Vertices
-                vertices = len(f.readline().replace("\n", ""))
+                encoder = RunLengthEncoder()
+                line = f.readline()
+
+                vertices = len(encoder.decode(line.replace('\n', ''))
+                                               if any(_ in [chr(0), chr(1)] for _ in line)
+                                               else len(line.replace("\n", "")))
                 f.seek(0)
 
                 i = 0
                 j = 0
                 Edges = []
                 for line in f:
+                    line = encoder.decode(line.replace('\n', '')) \
+                        if any(_ in [chr(0), chr(1)] for _ in line) else line
                     for char in line:
                         if str(char) == '1' and i < j and i != j:
                             Edges.append((i, j))

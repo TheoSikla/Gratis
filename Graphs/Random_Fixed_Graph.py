@@ -28,7 +28,7 @@ class RandomFixedGraph:
     def __init__(self):
         self.g = None
 
-    def create_random_fixed_graph(self, graph_respresentation_type, numOfVertices, connectivity, seed, thread):
+    def create_random_fixed_graph(self, graph_respresentation_type, numOfVertices, connectivity, seed, thread, **kwargs):
 
         """ Commented lines of code serve debugging purposes. """
 
@@ -39,6 +39,10 @@ class RandomFixedGraph:
 
         self.g = Graph()
         self.g.reset_graph()
+
+        if graph_respresentation_type == "Matrix":
+            if kwargs.get('rle'):
+                self.g.mode = "memory efficient"
 
         random.seed(seed)
         numOfEdges = [0] * numOfVertices

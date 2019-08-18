@@ -5,6 +5,7 @@ from sqlite3_db.Database import *
 from gui.pages.mousewheel import *
 from os_recon.define_os import transform, platform_type
 from Support_Folders.multithreading import StoppableThread
+from Support_Folders.run_length_encoder import RunLengthEncoder
 
 
 class Page(Frame):

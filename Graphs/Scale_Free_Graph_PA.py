@@ -32,17 +32,21 @@ class ScaleFreeGraphPA:
     def __init__(self):
         self.g = None
 
-    def create_scale_free_graph(self, adjacency_type, numOfVertices, seed, thread):
+    def create_scale_free_graph(self, graph_respresentation_type, numOfVertices, seed, thread, **kwargs):
 
         """ Commented lines of code serve debugging purposes. """
 
-        if adjacency_type == "Matrix":
+        if graph_respresentation_type == "Matrix":
             from Graphs.graph_adjacency_matrix import Graph, Vertex
         else:
             from Graphs.graph_adjacency_list import Graph, Vertex
 
         self.g = Graph()
         self.g.reset_graph()
+
+        if graph_respresentation_type == "Matrix":
+            if kwargs.get('rle'):
+                self.g.mode = "memory efficient"
 
         numOfEdges = [0] * numOfVertices
         numOfConnectedEdges = 0
@@ -120,28 +124,32 @@ class ScaleFreeGraphPA:
 
         self.g.get_number_of_edges()
 
-        generator.generate(adjacency_type, self.g, thread)
+        generator.generate(graph_respresentation_type, self.g, thread)
 
-        if adjacency_type == "Matrix":
-            analyzer.analyze_generated_graph(self.g.edges, adjacency_type,
+        if graph_respresentation_type == "Matrix":
+            analyzer.analyze_generated_graph(self.g.edges, graph_respresentation_type,
                                             f'{camel_case_split(self.__class__.__name__[:-2])} with Preferential Attachment', numOfVertices, None,
-                                            None, None, None, None, seed)
+                                             None, None, None, None, seed)
         else:
-            analyzer.analyze_generated_graph(self.g.neighbors, adjacency_type,
+            analyzer.analyze_generated_graph(self.g.neighbors, graph_respresentation_type,
                                              f'{camel_case_split(self.__class__.__name__[:-2])} with Preferential Attachment', numOfVertices, None,
                                              None, None, None, None, seed)
 
-    def create_custom_scale_free_graph(self, adjacency_type, numOfVertices, totalNumOfEdges, seed, thread):
+    def create_custom_scale_free_graph(self, graph_respresentation_type, numOfVertices, totalNumOfEdges, seed, thread, **kwargs):
 
         """ Commented lines of code serve debugging purposes. """
 
-        if adjacency_type == "Matrix":
+        if graph_respresentation_type == "Matrix":
             from Graphs.graph_adjacency_matrix import Graph, Vertex
         else:
             from Graphs.graph_adjacency_list import Graph, Vertex
 
         self.g = Graph()
         self.g.reset_graph()
+
+        if graph_respresentation_type == "Matrix":
+            if kwargs.get('rle'):
+                self.g.mode = "memory efficient"
 
         numOfEdges = [0] * numOfVertices
         numOfConnectedEdges = 0
@@ -220,13 +228,13 @@ class ScaleFreeGraphPA:
 
         self.g.get_number_of_edges()
 
-        generator.generate(adjacency_type, self.g, thread)
+        generator.generate(graph_respresentation_type, self.g, thread)
 
-        if adjacency_type == "Matrix":
-            analyzer.analyze_generated_graph(self.g.edges, adjacency_type,
+        if graph_respresentation_type == "Matrix":
+            analyzer.analyze_generated_graph(self.g.edges, graph_respresentation_type,
                                             f'Custom {camel_case_split(self.__class__.__name__[:-2])} with Preferential Attachment', numOfVertices, None,
-                                            totalNumOfEdges, None, None, None, seed)
+                                             totalNumOfEdges, None, None, None, seed)
         else:
-            analyzer.analyze_generated_graph(self.g.neighbors, adjacency_type,
+            analyzer.analyze_generated_graph(self.g.neighbors, graph_respresentation_type,
                                             f'Custom {camel_case_split(self.__class__.__name__[:-2])} with Preferential Attachment', numOfVertices, None,
-                                            totalNumOfEdges, None, None, None, seed)
+                                             totalNumOfEdges, None, None, None, seed)

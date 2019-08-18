@@ -10,6 +10,9 @@ class Vertex:
     def __init__(self, n):
         self.name = str(n)
 
+    def __str__(self):
+        return self.name
+
 
 class Graph:
     """ Creates a Graph object. """
@@ -17,6 +20,9 @@ class Graph:
     vertices = {}  # A dictionary that hold the name of the vertex as key and the memory position as value.
     edges = []  # A list that holds the adjacency matrix, gradually is becoming a 2 dimension list
     edge_indices = {}  # A dictionary that hold the name of the vertex as key and the name's integer form as value
+
+    def __init__(self, mode="normal"):
+        self.mode = mode
 
     def __str__(self):
         """ Prints a well formatted output of the graph's adjacency matrix. """

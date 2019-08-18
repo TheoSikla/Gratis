@@ -26,7 +26,7 @@ class RunLengthEncoder:
         return int(match.group(1)) * match.group(2)
 
     def encode(self, string: str):
-        self.initial_input = string
+        # self.initial_input = string
         self.check_input(string)
         if self.mode == 'normal':
             return self.REPEATS_RE.sub(self.to_numbers, string)
@@ -34,11 +34,13 @@ class RunLengthEncoder:
         return self.REPEATS_RE.sub(self.to_numbers, string)
 
     def decode(self, string: str):
+        if self.mode is None:
+            self.mode = "binary" if any(_ in [chr(0), chr(1)] for _ in string) else "normal"
         if self.mode == 'normal':
             decoded_string = self.NUMBERS_RE.sub(self.from_numbers, string)
         else:
             decoded_string = ''.join([''.join(str(ord(digit))) for digit in self.NUMBERS_RE.sub(self.from_numbers,
                                                                                                 string)])
-        if decoded_string != self.initial_input:
-            raise Exception("Run Length Decoding Failed.")
+        # if decoded_string != self.initial_input:
+        #     raise Exception("Run Length Decoding Failed.")
         return decoded_string

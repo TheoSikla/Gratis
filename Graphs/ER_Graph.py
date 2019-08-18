@@ -37,16 +37,20 @@ class ErdosRenyiGraph:
     def __init__(self):
         self.g = None
 
-    def create_er_graph(self, adjacency_type, numOfVertices, probability, seed, thread):
+    def create_er_graph(self, graph_respresentation_type, numOfVertices, probability, seed, thread, **kwargs):
         """ Commented lines of code serve debugging purposes. """
 
-        if adjacency_type == "Matrix":
+        if graph_respresentation_type == "Matrix":
             from Graphs.graph_adjacency_matrix import Graph, Vertex
         else:
             from Graphs.graph_adjacency_list import Graph, Vertex
 
         self.g = Graph()
         self.g.reset_graph()
+
+        if graph_respresentation_type == "Matrix":
+            if kwargs.get('rle'):
+                self.g.mode = "memory efficient"
 
         random.seed(seed)
 
@@ -84,26 +88,30 @@ class ErdosRenyiGraph:
 
         self.g.get_number_of_edges()
 
-        generator.generate(adjacency_type, self.g, thread)
+        generator.generate(graph_respresentation_type, self.g, thread)
 
-        if adjacency_type == "Matrix":
-            analyzer.analyze_generated_graph(self.g.edges, adjacency_type, camel_case_split(self.__class__.__name__), numOfVertices, None,
-                                            None, None, None, probability, seed)
+        if graph_respresentation_type == "Matrix":
+            analyzer.analyze_generated_graph(self.g.edges, graph_respresentation_type, camel_case_split(self.__class__.__name__), numOfVertices, None,
+                                             None, None, None, probability, seed)
         else:
-            analyzer.analyze_generated_graph(self.g.neighbors, adjacency_type, camel_case_split(self.__class__.__name__), numOfVertices, None,
-                                            None, None, None, probability, seed)
+            analyzer.analyze_generated_graph(self.g.neighbors, graph_respresentation_type, camel_case_split(self.__class__.__name__), numOfVertices, None,
+                                             None, None, None, probability, seed)
 
-    def create_custom_er_graph(self, adjacency_type, numOfVertices, totalNumOfEdges, probability, seed, thread):
+    def create_custom_er_graph(self, graph_respresentation_type, numOfVertices, totalNumOfEdges, probability, seed, thread, **kwargs):
 
         """ Commented lines of code serve debugging purposes. """
 
-        if adjacency_type == "Matrix":
+        if graph_respresentation_type == "Matrix":
             from Graphs.graph_adjacency_matrix import Graph, Vertex
         else:
             from Graphs.graph_adjacency_list import Graph, Vertex
 
         self.g = Graph()
         self.g.reset_graph()
+
+        if graph_respresentation_type == "Matrix":
+            if kwargs.get('rle'):
+                self.g.mode = "memory efficient"
 
         random.seed(seed)
 
@@ -188,11 +196,11 @@ class ErdosRenyiGraph:
 
         self.g.get_number_of_edges()
 
-        generator.generate(adjacency_type, self.g, thread)
+        generator.generate(graph_respresentation_type, self.g, thread)
 
-        if adjacency_type == "Matrix":
-            analyzer.analyze_generated_graph(self.g.edges, adjacency_type, f'Custom {camel_case_split(self.__class__.__name__)}', numOfVertices, None,
-                                            totalNumOfEdges, None, None, probability, seed)
+        if graph_respresentation_type == "Matrix":
+            analyzer.analyze_generated_graph(self.g.edges, graph_respresentation_type, f'Custom {camel_case_split(self.__class__.__name__)}', numOfVertices, None,
+                                             totalNumOfEdges, None, None, probability, seed)
         else:
-            analyzer.analyze_generated_graph(self.g.neighbors, adjacency_type, f'Custom {camel_case_split(self.__class__.__name__)}', numOfVertices, None,
-                                            totalNumOfEdges, None, None, probability, seed)
+            analyzer.analyze_generated_graph(self.g.neighbors, graph_respresentation_type, f'Custom {camel_case_split(self.__class__.__name__)}', numOfVertices, None,
+                                             totalNumOfEdges, None, None, probability, seed)

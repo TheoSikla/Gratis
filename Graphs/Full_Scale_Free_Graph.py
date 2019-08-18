@@ -36,18 +36,22 @@ class FullScaleFreeGraph:
     def __init__(self):
         self.g = None
 
-    def create_full_scale_free_graph(self, adjacency_type, numOfVertices, numOfInitialNodes, seed, thread,
-                                     numOfInitialEdges=None):
+    def create_full_scale_free_graph(self, graph_respresentation_type, numOfVertices, numOfInitialNodes, seed, thread,
+                                     numOfInitialEdges=None, **kwargs):
 
         """ Commented lines of code serve debugging purposes. """
 
-        if adjacency_type == "Matrix":
+        if graph_respresentation_type == "Matrix":
             from Graphs.graph_adjacency_matrix import Graph, Vertex
         else:
             from Graphs.graph_adjacency_list import Graph, Vertex
 
         self.g = Graph()
         self.g.reset_graph()
+
+        if graph_respresentation_type == "Matrix":
+            if kwargs.get('rle'):
+                self.g.mode = "memory efficient"
 
         numOfEdges = [0] * numOfVertices
 
@@ -160,11 +164,11 @@ class FullScaleFreeGraph:
 
         self.g.get_number_of_edges()
 
-        generator.generate(adjacency_type, self.g, thread)
+        generator.generate(graph_respresentation_type, self.g, thread)
 
-        if adjacency_type == "Matrix":
-            analyzer.analyze_generated_graph(self.g.edges, adjacency_type, f'{"Custom " if numOfInitialEdges is not None else ""}{camel_case_split(self.__class__.__name__)}', numOfVertices, None,
-                                            None, numOfInitialEdges, None, None, seed)
+        if graph_respresentation_type == "Matrix":
+            analyzer.analyze_generated_graph(self.g.edges, graph_respresentation_type, f'{"Custom " if numOfInitialEdges is not None else ""}{camel_case_split(self.__class__.__name__)}', numOfVertices, None,
+                                             None, numOfInitialEdges, None, None, seed)
         else:
-            analyzer.analyze_generated_graph(self.g.neighbors, adjacency_type, f'{"Custom " if numOfInitialEdges is not None else ""}{camel_case_split(self.__class__.__name__)}', numOfVertices, None,
-                                            None, numOfInitialEdges, None, None, seed)
+            analyzer.analyze_generated_graph(self.g.neighbors, graph_respresentation_type, f'{"Custom " if numOfInitialEdges is not None else ""}{camel_case_split(self.__class__.__name__)}', numOfVertices, None,
+                                             None, numOfInitialEdges, None, None, seed)

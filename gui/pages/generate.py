@@ -38,10 +38,14 @@ class GraphGeneratePage(Page):
                             'Custom ER Random Graph', 'Custom Scale-Free Graph']
         # ================================
 
+        self.rle_var = BooleanVar(False)
+        self.rle = ttk.Checkbutton(self, text="Run Length Encoder", variable=self.rle_var)
+        self.rle.grid(row=1, column=2, sticky="w")
+
         # Main Label
         self.main_label = Label(self, bg="azure3", text="Generate a graph\n",
                                 font=("Arial", 20, "bold"))
-        self.main_label.grid(row=1, column=1)
+        self.main_label.grid(row=2, column=1)
         # ================================
 
         # Text Area Frame
@@ -57,22 +61,22 @@ class GraphGeneratePage(Page):
         self.text_area.config(font=("consolas", 11), undo=True, wrap='word')
         self.my_scroll.config(command=self.text_area.yview)
 
-        self.my_frame_inner.grid(row=1, column=2, rowspan=13, columnspan=2, sticky='nesw')
-        self.text_area.grid(row=1, column=2, rowspan=13)
-        self.my_scroll.grid(row=1, column=3, rowspan=13, columnspan=2, sticky='nesw')
+        self.my_frame_inner.grid(row=2, column=2, rowspan=13, columnspan=2, sticky='nesw')
+        self.text_area.grid(row=2, column=2, rowspan=13)
+        self.my_scroll.grid(row=2, column=3, rowspan=13, columnspan=2, sticky='nesw')
         # ================================
 
         # Type Label
         self.main_label = Label(self, bg="azure3", text="Select type of graph:\n",
                                 font=("Arial", 10, "bold"))
-        self.main_label.grid(row=2, column=1)
+        self.main_label.grid(row=3, column=1)
         # ================================
 
         self.chosen_graph = StringVar()
         self.chosen_graph.set(self.graph_types[1])
 
         self.graphs = ttk.OptionMenu(self, self.chosen_graph, *self.graph_types, command=self.show_parameters)
-        self.graphs.grid(row=3, column=1, pady=10)
+        self.graphs.grid(row=4, column=1, pady=10)
 
         # Parameter's Frame
         self.parameters_frame = ttk.Frame(self)
@@ -84,11 +88,13 @@ class GraphGeneratePage(Page):
 
         self.adjacency_type_selected = StringVar()
         self.matrix = ttk.Radiobutton(self.parameters_frame, text="Adjacency Matrix", value="Matrix",
-                                      variable=self.adjacency_type_selected)
+                                      variable=self.adjacency_type_selected,
+                                      command=self.handle_run_length_encoder_button)
         self.matrix.grid(row=0, column=0, padx=30, pady=10, sticky="w")
 
         self.list = ttk.Radiobutton(self.parameters_frame, text="Adjacency List", value="List",
-                                    variable=self.adjacency_type_selected)
+                                    variable=self.adjacency_type_selected,
+                                    command=self.handle_run_length_encoder_button)
         self.list.grid(row=0, column=1, padx=30, pady=10, sticky="w")
 
         self.incremental_growth_selected = BooleanVar()
@@ -390,6 +396,13 @@ class GraphGeneratePage(Page):
     def defocus(event):
         event.widget.master.focus_set()
 
+    def handle_run_length_encoder_button(self):
+        if self.adjacency_type_selected.get() == "List":
+            self.rle.configure(state=DISABLED)
+            self.rle_var.set(False)
+        else:
+            self.rle.configure(state=NORMAL)
+
     def preferential_attachment_func(self):
         if self.chosen_graph.get() == 'Scale-Free':
             if self.incremental_growth_selected.get() is False:
@@ -594,7 +607,8 @@ class GraphGeneratePage(Page):
 
                 Homogeneous_Graph = Homogeneous()
                 Homogeneous_Graph.create_homogeneous_graph(self.adjacency_type_selected.get(),
-                                                           self.number_of_vertices_entry_result.get(), self.thread)
+                                                           self.number_of_vertices_entry_result.get(),
+                                                           self.thread, rle=self.rle_var.get())
 
                 end = time() - start
 
@@ -621,7 +635,7 @@ class GraphGeneratePage(Page):
                     Random_Fixed_Graph.create_random_fixed_graph(self.adjacency_type_selected.get(),
                                                                  self.number_of_vertices_entry_result.get(),
                                                                  self.graph_degree_result.get(), self.seed_result.get(),
-                                                                 self.thread)
+                                                                 self.thread, rle=self.rle_var.get())
 
                     end = time() - start
 
@@ -660,7 +674,8 @@ class GraphGeneratePage(Page):
                         ScaleFreeGraphPA = ScaleFreeGraphPA()
                         ScaleFreeGraphPA.create_scale_free_graph(self.adjacency_type_selected.get(),
                                                                  self.number_of_vertices_entry_result.get(),
-                                                                 self.seed_result.get(), self.thread)
+                                                                 self.seed_result.get(), self.thread,
+                                                                 rle=self.rle_var.get())
 
                         end = time() - start
 
@@ -693,9 +708,10 @@ class GraphGeneratePage(Page):
 
                         FullScaleFreeGraph = FullScaleFreeGraph()
                         FullScaleFreeGraph.create_full_scale_free_graph(self.adjacency_type_selected.get(),
-                                                                           self.number_of_vertices_entry_result.get(),
-                                                                           self.number_of_initial_nodes_result.get(),
-                                                                           self.seed_result.get(), self.thread)
+                                                                        self.number_of_vertices_entry_result.get(),
+                                                                        self.number_of_initial_nodes_result.get(),
+                                                                        self.seed_result.get(), self.thread,
+                                                                        rle=self.rle_var.get())
 
                         end = time() - start
 
@@ -719,8 +735,10 @@ class GraphGeneratePage(Page):
 
                     ErdosRenyiGraph = ErdosRenyiGraph()
                     ErdosRenyiGraph.create_er_graph(self.adjacency_type_selected.get(),
-                                             self.number_of_vertices_entry_result.get(),
-                                             float(self.probability_result.get()), self.seed_result.get(), self.thread)
+                                                    self.number_of_vertices_entry_result.get(),
+                                                    float(self.probability_result.get()), self.seed_result.get(),
+                                                    self.thread,
+                                                    rle=self.rle_var.get())
 
                     end = time() - start
 
@@ -775,11 +793,12 @@ class GraphGeneratePage(Page):
 
                 ErdosRenyiGraph = ErdosRenyiGraph()
                 ErdosRenyiGraph.create_custom_er_graph(self.adjacency_type_selected.get(),
-                                                self.number_of_vertices_entry_result.get(),
-                                                self.number_of_edges_result.get(),
-                                                float(self.probability_result.get()),
-                                                self.seed_result.get(),
-                                                self.thread)
+                                                       self.number_of_vertices_entry_result.get(),
+                                                       self.number_of_edges_result.get(),
+                                                       float(self.probability_result.get()),
+                                                       self.seed_result.get(),
+                                                       self.thread,
+                                                       rle=self.rle_var.get())
 
                 end = time() - start
 
@@ -829,7 +848,8 @@ class GraphGeneratePage(Page):
                         ScaleFreeGraphPA.create_custom_scale_free_graph(self.adjacency_type_selected.get(),
                                                                         self.number_of_vertices_entry_result.get(),
                                                                         self.number_of_edges_result.get(),
-                                                                        self.seed_result.get(), self.thread)
+                                                                        self.seed_result.get(), self.thread,
+                                                                        rle=self.rle_var.get())
 
                         end = time() - start
 
@@ -873,11 +893,12 @@ class GraphGeneratePage(Page):
 
                         FullScaleFreeGraph = FullScaleFreeGraph()
                         FullScaleFreeGraph.create_full_scale_free_graph(self.adjacency_type_selected.get(),
-                                                                           self.number_of_vertices_entry_result.get(),
-                                                                           self.number_of_initial_nodes_result.get(),
-                                                                           self.seed_result.get(), self.thread,
-                                                                           self.initial_connections_per_node_result
-                                                                           .get())  # --> Custom Full Scale-Free Graph.
+                                                                        self.number_of_vertices_entry_result.get(),
+                                                                        self.number_of_initial_nodes_result.get(),
+                                                                        self.seed_result.get(), self.thread,
+                                                                        self.initial_connections_per_node_result
+                                                                        .get(),
+                                                                        rle=self.rle_var.get())  # --> Custom Full Scale-Free Graph.
 
                         end = time() - start
 

@@ -5,6 +5,7 @@ __license__ = "GNU General Public License v3.0"
 
 import re
 from os_recon.define_os import path_escape
+from Support_Folders.run_length_encoder import RunLengthEncoder
 
 
 class PajekVisualize:
@@ -19,7 +20,12 @@ class PajekVisualize:
                 with open(f"Output_Files{path_escape}matrix.txt") as f:
                     # Number of Vertices
 
-                    vertices = len(f.readline().replace("\n", ""))
+                    encoder = RunLengthEncoder()
+                    line = f.readline()
+
+                    vertices = len(encoder.decode(line.replace('\n', ''))
+                                               if any(_ in [chr(0), chr(1)] for _ in line)
+                                               else len(line.replace("\n", "")))
                     f.seek(0)
 
                     file_output += f"*Vertices {vertices}\n"
@@ -30,6 +36,8 @@ class PajekVisualize:
                     i = 1
                     j = 1
                     for line in f:
+                        line = encoder.decode(line.replace('\n', '')) \
+                            if any(_ in [chr(0), chr(1)] for _ in line) else line
                         for char in line:
                             if char == '1' and i < j:
                                 file_output += f"  {i} {j}\n"
