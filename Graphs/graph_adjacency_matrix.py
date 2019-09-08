@@ -4,25 +4,16 @@ __version__ = "1.0"
 __license__ = "GNU General Public License v3.0"
 
 
-class Vertex:
-    """Creates a Vertex object that has a name."""
-
-    def __init__(self, n):
-        self.name = str(n)
-
-    def __str__(self):
-        return self.name
+from Graphs.vertex import Vertex
+from Graphs.graph import Graph
 
 
-class Graph:
-    """ Creates a Graph object. """
+class AdjacencyMatrixGraph(Graph):
+    """Class for Adjacency Matrix Graph objects."""
 
-    vertices = {}  # A dictionary that hold the name of the vertex as key and the memory position as value.
-    edges = []  # A list that holds the adjacency matrix, gradually is becoming a 2 dimension list
-    edge_indices = {}  # A dictionary that hold the name of the vertex as key and the name's integer form as value
-
-    def __init__(self, mode="normal"):
+    def __init__(self, repr_type, graph_type, mode="normal"):
         self.mode = mode
+        super(AdjacencyMatrixGraph, self).__init__(repr_type, graph_type)
 
     def __str__(self):
         """ Prints a well formatted output of the graph's adjacency matrix. """
