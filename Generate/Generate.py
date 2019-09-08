@@ -16,7 +16,7 @@ class Generate:
 
         file_output = ''
 
-        if adjacency_type == "Matrix":
+        if adjacency_type == "matrix":
             if hasattr(graph, 'mode'):
                 if graph.mode == 'normal':
                     for i in range(len(graph.edges)):
@@ -44,20 +44,20 @@ class Generate:
                 raise Exception("Graph without mode found.")
             
         else:
-            for vertex, neighbors in graph.neighbors.items():
+            for vertex, edges in graph.edges.items():
                 if thread.isStopped():
                     graph.reset_graph()
                     sys.exit(0)
 
                 file_output += f"{vertex}:"
-                if len(neighbors) > 0:
-                    for node in graph.neighbors[vertex]:
+                if len(edges) > 0:
+                    for node in graph.edges[vertex]:
                         file_output += f"{node},"
 
                     file_output = file_output[:-1]
                 file_output += "\n"
         
-        if adjacency_type == "Matrix":
+        if adjacency_type == "matrix":
 
             with open(f"Output_Files{path_escape}matrix.txt", "w") as f:
                 f.write(file_output)
