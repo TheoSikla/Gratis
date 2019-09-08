@@ -44,5 +44,5 @@ class Homogeneous:
                         sys.exit(0)
 
         generator.generate(self.graph.graph_representation_type, self.graph, thread)
-        analyzer.analyze_generated_graph(self.graph.edges, self.graph.graph_representation_type,
-                                         self.__class__.__name__.replace("_", " "), number_of_vertices)
+        analyzer.analyze_generated_graph(self.graph.edges, self.graph.graph_representation_type, self.graph.graph_type,
+                                         number_of_vertices)

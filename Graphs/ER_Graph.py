@@ -3,14 +3,17 @@ __name__ = "Gratis"
 __version__ = "1.0"
 __license__ = "GNU General Public License v3.0"
 
-import sys
 import random
 from Analyze.Analyze import *
 from Generate.Generate import *
+from Graphs.vertex import Vertex
 from Support_Folders.camel_case_spliter import *
+from Graphs.graph_adjacency_list import AdjacencyListGraph
+from Graphs.graph import GraphRepresentationType, GraphType
+from Graphs.graph_adjacency_matrix import AdjacencyMatrixGraph
 
 
-class ErdosRenyiGraph:
+class ErdosRenyi:
     """
 
         This class creates a Erdős–Rényi Graph (ER Graph) and a Custom ER Graph with specified connection probability.
@@ -34,107 +37,94 @@ class ErdosRenyiGraph:
 
     """
 
-    def __init__(self):
-        self.g = None
+    def __init__(self, graph_representation_type):
+        if graph_representation_type == str(GraphRepresentationType.MATRIX):
+            self.graph = AdjacencyMatrixGraph(GraphRepresentationType.MATRIX, GraphType.ER)
+        else:
+            self.graph = AdjacencyListGraph(GraphRepresentationType.LIST, GraphType.ER)
 
-    def create_er_graph(self, graph_respresentation_type, numOfVertices, probability, seed, thread, **kwargs):
+    def create_er_graph(self, number_of_vertices, probability, seed, thread, **kwargs):
         """ Commented lines of code serve debugging purposes. """
 
-        if graph_respresentation_type == "Matrix":
-            from Graphs.graph_adjacency_matrix import Graph, Vertex
-        else:
-            from Graphs.graph_adjacency_list import Graph, Vertex
+        self.graph.reset_graph()
 
-        self.g = Graph()
-        self.g.reset_graph()
-
-        if graph_respresentation_type == "Matrix":
+        if self.graph.graph_representation_type == "matrix":
             if kwargs.get('rle'):
-                self.g.mode = "memory efficient"
+                self.graph.mode = "memory efficient"
 
         random.seed(seed)
 
-        numOfEdges = [0] * numOfVertices
+        number_of_edges = [0] * number_of_vertices
 
-        for i in range(numOfVertices):
+        for i in range(number_of_vertices):
             if thread.isStopped():  # --> Thread Status.
                 sys.exit(0)
 
-            self.g.add_vertex(Vertex(i))
+            self.graph.add_vertex(Vertex(i))
 
-        for newNode in range(numOfVertices):
-            for adjacency_vertex in range(numOfVertices):
+        for new_node in range(number_of_vertices):
+            for adjacency_vertex in range(number_of_vertices):
 
-                Per = random.uniform(0, 1)
+                per = random.uniform(0, 1)
 
-                if newNode == adjacency_vertex or adjacency_vertex >= numOfVertices:
+                if new_node == adjacency_vertex or adjacency_vertex >= number_of_vertices:
                     pass
 
-                elif probability >= Per:
+                elif probability >= per:
 
                     if thread.isStopped():  # --> Thread Status.
                         sys.exit(0)
 
-                    if not self.g.isAdjacent(newNode, adjacency_vertex):
+                    if not self.graph.isAdjacent(new_node, adjacency_vertex):
 
-                        self.g.add_edge_undirected(newNode, adjacency_vertex)
+                        self.graph.add_edge_undirected(new_node, adjacency_vertex)
 
-                        numOfEdges[newNode] += 1
-                        numOfEdges[adjacency_vertex] += 1
+                        number_of_edges[new_node] += 1
+                        number_of_edges[adjacency_vertex] += 1
 
-        #                 print(f"""Connected node {newNode} ({numOfEdges[newNode]}) edges with """
-        #                       f"""node {adjacency_vertex} ({numOfEdges[adjacency_vertex]}) edges with probability {probability} > {Per}""")
+                        # print(f"""Connected node {new_node} ({number_of_edges[new_node]}) edges with """
+                        #       f"""node {adjacency_vertex} ({number_of_edges[adjacency_vertex]})
+                        #       edges with probability {probability} > {per}""")
         # print()
 
-        self.g.get_number_of_edges()
+        self.graph.get_number_of_edges()
 
-        generator.generate(graph_respresentation_type, self.g, thread)
+        generator.generate(self.graph.graph_representation_type, self.graph, thread)
+        analyzer.analyze_generated_graph(self.graph.edges, self.graph.graph_representation_type, self.graph.graph_type,
+                                         number_of_vertices, None, None, None, None, probability, seed)
 
-        if graph_respresentation_type == "Matrix":
-            analyzer.analyze_generated_graph(self.g.edges, graph_respresentation_type, camel_case_split(self.__class__.__name__), numOfVertices, None,
-                                             None, None, None, probability, seed)
-        else:
-            analyzer.analyze_generated_graph(self.g.neighbors, graph_respresentation_type, camel_case_split(self.__class__.__name__), numOfVertices, None,
-                                             None, None, None, probability, seed)
-
-    def create_custom_er_graph(self, graph_respresentation_type, numOfVertices, totalNumOfEdges, probability, seed, thread, **kwargs):
-
+    def create_custom_er_graph(self, number_of_vertices, total_number_of_edges, probability,
+                               seed, thread, **kwargs):
         """ Commented lines of code serve debugging purposes. """
 
-        if graph_respresentation_type == "Matrix":
-            from Graphs.graph_adjacency_matrix import Graph, Vertex
-        else:
-            from Graphs.graph_adjacency_list import Graph, Vertex
+        self.graph.reset_graph()
 
-        self.g = Graph()
-        self.g.reset_graph()
-
-        if graph_respresentation_type == "Matrix":
+        if self.graph.graph_representation_type == "matrix":
             if kwargs.get('rle'):
-                self.g.mode = "memory efficient"
+                self.graph.mode = "memory efficient"
 
         random.seed(seed)
 
-        numOfEdges = [0] * numOfVertices
-        numOfConnectedEdges = 0
+        number_of_edges = [0] * number_of_vertices
+        number_of_connected_edges = 0
 
-        for i in range(numOfVertices):
+        for i in range(number_of_vertices):
             if thread.isStopped():  # --> Thread Status.
                 sys.exit(0)
 
-            self.g.add_vertex(Vertex(i))
+            self.graph.add_vertex(Vertex(i))
 
-        graph_vector = self.g.edge_indices.copy()
+        graph_vector = self.graph.edge_indices.copy()
 
-        while numOfConnectedEdges < totalNumOfEdges:
+        while number_of_connected_edges < total_number_of_edges:
 
-            newNode = int(random.choice(list(graph_vector.keys())))
+            new_node = int(random.choice(list(graph_vector.keys())))
 
             adjacency_vertex = int(random.choice(list(graph_vector.keys())))
 
-            Per = random.uniform(0, 1)
+            per = random.uniform(0, 1)
 
-            while newNode == adjacency_vertex or self.g.isAdjacent(newNode, adjacency_vertex):
+            while new_node == adjacency_vertex or self.graph.isAdjacent(new_node, adjacency_vertex):
                 if thread.isStopped():  # --> Thread Status.
                     sys.exit(0)
 
@@ -142,40 +132,41 @@ class ErdosRenyiGraph:
                     counter = 0
                     for w, l in graph_vector.items():
 
-                        if self.g.isAdjacent(newNode, w) and newNode != w:
+                        if self.graph.isAdjacent(new_node, w) and new_node != w:
                             counter += 1
 
                     if counter == len(graph_vector) - 1:
                         break
 
                 adjacency_vertex = int(random.choice(list(graph_vector.keys())))
-                Per = random.uniform(0, 1)
+                per = random.uniform(0, 1)
 
-            if probability > Per:
+            if probability > per:
                 if thread.isStopped():  # --> Thread Status.
                     sys.exit(0)
 
-                self.g.add_edge_undirected(newNode, adjacency_vertex)
-                numOfEdges[newNode] += 1
-                numOfEdges[adjacency_vertex] += 1
+                self.graph.add_edge_undirected(new_node, adjacency_vertex)
+                number_of_edges[new_node] += 1
+                number_of_edges[adjacency_vertex] += 1
 
-                numOfConnectedEdges += 1
+                number_of_connected_edges += 1
 
-                # print(f"""Connected node {newNode} ({numOfEdges[newNode]}) edges with """
-                #       f"""node {adjacency_vertex} ({numOfEdges[adjacency_vertex]}) edges with probability {probability} > {Per}""")
+                # print(f"""Connected node {new_node} ({number_of_edges[new_node]}) edges with """
+                #       f"""node {adjacency_vertex} ({number_of_edges[adjacency_vertex]}) edges with probability
+                #       {probability} > {per}""")
                 
-                # print(f"Number of connected edges {numOfConnectedEdges}")
+                # print(f"Number of connected edges {number_of_connected_edges}")
 
-            if numOfEdges[newNode] >= numOfVertices - 1:
+            if number_of_edges[new_node] >= number_of_vertices - 1:
                 try:
-                    del graph_vector[str(newNode)]
-                    # print(f"Removed node {newNode} from play.")
+                    del graph_vector[str(new_node)]
+                    # print(f"Removed node {new_node} from play.")
                     # print(graph_vector)
 
                 except KeyError:
                     pass
 
-            elif numOfEdges[adjacency_vertex] >= numOfVertices - 1:
+            elif number_of_edges[adjacency_vertex] >= number_of_vertices - 1:
                 try:
                     del graph_vector[str(adjacency_vertex)]
                     # print(f"Removed node {adjacency_vertex} from play.")
@@ -194,13 +185,9 @@ class ErdosRenyiGraph:
 
         # print()
 
-        self.g.get_number_of_edges()
+        self.graph.get_number_of_edges()
 
-        generator.generate(graph_respresentation_type, self.g, thread)
-
-        if graph_respresentation_type == "Matrix":
-            analyzer.analyze_generated_graph(self.g.edges, graph_respresentation_type, f'Custom {camel_case_split(self.__class__.__name__)}', numOfVertices, None,
-                                             totalNumOfEdges, None, None, probability, seed)
-        else:
-            analyzer.analyze_generated_graph(self.g.neighbors, graph_respresentation_type, f'Custom {camel_case_split(self.__class__.__name__)}', numOfVertices, None,
-                                             totalNumOfEdges, None, None, probability, seed)
+        generator.generate(self.graph.graph_representation_type, self.graph, thread)
+        analyzer.analyze_generated_graph(self.graph.edges, self.graph.graph_representation_type,
+                                         f'Custom {camel_case_split(self.__class__.__name__)}', number_of_vertices,
+                                         None, total_number_of_edges, None, None, probability, seed)

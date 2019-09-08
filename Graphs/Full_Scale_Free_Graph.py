@@ -3,15 +3,18 @@ __name__ = "Gratis"
 __version__ = "1.0"
 __license__ = "GNU General Public License v3.0"
 
-import sys
 import random
 from Analyze.Analyze import *
 from Generate.Generate import *
 from collections import OrderedDict
+from Graphs.vertex import Vertex
 from Support_Folders.camel_case_spliter import *
+from Graphs.graph_adjacency_list import AdjacencyListGraph
+from Graphs.graph import GraphRepresentationType, GraphType
+from Graphs.graph_adjacency_matrix import AdjacencyMatrixGraph
 
 
-class FullScaleFreeGraph:
+class FullScaleFree:
     """
         This class creates a Barabási-Albert Full Scale-Free graph who's nodes use the preferential attachment and
         incremental growth mechanism.
@@ -33,142 +36,119 @@ class FullScaleFreeGraph:
 
     """
 
-    def __init__(self):
-        self.g = None
+    def __init__(self, graph_representation_type):
+        if graph_representation_type == str(GraphRepresentationType.MATRIX):
+            self.graph = AdjacencyMatrixGraph(GraphRepresentationType.MATRIX, GraphType.HOMOGENEOUS)
+        else:
+            self.graph = AdjacencyListGraph(GraphRepresentationType.LIST, GraphType.HOMOGENEOUS)
 
-    def create_full_scale_free_graph(self, graph_respresentation_type, numOfVertices, numOfInitialNodes, seed, thread,
-                                     numOfInitialEdges=None, **kwargs):
-
+    def create_full_scale_free_graph(self, number_of_vertices, number_of_initial_nodes, seed, thread,
+                                     number_of_initial_edges=None, **kwargs):
         """ Commented lines of code serve debugging purposes. """
 
-        if graph_respresentation_type == "Matrix":
-            from Graphs.graph_adjacency_matrix import Graph, Vertex
-        else:
-            from Graphs.graph_adjacency_list import Graph, Vertex
+        self.graph.reset_graph()
 
-        self.g = Graph()
-        self.g.reset_graph()
-
-        if graph_respresentation_type == "Matrix":
+        if self.graph.graph_representation_type == "matrix":
             if kwargs.get('rle'):
-                self.g.mode = "memory efficient"
+                self.graph.mode = "memory efficient"
 
-        numOfEdges = [0] * numOfVertices
-
-        numOfConnectedEdges = 0
-
+        number_of_edges = [0] * number_of_vertices
+        number_of_connected_edges = 0
         random.seed(seed)
-
         graph_vector = {}
 
         # In case there is only one initial node.
-        if numOfInitialNodes == 1:
-            numOfConnectedEdges += 1
-
-        # ======================================
+        if number_of_initial_nodes == 1:
+            number_of_connected_edges += 1
 
         # Generating tank with all nodes inside.
-        for i in range(numOfVertices):
+        for i in range(number_of_vertices):
 
             if thread.isStopped():  # --> Thread Status.
                 sys.exit(0)
 
             graph_vector[str(i)] = i
 
-        # ======================================
-
         # Adding random mo initial nodes to the graph.
         # print("Initial nodes:")
 
-        for i in range(numOfInitialNodes):
-
+        for i in range(number_of_initial_nodes):
             if thread.isStopped():  # --> Thread Status.
                 sys.exit(0)
 
             random_node = random.choice(list(graph_vector.keys()))
-            self.g.add_vertex(Vertex(random_node))
+            self.graph.add_vertex(Vertex(random_node))
             del graph_vector[random_node]
 
             # print(int(random_node) + 1)
 
-        # ======================================
-
         # Connecting all mo (initial nodes).
-        if numOfInitialNodes == 1:  # If number of initial node is one give the node a starting edge.
-            for v, i in list(self.g.edge_indices.items()):
-                numOfEdges[int(v)] += 1
+        if number_of_initial_nodes == 1:  # If number of initial node is one give the node a starting edge.
+            for v, i in list(self.graph.edge_indices.items()):
+                number_of_edges[int(v)] += 1
 
-        for v, i in list(self.g.edge_indices.items()):
-
-            for b, j in list(self.g.edge_indices.items()):
-
+        for v, i in list(self.graph.edge_indices.items()):
+            for b, j in list(self.graph.edge_indices.items()):
                 if thread.isStopped():  # --> Thread Status.
                     sys.exit(0)
 
                 # If Custom Full Scale-Free Graph is chosen.
-                if numOfInitialEdges is not None and numOfConnectedEdges >= numOfInitialEdges:
+                if number_of_initial_edges is not None and number_of_connected_edges >= number_of_initial_edges:
                     break
-                # ======================================
 
                 if v != b and v < b:
-                    self.g.add_edge_undirected(v, b)
-                    numOfEdges[int(v)] += 1
-                    numOfEdges[int(b)] += 1
-                    numOfConnectedEdges += 1
+                    self.graph.add_edge_undirected(v, b)
+                    number_of_edges[int(v)] += 1
+                    number_of_edges[int(b)] += 1
+                    number_of_connected_edges += 1
 
             # If Custom Full Scale-Free Graph is chosen.
-            if numOfInitialEdges is not None and numOfConnectedEdges >= numOfInitialEdges:
+            if number_of_initial_edges is not None and number_of_connected_edges >= number_of_initial_edges:
                 break
-            # ======================================
 
-        #         print(f"""Connected node {int(v) + 1} ({numOfEdges[int(v)]}) edges with """
-        #                 f"""node {int(b) + 1} ({numOfEdges[int(b)]}) edges with probability 1.0""")
+        #         print(f"""Connected node {int(v) + 1} ({number_of_edges[int(v)]}) edges with """
+        #                 f"""node {int(b) + 1} ({number_of_edges[int(b)]}) edges with probability 1.0""")
         # print("Finished initial nodes.")
 
         # ======================================
 
         # Go for the rest nodes.
         while len(graph_vector) != 0:
-
             random_node = random.choice(list(graph_vector.keys()))  # random_node --> str
-            self.g.add_vertex(Vertex(random_node))
+            self.graph.add_vertex(Vertex(random_node))
             del graph_vector[random_node]
 
-            for v, i in list(self.g.edge_indices.items()):
-
+            for v, i in list(self.graph.edge_indices.items()):
                 if thread.isStopped():  # --> Thread Status.
                     sys.exit(0)
 
                 if v != random_node:
-                    P = numOfEdges[int(v)] / numOfConnectedEdges
-                    prandom = random.uniform(0, 1)
+                    probability = number_of_edges[int(v)] / number_of_connected_edges
+                    probability_random = random.uniform(0, 1)
 
-                    if P > prandom:
-                        self.g.add_edge_undirected(random_node, v)
-                        numOfEdges[int(random_node)] += 1
-                        numOfEdges[int(v)] += 1
-                        numOfConnectedEdges += 1
+                    if probability > probability_random:
+                        self.graph.add_edge_undirected(random_node, v)
+                        number_of_edges[int(random_node)] += 1
+                        number_of_edges[int(v)] += 1
+                        number_of_connected_edges += 1
 
-                        # print(f"""Connected node {int(random_node) + 1} ({numOfEdges[int(random_node)]}) edges with """
-                        #       f"""node {int(v) + 1} ({numOfEdges[int(v)]}) edges with probability {P}""")
+                        # print(f"""Connected node {int(random_node) + 1} ({number_of_edges[int(random_node)]}) """
+                        #       f"""edges with node {int(v) + 1} ({number_of_edges[int(v)]}) edges with probability """
+                        #       f"""{probability}""")
 
-        # ======================================
         graph_vector.clear()
 
         # Sort randomized graph order.
 
         # Method 1
-        self.g.edge_indices = {int(c): v for c, v in self.g.edge_indices.items()}
-        self.g.edge_indices = OrderedDict(sorted(self.g.edge_indices.items()))
-        self.g.edge_indices = {str(c): v for c, v in self.g.edge_indices.items()}
+        self.graph.edge_indices = {int(c): v for c, v in self.graph.edge_indices.items()}
+        self.graph.edge_indices = OrderedDict(sorted(self.graph.edge_indices.items()))
+        self.graph.edge_indices = {str(c): v for c, v in self.graph.edge_indices.items()}
 
-        self.g.get_number_of_edges()
+        self.graph.get_number_of_edges()
 
-        generator.generate(graph_respresentation_type, self.g, thread)
-
-        if graph_respresentation_type == "Matrix":
-            analyzer.analyze_generated_graph(self.g.edges, graph_respresentation_type, f'{"Custom " if numOfInitialEdges is not None else ""}{camel_case_split(self.__class__.__name__)}', numOfVertices, None,
-                                             None, numOfInitialEdges, None, None, seed)
-        else:
-            analyzer.analyze_generated_graph(self.g.neighbors, graph_respresentation_type, f'{"Custom " if numOfInitialEdges is not None else ""}{camel_case_split(self.__class__.__name__)}', numOfVertices, None,
-                                             None, numOfInitialEdges, None, None, seed)
+        generator.generate(self.graph.graph_representation_type, self.graph, thread)
+        analyzer.analyze_generated_graph(self.graph.edges, self.graph.graph_representation_type,
+                                         f'{"Custom " if number_of_initial_edges is not None else ""}'
+                                         f'{camel_case_split(self.__class__.__name__)}',
+                                         number_of_vertices, None, None, number_of_initial_edges, None, None, seed)

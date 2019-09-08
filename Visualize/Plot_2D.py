@@ -30,7 +30,7 @@ class Plot2D:
 
                     self.num_of_vertices = len(encoder.decode(line.replace('\n', ''))
                                                if any(_ in [chr(0), chr(1)] for _ in line)
-                                               else len(line.replace("\n", "")))
+                                               else line.replace("\n", ""))
                     f.seek(0)
 
                     i = 0

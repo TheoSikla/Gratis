@@ -11,8 +11,8 @@ class GraphRepresentationType(Enum):
 class GraphType(Enum):
     """Enumeration Class for Graph types"""
 
-    HOMOGENEOUS = 'homogeneous'
-    ER = 'ER'  # Erdos Renyi
+    HOMOGENEOUS = 'Homogeneous'
+    ER = 'Erdos Renyi'  # Erdos Renyi
 
 
 class AbstractGraph:
