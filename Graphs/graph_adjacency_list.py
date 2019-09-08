@@ -11,6 +11,9 @@ from collections import OrderedDict
 class AdjacencyListGraph(Graph):
     """Class for Adjacency List Graph objects."""
 
+    def __init__(self, repr_type, graph_type):
+        super(AdjacencyListGraph, self).__init__(repr_type, graph_type)
+
     def __str__(self):
         out = ""
         out += "Graph = {\n"
