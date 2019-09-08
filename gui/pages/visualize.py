@@ -150,8 +150,8 @@ class GraphVisualizePage(Page):
     def plotly_visualize(self, username, api_key, output_filename):
         """ Visualizes the generated graph in 3D form with the appropriate file format that plotly needs. """
 
-        from Visualize.Plotly3D import plotly_visualizer
-
+        from Visualize.Plotly3D import Plotly3D
+        plotly_visualizer = Plotly3D(edges_pixels=5)
         start = time()
 
         self.text_area.delete('1.0', END)
