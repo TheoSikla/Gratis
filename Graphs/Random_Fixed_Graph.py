@@ -7,7 +7,6 @@ import random
 from Analyze.Analyze import *
 from Generate.Generate import *
 from Graphs.vertex import Vertex
-from Support_Folders.camel_case_spliter import *
 from Graphs.graph_adjacency_list import AdjacencyListGraph
 from Graphs.graph import GraphRepresentationType, GraphType
 from Graphs.graph_adjacency_matrix import AdjacencyMatrixGraph
@@ -30,9 +29,9 @@ class RandomFixed:
 
     def __init__(self, graph_representation_type):
         if graph_representation_type == str(GraphRepresentationType.MATRIX):
-            self.graph = AdjacencyMatrixGraph(GraphRepresentationType.MATRIX, GraphType.HOMOGENEOUS)
+            self.graph = AdjacencyMatrixGraph(GraphRepresentationType.MATRIX, GraphType.RANDOM_FIXED)
         else:
-            self.graph = AdjacencyListGraph(GraphRepresentationType.LIST, GraphType.HOMOGENEOUS)
+            self.graph = AdjacencyListGraph(GraphRepresentationType.LIST, GraphType.RANDOM_FIXED)
 
     def create_random_fixed_graph(self, number_of_vertices, connectivity, seed, thread, **kwargs):
         """ Commented lines of code serve debugging purposes. """
@@ -133,9 +132,9 @@ class RandomFixed:
 
         # print()
 
-        self.graph.get_number_of_edges()
+        # self.graph.get_number_of_edges()
 
         generator.generate(self.graph.graph_representation_type, self.graph, thread)
         analyzer.analyze_generated_graph(self.graph.edges, self.graph.graph_representation_type,
-                                         camel_case_split(self.__class__.__name__),
+                                         self.graph.graph_type,
                                          number_of_vertices, connectivity, None, None, None, None, seed)

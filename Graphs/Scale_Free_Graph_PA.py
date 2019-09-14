@@ -7,7 +7,6 @@ import random
 from Analyze.Analyze import *
 from Generate.Generate import *
 from Graphs.vertex import Vertex
-from Support_Folders.camel_case_spliter import *
 from Graphs.graph_adjacency_list import AdjacencyListGraph
 from Graphs.graph import GraphRepresentationType, GraphType
 from Graphs.graph_adjacency_matrix import AdjacencyMatrixGraph
@@ -34,9 +33,9 @@ class ScaleFreePA:
 
     def __init__(self, graph_representation_type):
         if graph_representation_type == str(GraphRepresentationType.MATRIX):
-            self.graph = AdjacencyMatrixGraph(GraphRepresentationType.MATRIX, GraphType.HOMOGENEOUS)
+            self.graph = AdjacencyMatrixGraph(GraphRepresentationType.MATRIX, GraphType.SCALE_FREE)
         else:
-            self.graph = AdjacencyListGraph(GraphRepresentationType.LIST, GraphType.HOMOGENEOUS)
+            self.graph = AdjacencyListGraph(GraphRepresentationType.LIST, GraphType.SCALE_FREE)
 
     def create_scale_free_graph(self, number_of_vertices, seed, thread, **kwargs):
         """ Commented lines of code serve debugging purposes. """
@@ -82,9 +81,9 @@ class ScaleFreePA:
         del graph_vector[random_node1]
         del graph_vector[random_node2]
 
-        print("Initial connection: ")
-        print(f"""Connected node {int(random_node1) + 1} ({number_of_edges[int(random_node1)]}) edges with """
-              f"""node {int(random_node2) + 1} ({number_of_edges[int(random_node2)]}) edges.\n""")
+        # print("Initial connection: ")
+        # print(f"""Connected node {int(random_node1) + 1} ({number_of_edges[int(random_node1)]}) edges with """
+        #       f"""node {int(random_node2) + 1} ({number_of_edges[int(random_node2)]}) edges.\n""")
 
         # ======================================
 
@@ -121,12 +120,12 @@ class ScaleFreePA:
 
         # ======================================
 
-        self.graph.get_number_of_edges()
+        # self.graph.get_number_of_edges()
 
         generator.generate(self.graph.graph_representation_type, self.graph, thread)
 
         analyzer.analyze_generated_graph(self.graph.edges, self.graph.graph_representation_type,
-                                         f'{camel_case_split(self.__class__.__name__[:-2])} '
+                                         f'{self.graph.graph_type} '
                                          f'with Preferential Attachment', number_of_vertices, None,
                                          None, None, None, None, seed)
 
@@ -174,9 +173,9 @@ class ScaleFreePA:
         del graph_vector[random_node1]
         del graph_vector[random_node2]
 
-        print("Initial connection: ")
-        print(f"""Connected node {int(random_node1) + 1} ({number_of_edges[int(random_node1)]}) edges with """
-              f"""node {int(random_node2) + 1} ({number_of_edges[int(random_node2)]}) edges.\n""")
+        # print("Initial connection: ")
+        # print(f"""Connected node {int(random_node1) + 1} ({number_of_edges[int(random_node1)]}) edges with """
+        #       f"""node {int(random_node2) + 1} ({number_of_edges[int(random_node2)]}) edges.\n""")
 
         # ======================================
 
@@ -214,10 +213,10 @@ class ScaleFreePA:
 
         # ======================================
 
-        self.graph.get_number_of_edges()
+        # self.graph.get_number_of_edges()
 
         generator.generate(self.graph.graph_representation_type, self.graph, thread)
         analyzer.analyze_generated_graph(self.graph.edges, self.graph.graph_representation_type,
-                                         f'Custom {camel_case_split(self.__class__.__name__[:-2])} '
+                                         f'Custom {self.graph.graph_type} '
                                          f'with Preferential Attachment', number_of_vertices, None,
                                          total_number_of_edges, None, None, None, seed)

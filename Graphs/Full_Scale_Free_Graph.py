@@ -8,7 +8,6 @@ from Analyze.Analyze import *
 from Generate.Generate import *
 from collections import OrderedDict
 from Graphs.vertex import Vertex
-from Support_Folders.camel_case_spliter import *
 from Graphs.graph_adjacency_list import AdjacencyListGraph
 from Graphs.graph import GraphRepresentationType, GraphType
 from Graphs.graph_adjacency_matrix import AdjacencyMatrixGraph
@@ -38,9 +37,9 @@ class FullScaleFree:
 
     def __init__(self, graph_representation_type):
         if graph_representation_type == str(GraphRepresentationType.MATRIX):
-            self.graph = AdjacencyMatrixGraph(GraphRepresentationType.MATRIX, GraphType.HOMOGENEOUS)
+            self.graph = AdjacencyMatrixGraph(GraphRepresentationType.MATRIX, GraphType.SCALE_FREE)
         else:
-            self.graph = AdjacencyListGraph(GraphRepresentationType.LIST, GraphType.HOMOGENEOUS)
+            self.graph = AdjacencyListGraph(GraphRepresentationType.LIST, GraphType.SCALE_FREE)
 
     def create_full_scale_free_graph(self, number_of_vertices, number_of_initial_nodes, seed, thread,
                                      number_of_initial_edges=None, **kwargs):
@@ -145,10 +144,10 @@ class FullScaleFree:
         self.graph.edge_indices = OrderedDict(sorted(self.graph.edge_indices.items()))
         self.graph.edge_indices = {str(c): v for c, v in self.graph.edge_indices.items()}
 
-        self.graph.get_number_of_edges()
+        # self.graph.get_number_of_edges()
 
         generator.generate(self.graph.graph_representation_type, self.graph, thread)
         analyzer.analyze_generated_graph(self.graph.edges, self.graph.graph_representation_type,
                                          f'{"Custom " if number_of_initial_edges is not None else ""}'
-                                         f'{camel_case_split(self.__class__.__name__)}',
+                                         f'Full {self.graph.graph_type}',
                                          number_of_vertices, None, None, number_of_initial_edges, None, None, seed)

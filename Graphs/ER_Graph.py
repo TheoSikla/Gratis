@@ -7,7 +7,6 @@ import random
 from Analyze.Analyze import *
 from Generate.Generate import *
 from Graphs.vertex import Vertex
-from Support_Folders.camel_case_spliter import *
 from Graphs.graph_adjacency_list import AdjacencyListGraph
 from Graphs.graph import GraphRepresentationType, GraphType
 from Graphs.graph_adjacency_matrix import AdjacencyMatrixGraph
@@ -87,7 +86,7 @@ class ErdosRenyi:
                         #       edges with probability {probability} > {per}""")
         # print()
 
-        self.graph.get_number_of_edges()
+        # self.graph.get_number_of_edges()
 
         generator.generate(self.graph.graph_representation_type, self.graph, thread)
         analyzer.analyze_generated_graph(self.graph.edges, self.graph.graph_representation_type, self.graph.graph_type,
@@ -185,9 +184,9 @@ class ErdosRenyi:
 
         # print()
 
-        self.graph.get_number_of_edges()
+        # self.graph.get_number_of_edges()
 
         generator.generate(self.graph.graph_representation_type, self.graph, thread)
         analyzer.analyze_generated_graph(self.graph.edges, self.graph.graph_representation_type,
-                                         f'Custom {camel_case_split(self.__class__.__name__)}', number_of_vertices,
+                                         f'Custom {self.graph.graph_type}', number_of_vertices,
                                          None, total_number_of_edges, None, None, probability, seed)

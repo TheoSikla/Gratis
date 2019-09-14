@@ -12,7 +12,9 @@ class GraphType(Enum):
     """Enumeration Class for Graph types"""
 
     HOMOGENEOUS = 'Homogeneous'
-    ER = 'Erdos Renyi'  # Erdos Renyi
+    ER = 'Erdos Renyi'
+    SCALE_FREE = 'Scale Free'
+    RANDOM_FIXED = 'Random Fixed'
 
 
 class AbstractGraph:
