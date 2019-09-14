@@ -11,12 +11,14 @@ import plotly.graph_objs as go
 from tkinter import messagebox
 import igraph.vendor.texttable
 from os_recon.define_os import path_escape
+from Support_Folders.run_length_encoder import RunLengthEncoder
 
 
 class Plotly3D:
 
-    def __init__(self):
+    def __init__(self, edges_pixels=1):
         self.link = None
+        self.edges_pixels = edges_pixels
 
     def plotly_visualize_matrix(self, username, api_key, output_filename):
         global f
@@ -34,13 +36,20 @@ class Plotly3D:
         try:
             with open(f"Output_Files{path_escape}matrix.txt", buffering=20000) as f:
                 # Number of Vertices
-                vertices = len(f.readline().replace("\n", ""))
+                encoder = RunLengthEncoder()
+                line = f.readline()
+
+                vertices = len(encoder.decode(line.replace('\n', ''))
+                               if any(_ in [chr(0), chr(1)] for _ in line)
+                               else line.replace("\n", ""))
                 f.seek(0)
 
                 i = 0
                 j = 0
                 Edges = []
                 for line in f:
+                    line = encoder.decode(line.replace('\n', '')) \
+                        if any(_ in [chr(0), chr(1)] for _ in line) else line
                     for char in line:
                         if str(char) == '1' and i < j and i != j:
                             Edges.append((i, j))
@@ -55,9 +64,7 @@ class Plotly3D:
             # print(Nodes)
 
             # Create a graph based on igraph library --> Graph Class.
-            G = ig.Graph(Edges, directed=False)
-
-            # ===================================
+            G = ig.Graph(len(Nodes), Edges, directed=False)
 
             # Create the appropriate labels for the nodes
             # labels = []
@@ -66,14 +73,10 @@ class Plotly3D:
             #     labels.append(name)
             #     # group.append(node['group'])
 
-            labels = [name for name in Nodes]
-
-            # ===================================
+            labels = [f'v{name}' for name in Nodes]
 
             # Define Graph layout
             layt = G.layout('kk', dim=3)
-
-            # ===================================
 
             # Set the appropriate spawn coordinates for each node and edge
             N = len(Nodes)
@@ -88,17 +91,14 @@ class Plotly3D:
                 Ye += [layt[e[0]][1], layt[e[1]][1], None]
                 Ze += [layt[e[0]][2], layt[e[1]][2], None]
 
-            # ===================================
-
             # Create a 3d Scatter plot for the edges
             trace1 = go.Scatter3d(x=Xe,
                                   y=Ye,
                                   z=Ze,
                                   mode='lines',
-                                  line=dict(color='rgb(125,125,125)', width=1),  # Edges color
+                                  line=dict(color='rgb(125,125,125)', width=self.edges_pixels),  # Edges color
                                   hoverinfo='none'
                                   )
-            # ===================================
 
             # Create a 3d Scatter plot for the nodes
             trace2 = go.Scatter3d(x=Xn,
@@ -115,7 +115,6 @@ class Plotly3D:
                                   text=labels,
                                   hoverinfo='text'
                                   )
-            # ===================================
 
             # Configure the axis
             axis = dict(showbackground=False,
@@ -125,7 +124,6 @@ class Plotly3D:
                         showticklabels=False,
                         title=''
                         )
-            # ===================================
 
             # Configure the web-plot layout
             layout = go.Layout(
@@ -157,7 +155,6 @@ class Plotly3D:
                         )
                     )
                 ], )
-            # ===================================
 
             # Merge edges and nodes coordinates and create the 3d plot
             data = [trace1, trace2]
@@ -174,11 +171,8 @@ class Plotly3D:
                 messagebox.showerror("Error!", message)
                 return e
 
-            # ===================================
-
         except FileNotFoundError:
             return "File not found"
-        # ===================================
 
     def plotly_visualize_list(self, username, api_key, output_filename):
 
@@ -194,15 +188,12 @@ class Plotly3D:
             messagebox.showerror("Error!", e)
             return False
 
-        # ===================================
-
         # Create a list with all the connections between the nodes with source file: list.txt
         try:
             with open(f"Output_Files{path_escape}list.txt", buffering=20000) as f:
                 # Number of Vertices
                 vertices = int(f.readlines()[-1].split(':')[0]) + 1
                 f.seek(0)
-                # ===============================================
 
                 Edges = []
                 for i in range(vertices):
@@ -220,9 +211,7 @@ class Plotly3D:
             # print(Nodes)
 
             # Create a graph based on igraph library --> Graph Class.
-            G = ig.Graph(Edges, directed=False)
-
-            # ===================================
+            G = ig.Graph(len(Nodes), Edges, directed=False)
 
             # Create the appropriate labels for the nodes
             # labels = []
@@ -231,14 +220,10 @@ class Plotly3D:
             #     labels.append(name)
             #     # group.append(node['group'])
 
-            labels = [name for name in Nodes]
-
-            # ===================================
+            labels = [f'v{name}' for name in Nodes]
 
             # Define Graph layout
             layt = G.layout('kk', dim=3)
-
-            # ===================================
 
             # Set the appropriate spawn coordinates for each node and edge
             N = len(Nodes)
@@ -253,17 +238,14 @@ class Plotly3D:
                 Ye += [layt[e[0]][1], layt[e[1]][1], None]
                 Ze += [layt[e[0]][2], layt[e[1]][2], None]
 
-            # ===================================
-
             # Create a 3d Scatter plot for the edges
             trace1 = go.Scatter3d(x=Xe,
                                   y=Ye,
                                   z=Ze,
                                   mode='lines',
-                                  line=dict(color='rgb(125,125,125)', width=1),  # Edges color
+                                  line=dict(color='rgb(125,125,125)', width=self.edges_pixels),  # Edges color
                                   hoverinfo='none'
                                   )
-            # ===================================
 
             # Create a 3d Scatter plot for the nodes
             trace2 = go.Scatter3d(x=Xn,
@@ -280,7 +262,6 @@ class Plotly3D:
                                   text=labels,
                                   hoverinfo='text'
                                   )
-            # ===================================
 
             # Configure the axis
             axis = dict(showbackground=False,
@@ -290,7 +271,6 @@ class Plotly3D:
                         showticklabels=False,
                         title=''
                         )
-            # ===================================
 
             # Configure the web-plot layout
             layout = go.Layout(
@@ -322,7 +302,6 @@ class Plotly3D:
                         )
                     )
                 ], )
-            # ===================================
 
             # Merge edges and nodes coordinates and create the 3d plot
             data = [trace1, trace2]
@@ -340,11 +319,5 @@ class Plotly3D:
                 messagebox.showerror("Error!", message)
                 return e
 
-            # ===================================
-
         except FileNotFoundError:
             return "File not found"
-        # ===================================
-
-
-plotly_visualizer = Plotly3D()

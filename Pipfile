@@ -11,6 +11,8 @@ plotly = "==3.10.0"
 cryptography = "==2.7"
 python-igraph = "==0.7.1.post6"
 networkx = "*"
+bitarray = "*"
+cython = "*"
 
 [requires]
 python_version = "3.6"

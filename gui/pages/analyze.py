@@ -341,8 +341,11 @@ class GraphAnalyzePage(Page):
         i = 0
         j = 0
         with open(path_to_matrix_file) as f:
+            encoder = RunLengthEncoder()
             # Number of Vertices
             first_row = f.readline()
+            if any(_ in [chr(0), chr(1)] for _ in first_row):
+                first_row = encoder.decode(first_row.replace('\n', ''))
             counter = 0
             for char in first_row:
                 if char != "\n":
@@ -353,6 +356,8 @@ class GraphAnalyzePage(Page):
             for k in range(Vertices):
 
                 line = f.readline()
+                if any(_ in [chr(0), chr(1)] for _ in line):
+                    line = encoder.decode(line.replace('\n', ''))
 
                 for char in line:
                     if char != '\n':

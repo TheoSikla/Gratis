@@ -16,56 +16,56 @@ class Analyze:
     def __init__(self):
         self.version = 'Gratis v1.0'
 
-    def analyze_generated_graph(self, graph_respresentation, graph_respresentation_type,
-                                graph_type, numOfVertices, graphDegree=None,
-                                numOfEdges=None, numOfInitialNodes=None,
-                                initialConnectionsPerNode=None, probability=None, seed=None):
+    def analyze_generated_graph(self, graph_representation, graph_representation_type,
+                                graph_type, number_of_vertices, graph_degree=None,
+                                number_of_edges=None, number_of_initial_nodes=None,
+                                initial_connections_per_node=None, probability=None, seed=None):
         
         """ Analyzes a generated graph. """
 
-        with open(f'Output_Files{path_escape}graph_analysis_{graph_respresentation_type.lower()}.txt', "w") as f:
+        with open(f'Output_Files{path_escape}graph_analysis_{graph_representation_type.lower()}.txt', "w") as f:
 
             analysis = {
-                        'Graph_Respresentation_Type': graph_respresentation_type,
+                        'Graph_Representation_Type': graph_representation_type,
                         'Graph_Type': graph_type,
-                        'Number_Of_Vertices': numOfVertices,
-                        'Graph_Degree': graphDegree,
-                        'Number_Of_Maximum_Edges': numOfEdges,
-                        'Number_Of_Initial_Nodes': numOfInitialNodes,
-                        'Initial_Connections_Per_Node': initialConnectionsPerNode,
+                        'Number_Of_Vertices': number_of_vertices,
+                        'Graph_Degree': graph_degree,
+                        'Number_Of_Maximum_Edges': number_of_edges,
+                        'Number_Of_Initial_Nodes': number_of_initial_nodes,
+                        'Initial_Connections_Per_Node': initial_connections_per_node,
                         'Probability': probability,
                         'Seed': seed
                         }
 
             # Graph Analysis
             connections = 0
-            numOfEdgesPerNode = [0] * numOfVertices
+            number_of_edges_per_node = [0] * number_of_vertices
 
-            if graph_respresentation_type == "Matrix":
-                for i in range(len(graph_respresentation)):
-                    for j in range(len(graph_respresentation)):
+            if graph_representation_type == "matrix":
+                for i in range(len(graph_representation)):
+                    for j in range(len(graph_representation)):
                         if i != j and i < j:
-                            if graph_respresentation[i][j] >= 1:
-                                numOfEdgesPerNode[i] += 1
-                                numOfEdgesPerNode[j] += 1
+                            if graph_representation[i][j] >= 1:
+                                number_of_edges_per_node[i] += 1
+                                number_of_edges_per_node[j] += 1
                                 connections += 1
             else:
-                for vertex, neighbors in graph_respresentation.items():
+                for vertex, neighbors in graph_representation.items():
                     number_of_edges = 0
                     for _ in neighbors:
                         number_of_edges += 1
 
-                    numOfEdgesPerNode[int(vertex)] = number_of_edges
+                    number_of_edges_per_node[int(vertex)] = number_of_edges
                     connections += number_of_edges
 
                 connections = connections // 2
 
             first = 0
             highest_node_indicator = 0
-            for i in range(numOfVertices):
-                if numOfEdgesPerNode[i] > first:
+            for i in range(number_of_vertices):
+                if number_of_edges_per_node[i] > first:
                     highest_node_indicator = i
-                    first = numOfEdgesPerNode[i]
+                    first = number_of_edges_per_node[i]
 
             analysis['Total_Number_Of_Edges'] = connections
 
@@ -102,9 +102,9 @@ class Analyze:
         text_area.update()
 
         with open(f"Output_Files{path_escape}graph_analysis_{adjacency_type.lower()}.txt", "r") as f:
-                for line in f:
-                    text_area.insert(END, line)
-                text_area.update()
+            for line in f:
+                text_area.insert(END, line)
+            text_area.update()
 
     @staticmethod
     def pajek_file_to_dict(path):

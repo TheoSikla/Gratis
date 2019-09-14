@@ -1,5 +1,6 @@
 from time import time
 from gui.pages.page import *
+from Graphs.graph import GraphRepresentationType
 
 
 class GraphGeneratePage(Page):
@@ -38,10 +39,14 @@ class GraphGeneratePage(Page):
                             'Custom ER Random Graph', 'Custom Scale-Free Graph']
         # ================================
 
+        self.rle_var = BooleanVar(False)
+        self.rle = ttk.Checkbutton(self, text="Run Length Encoder", variable=self.rle_var)
+        self.rle.grid(row=1, column=2, sticky="w")
+
         # Main Label
         self.main_label = Label(self, bg="azure3", text="Generate a graph\n",
                                 font=("Arial", 20, "bold"))
-        self.main_label.grid(row=1, column=1)
+        self.main_label.grid(row=2, column=1)
         # ================================
 
         # Text Area Frame
@@ -57,22 +62,22 @@ class GraphGeneratePage(Page):
         self.text_area.config(font=("consolas", 11), undo=True, wrap='word')
         self.my_scroll.config(command=self.text_area.yview)
 
-        self.my_frame_inner.grid(row=1, column=2, rowspan=13, columnspan=2, sticky='nesw')
-        self.text_area.grid(row=1, column=2, rowspan=13)
-        self.my_scroll.grid(row=1, column=3, rowspan=13, columnspan=2, sticky='nesw')
+        self.my_frame_inner.grid(row=2, column=2, rowspan=13, columnspan=2, sticky='nesw')
+        self.text_area.grid(row=2, column=2, rowspan=13)
+        self.my_scroll.grid(row=2, column=3, rowspan=13, columnspan=2, sticky='nesw')
         # ================================
 
         # Type Label
         self.main_label = Label(self, bg="azure3", text="Select type of graph:\n",
                                 font=("Arial", 10, "bold"))
-        self.main_label.grid(row=2, column=1)
+        self.main_label.grid(row=3, column=1)
         # ================================
 
         self.chosen_graph = StringVar()
         self.chosen_graph.set(self.graph_types[1])
 
         self.graphs = ttk.OptionMenu(self, self.chosen_graph, *self.graph_types, command=self.show_parameters)
-        self.graphs.grid(row=3, column=1, pady=10)
+        self.graphs.grid(row=4, column=1, pady=10)
 
         # Parameter's Frame
         self.parameters_frame = ttk.Frame(self)
@@ -83,12 +88,16 @@ class GraphGeneratePage(Page):
         # Incremental Growth, Preferential Attachment Checkbuttons for Scale-free Radiobutton
 
         self.adjacency_type_selected = StringVar()
-        self.matrix = ttk.Radiobutton(self.parameters_frame, text="Adjacency Matrix", value="Matrix",
-                                      variable=self.adjacency_type_selected)
+        self.matrix = ttk.Radiobutton(self.parameters_frame, text="Adjacency Matrix",
+                                      value=GraphRepresentationType.MATRIX,
+                                      variable=self.adjacency_type_selected,
+                                      command=self.handle_run_length_encoder_button)
         self.matrix.grid(row=0, column=0, padx=30, pady=10, sticky="w")
 
-        self.list = ttk.Radiobutton(self.parameters_frame, text="Adjacency List", value="List",
-                                    variable=self.adjacency_type_selected)
+        self.list = ttk.Radiobutton(self.parameters_frame, text="Adjacency List",
+                                    value=GraphRepresentationType.LIST,
+                                    variable=self.adjacency_type_selected,
+                                    command=self.handle_run_length_encoder_button)
         self.list.grid(row=0, column=1, padx=30, pady=10, sticky="w")
 
         self.incremental_growth_selected = BooleanVar()
@@ -390,6 +399,13 @@ class GraphGeneratePage(Page):
     def defocus(event):
         event.widget.master.focus_set()
 
+    def handle_run_length_encoder_button(self):
+        if self.adjacency_type_selected.get() == str(GraphRepresentationType.LIST):
+            self.rle.configure(state=DISABLED)
+            self.rle_var.set(False)
+        else:
+            self.rle.configure(state=NORMAL)
+
     def preferential_attachment_func(self):
         if self.chosen_graph.get() == 'Scale-Free':
             if self.incremental_growth_selected.get() is False:
@@ -592,9 +608,9 @@ class GraphGeneratePage(Page):
 
                 start = time()
 
-                Homogeneous_Graph = Homogeneous()
-                Homogeneous_Graph.create_homogeneous_graph(self.adjacency_type_selected.get(),
-                                                           self.number_of_vertices_entry_result.get(), self.thread)
+                homogeneous_graph = Homogeneous(self.adjacency_type_selected.get())
+                homogeneous_graph.create_homogeneous_graph(self.number_of_vertices_entry_result.get(),
+                                                           self.thread, rle=self.rle_var.get())
 
                 end = time() - start
 
@@ -610,18 +626,17 @@ class GraphGeneratePage(Page):
                 else:
                     self.text_area.insert(END, message1)
                     self.text_area.update()
-                    from Graphs.Random_Fixed_Graph import RandomFixedGraph
+                    from Graphs.Random_Fixed_Graph import RandomFixed
                     self.cancel_button.configure(state=NORMAL)
                     self.generate_button.config(state=DISABLED)
                     self.back_button.configure(state=DISABLED)
 
                     start = time()
 
-                    Random_Fixed_Graph = RandomFixedGraph()
-                    Random_Fixed_Graph.create_random_fixed_graph(self.adjacency_type_selected.get(),
-                                                                 self.number_of_vertices_entry_result.get(),
+                    random_fixed_graph = RandomFixed(self.adjacency_type_selected.get())
+                    random_fixed_graph.create_random_fixed_graph(self.number_of_vertices_entry_result.get(),
                                                                  self.graph_degree_result.get(), self.seed_result.get(),
-                                                                 self.thread)
+                                                                 self.thread, rle=self.rle_var.get())
 
                     end = time() - start
 
@@ -650,17 +665,17 @@ class GraphGeneratePage(Page):
 
                         self.text_area.insert(END, message1)
                         self.text_area.update()
-                        from Graphs.Scale_Free_Graph_PA import ScaleFreeGraphPA
+                        from Graphs.Scale_Free_Graph_PA import ScaleFreePA
                         self.cancel_button.configure(state=NORMAL)
                         self.generate_button.config(state=DISABLED)
                         self.back_button.configure(state=DISABLED)
 
                         start = time()
 
-                        ScaleFreeGraphPA = ScaleFreeGraphPA()
-                        ScaleFreeGraphPA.create_scale_free_graph(self.adjacency_type_selected.get(),
-                                                                 self.number_of_vertices_entry_result.get(),
-                                                                 self.seed_result.get(), self.thread)
+                        scale_free_graph_pa = ScaleFreePA(self.adjacency_type_selected.get())
+                        scale_free_graph_pa.create_scale_free_graph(self.number_of_vertices_entry_result.get(),
+                                                                    self.seed_result.get(), self.thread,
+                                                                    rle=self.rle_var.get())
 
                         end = time() - start
 
@@ -685,17 +700,17 @@ class GraphGeneratePage(Page):
                     else:
                         self.text_area.insert(END, message1)
                         self.text_area.update()
-                        from Graphs.Full_Scale_Free_Graph import FullScaleFreeGraph
+                        from Graphs.Full_Scale_Free_Graph import FullScaleFree
                         self.cancel_button.configure(state=NORMAL)
                         self.generate_button.config(state=DISABLED)
 
                         start = time()
 
-                        FullScaleFreeGraph = FullScaleFreeGraph()
-                        FullScaleFreeGraph.create_full_scale_free_graph(self.adjacency_type_selected.get(),
-                                                                           self.number_of_vertices_entry_result.get(),
+                        full_scale_free_graph = FullScaleFree(self.adjacency_type_selected.get())
+                        full_scale_free_graph.create_full_scale_free_graph(self.number_of_vertices_entry_result.get(),
                                                                            self.number_of_initial_nodes_result.get(),
-                                                                           self.seed_result.get(), self.thread)
+                                                                           self.seed_result.get(), self.thread,
+                                                                           rle=self.rle_var.get())
 
                         end = time() - start
 
@@ -710,17 +725,18 @@ class GraphGeneratePage(Page):
                 else:
                     self.text_area.insert(END, message1)
                     self.text_area.update()
-                    from Graphs.ER_Graph import ErdosRenyiGraph
+                    from Graphs.ER_Graph import ErdosRenyi
                     self.cancel_button.configure(state=NORMAL)
                     self.generate_button.config(state=DISABLED)
                     self.back_button.configure(state=DISABLED)
 
                     start = time()
 
-                    ErdosRenyiGraph = ErdosRenyiGraph()
-                    ErdosRenyiGraph.create_er_graph(self.adjacency_type_selected.get(),
-                                             self.number_of_vertices_entry_result.get(),
-                                             float(self.probability_result.get()), self.seed_result.get(), self.thread)
+                    erdos_renyi_graph = ErdosRenyi(self.adjacency_type_selected.get())
+                    erdos_renyi_graph.create_er_graph(self.number_of_vertices_entry_result.get(),
+                                                      float(self.probability_result.get()), self.seed_result.get(),
+                                                      self.thread,
+                                                      rle=self.rle_var.get())
 
                     end = time() - start
 
@@ -766,20 +782,20 @@ class GraphGeneratePage(Page):
                 self.text_area.insert(END, message1)
                 self.text_area.update()
 
-                from Graphs.ER_Graph import ErdosRenyiGraph
+                from Graphs.ER_Graph import ErdosRenyi
                 self.cancel_button.configure(state=NORMAL)
                 self.generate_button.config(state=DISABLED)
                 self.back_button.configure(state=DISABLED)
 
                 start = time()
 
-                ErdosRenyiGraph = ErdosRenyiGraph()
-                ErdosRenyiGraph.create_custom_er_graph(self.adjacency_type_selected.get(),
-                                                self.number_of_vertices_entry_result.get(),
-                                                self.number_of_edges_result.get(),
-                                                float(self.probability_result.get()),
-                                                self.seed_result.get(),
-                                                self.thread)
+                erdos_renyi_graph = ErdosRenyi(self.adjacency_type_selected.get())
+                erdos_renyi_graph.create_custom_er_graph(self.number_of_vertices_entry_result.get(),
+                                                         self.number_of_edges_result.get(),
+                                                         float(self.probability_result.get()),
+                                                         self.seed_result.get(),
+                                                         self.thread,
+                                                         rle=self.rle_var.get())
 
                 end = time() - start
 
@@ -818,18 +834,18 @@ class GraphGeneratePage(Page):
 
                         self.text_area.insert(END, message1)
                         self.text_area.update()
-                        from Graphs.Scale_Free_Graph_PA import ScaleFreeGraphPA
+                        from Graphs.Scale_Free_Graph_PA import ScaleFreePA
                         self.cancel_button.configure(state=NORMAL)
                         self.generate_button.config(state=DISABLED)
                         self.back_button.configure(state=DISABLED)
 
                         start = time()
 
-                        ScaleFreeGraphPA = ScaleFreeGraphPA()
-                        ScaleFreeGraphPA.create_custom_scale_free_graph(self.adjacency_type_selected.get(),
-                                                                        self.number_of_vertices_entry_result.get(),
-                                                                        self.number_of_edges_result.get(),
-                                                                        self.seed_result.get(), self.thread)
+                        scale_free_graph_pa = ScaleFreePA(self.adjacency_type_selected.get())
+                        scale_free_graph_pa.create_custom_scale_free_graph(self.number_of_vertices_entry_result.get(),
+                                                                           self.number_of_edges_result.get(),
+                                                                           self.seed_result.get(), self.thread,
+                                                                           rle=self.rle_var.get())
 
                         end = time() - start
 
@@ -865,19 +881,21 @@ class GraphGeneratePage(Page):
                     else:
                         self.text_area.insert(END, message1)
                         self.text_area.update()
-                        from Graphs.Full_Scale_Free_Graph import FullScaleFreeGraph
+                        from Graphs.Full_Scale_Free_Graph import FullScaleFree
                         self.cancel_button.configure(state=NORMAL)
                         self.generate_button.config(state=DISABLED)
 
                         start = time()
 
-                        FullScaleFreeGraph = FullScaleFreeGraph()
-                        FullScaleFreeGraph.create_full_scale_free_graph(self.adjacency_type_selected.get(),
-                                                                           self.number_of_vertices_entry_result.get(),
-                                                                           self.number_of_initial_nodes_result.get(),
-                                                                           self.seed_result.get(), self.thread,
-                                                                           self.initial_connections_per_node_result
-                                                                           .get())  # --> Custom Full Scale-Free Graph.
+                        full_scale_free_graph = FullScaleFree(self.adjacency_type_selected.get())
+                        full_scale_free_graph.create_full_scale_free_graph(
+                            self.number_of_vertices_entry_result.get(),
+                            self.number_of_initial_nodes_result.get(),
+                            self.seed_result.get(),
+                            self.thread,
+                            self.initial_connections_per_node_result.get(),
+                            rle=self.rle_var.get()
+                        )  # --> Custom Full Scale-Free Graph.
 
                         end = time() - start
 

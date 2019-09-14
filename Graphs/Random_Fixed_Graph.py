@@ -3,14 +3,16 @@ __name__ = "Gratis"
 __version__ = "1.0"
 __license__ = "GNU General Public License v3.0"
 
-import sys
 import random
 from Analyze.Analyze import *
 from Generate.Generate import *
-from Support_Folders.camel_case_spliter import *
+from Graphs.vertex import Vertex
+from Graphs.graph_adjacency_list import AdjacencyListGraph
+from Graphs.graph import GraphRepresentationType, GraphType
+from Graphs.graph_adjacency_matrix import AdjacencyMatrixGraph
 
 
-class RandomFixedGraph:
+class RandomFixed:
     """
         This class creates a Random Fixed Graph and an adjacency matrix based on the number of vertices, maximum node
         connectivity and seed given by the user interface.
@@ -25,40 +27,40 @@ class RandomFixedGraph:
 
     """
 
-    def __init__(self):
-        self.g = None
+    def __init__(self, graph_representation_type):
+        if graph_representation_type == str(GraphRepresentationType.MATRIX):
+            self.graph = AdjacencyMatrixGraph(GraphRepresentationType.MATRIX, GraphType.RANDOM_FIXED)
+        else:
+            self.graph = AdjacencyListGraph(GraphRepresentationType.LIST, GraphType.RANDOM_FIXED)
 
-    def create_random_fixed_graph(self, graph_respresentation_type, numOfVertices, connectivity, seed, thread):
-
+    def create_random_fixed_graph(self, number_of_vertices, connectivity, seed, thread, **kwargs):
         """ Commented lines of code serve debugging purposes. """
 
-        if graph_respresentation_type == "Matrix":
-            from Graphs.graph_adjacency_matrix import Graph, Vertex
-        else:
-            from Graphs.graph_adjacency_list import Graph, Vertex
+        self.graph.reset_graph()
 
-        self.g = Graph()
-        self.g.reset_graph()
+        if self.graph.graph_representation_type == "matrix":
+            if kwargs.get('rle'):
+                self.graph.mode = "memory efficient"
 
         random.seed(seed)
-        numOfEdges = [0] * numOfVertices
+        number_of_edges = [0] * number_of_vertices
 
-        for i in range(numOfVertices):
+        for i in range(number_of_vertices):
 
             if thread.isStopped():
                 sys.exit(0)
 
-            self.g.add_vertex(Vertex(i))
+            self.graph.add_vertex(Vertex(i))
 
-        graph_vector = self.g.edge_indices.copy()
+        graph_vector = self.graph.edge_indices.copy()
 
-        for v, i in self.g.edge_indices.items():
+        for v, i in self.graph.edge_indices.items():
 
             if v in graph_vector:
 
                 # print(f"Connecting node {int(v)} with others...")
 
-                while numOfEdges[int(v)] < connectivity and len(graph_vector) != 0:
+                while number_of_edges[int(v)] < connectivity and len(graph_vector) != 0:
 
                     if thread.isStopped():
                         sys.exit(0)
@@ -69,12 +71,12 @@ class RandomFixedGraph:
                         while random_node == v:
                             random_node = random.choice(list(graph_vector.keys()))
 
-                    if numOfEdges[int(random_node)] >= connectivity:
+                    if number_of_edges[int(random_node)] >= connectivity:
                         del graph_vector[random_node]
                         # print(f"Removed node {int(random_node)} from play.")
                         # print(graph_vector)
 
-                    if numOfEdges[int(v)] >= connectivity:
+                    if number_of_edges[int(v)] >= connectivity:
                         try:
                             del graph_vector[v]
                             # print(f"Removed node {int(v) + 1} from play.")
@@ -83,17 +85,17 @@ class RandomFixedGraph:
                         except KeyError:
                             pass
 
-                    if numOfEdges[int(random_node)] < connectivity and v != random_node \
-                            and not self.g.isAdjacent(v, random_node):
+                    if number_of_edges[int(random_node)] < connectivity and v != random_node \
+                            and not self.graph.isAdjacent(v, random_node):
 
-                        self.g.add_edge_undirected(v, random_node)
-                        numOfEdges[int(v)] += 1
-                        numOfEdges[int(random_node)] += 1
+                        self.graph.add_edge_undirected(v, random_node)
+                        number_of_edges[int(v)] += 1
+                        number_of_edges[int(random_node)] += 1
 
-                        # print(f"""Connected node {int(v)} ({numOfEdges[int(v)]}) """
-                        #       f"""edges with node {int(random_node)} ({numOfEdges[int(random_node)]}) edges.""")
+                        # print(f"""Connected node {int(v)} ({number_of_edges[int(v)]}) """
+                        #       f"""edges with node {int(random_node)} ({number_of_edges[int(random_node)]}) edges.""")
 
-                        if numOfEdges[int(v)] >= connectivity:
+                        if number_of_edges[int(v)] >= connectivity:
                             try:
                                 del graph_vector[v]
                                 # print(f"Removed node {int(v)} from play.")
@@ -102,7 +104,7 @@ class RandomFixedGraph:
                             except KeyError:
                                 pass
 
-                        if numOfEdges[int(random_node)] >= connectivity:
+                        if number_of_edges[int(random_node)] >= connectivity:
                             del graph_vector[random_node]
                             # print(f"Removed node {int(random_node)} from play.")
                             # print(graph_vector)
@@ -114,29 +116,25 @@ class RandomFixedGraph:
                         counter = 0
                         for w, l in graph_vector.items():
 
-                            if self.g.isAdjacent(v, w) and v != w:
+                            if self.graph.isAdjacent(v, w) and v != w:
                                 counter += 1
 
                         if counter == len(graph_vector) - 1:
                             break
 
-                    elif not self.g.isAdjacent(v, random_node) and len(graph_vector) == 2 and v != random_node:
-                        self.g.add_edge_directed(v, random_node)
-                        numOfEdges[int(v)] += 1
-                        numOfEdges[int(random_node)] += 1
+                    elif not self.graph.isAdjacent(v, random_node) and len(graph_vector) == 2 and v != random_node:
+                        self.graph.add_edge_directed(v, random_node)
+                        number_of_edges[int(v)] += 1
+                        number_of_edges[int(random_node)] += 1
 
-        #                 print(f"""Connected node {int(v)} ({numOfEdges[int(v)]}) edges with """
-        #                       f"""node {int(random_node)} ({numOfEdges[int(random_node)]}) edges.""")
+        #                 print(f"""Connected node {int(v)} ({number_of_edges[int(v)]}) edges with """
+        #                       f"""node {int(random_node)} ({number_of_edges[int(random_node)]}) edges.""")
 
         # print()
 
-        self.g.get_number_of_edges()
+        # self.graph.get_number_of_edges()
 
-        generator.generate(graph_respresentation_type, self.g, thread)
-
-        if graph_respresentation_type == "Matrix":
-            analyzer.analyze_generated_graph(self.g.edges, graph_respresentation_type, camel_case_split(self.__class__.__name__), numOfVertices, connectivity,
-                                             None, None, None, None, seed)
-        else:
-            analyzer.analyze_generated_graph(self.g.neighbors, graph_respresentation_type, camel_case_split(self.__class__.__name__), numOfVertices, connectivity,
-                                             None, None, None, None, seed)
+        generator.generate(self.graph.graph_representation_type, self.graph, thread)
+        analyzer.analyze_generated_graph(self.graph.edges, self.graph.graph_representation_type,
+                                         self.graph.graph_type,
+                                         number_of_vertices, connectivity, None, None, None, None, seed)

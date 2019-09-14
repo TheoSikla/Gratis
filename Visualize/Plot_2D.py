@@ -9,6 +9,7 @@ from math import pow
 import matplotlib.ticker
 import matplotlib.pyplot as plt
 from os_recon.define_os import path_escape
+from Support_Folders.run_length_encoder import RunLengthEncoder
 
 
 class Plot2D:
@@ -24,13 +25,19 @@ class Plot2D:
             try:
                 with open(f"Output_Files{path_escape}matrix.txt", buffering=20000) as f:
                     # Number of Vertices
+                    encoder = RunLengthEncoder()
+                    line = f.readline()
 
-                    self.num_of_vertices = len(f.readline().replace("\n", ""))
+                    self.num_of_vertices = len(encoder.decode(line.replace('\n', ''))
+                                               if any(_ in [chr(0), chr(1)] for _ in line)
+                                               else line.replace("\n", ""))
                     f.seek(0)
 
                     i = 0
                     j = 0
                     for line in f:
+                        line = encoder.decode(line.replace('\n', '')) \
+                            if any(_ in [chr(0), chr(1)] for _ in line) else line
                         for char in line:
                             if str(char) == '1' and i < j:
                                 file_output += f"{i} {j}\n"
