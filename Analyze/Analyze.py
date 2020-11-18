@@ -115,10 +115,14 @@ class Analyze:
         text_area.delete('1.0', END)
         text_area.update()
 
-        with open(f"Output_Files{path_escape}graph_analysis_{adjacency_type.lower()}.txt", "r") as f:
-            for line in f:
-                text_area.insert(END, line)
-            text_area.update()
+        try:
+            with open(f"Output_Files{path_escape}graph_analysis_{adjacency_type.lower()}.txt", "r") as f:
+                for line in f:
+                    text_area.insert(END, line)
+                text_area.update()
+        except FileNotFoundError:
+            message = f"Please generate a graph first!"
+            messagebox.showerror("Error", message)
 
     @staticmethod
     def pajek_file_to_dict(path):
