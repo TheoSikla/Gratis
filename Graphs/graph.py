@@ -30,10 +30,18 @@ class GraphRepresentationType(Enum):
 class GraphType(Enum):
     """Enumeration Class for Graph types"""
 
-    HOMOGENEOUS = 'Homogeneous'
-    ER = 'Erdos Renyi'
-    SCALE_FREE = 'Scale Free'
-    RANDOM_FIXED = 'Random Fixed'
+    HOMOGENEOUS = 'hm'
+    ER = 'er'
+    SCALE_FREE = 'sf'
+    RANDOM_FIXED = 'rf'
+
+
+AVAILABLE_GRAPH_TYPE_FULL_NAMES = {
+    GraphType.HOMOGENEOUS.value: 'Homogeneous',
+    GraphType.ER.value: 'Erdos Renyi',
+    GraphType.SCALE_FREE.value: 'Scale Free',
+    GraphType.RANDOM_FIXED.value: 'Random Fixed',
+}
 
 
 class AbstractGraph:
@@ -73,3 +81,6 @@ class Graph(AbstractGraph):
     @property
     def graph_type(self):
         return self._type.value
+
+    def reset_graph(self):
+        pass

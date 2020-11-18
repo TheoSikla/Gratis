@@ -16,18 +16,27 @@
     You should have received a copy of the GNU General Public License
     along with GRATIS. If not, see <https://www.gnu.org/licenses/>.
 """
+
 import sys
+
+from Graphs.graph import Graph, AVAILABLE_GRAPH_TYPE_FULL_NAMES
 from os_recon.define_os import path_escape
 from Support_Folders.run_length_encoder import RunLengthEncoder
+from datetime import datetime
+
+date_format = '%d-%m-%Y_%H:%M:%S'
 
 
 class Generate:
 
     @staticmethod
-    def generate(adjacency_type, graph, thread):
+    def generate(adjacency_type, graph: Graph, thread):
         """ Generates the file that will be used to visualize the graph. """
 
         file_output = ''
+        output_filename = f"Output_Files{path_escape}{datetime.now().strftime(date_format)}_" \
+                          f"{graph.graph_representation_type}_{len(graph.vertices)}_" \
+                          f"{AVAILABLE_GRAPH_TYPE_FULL_NAMES[graph.graph_type].replace(' ', '_')}.txt"
 
         if adjacency_type == "matrix":
             if hasattr(graph, 'mode'):
@@ -69,15 +78,9 @@ class Generate:
 
                     file_output = file_output[:-1]
                 file_output += "\n"
-        
-        if adjacency_type == "matrix":
 
-            with open(f"Output_Files{path_escape}matrix.txt", "w") as f:
-                f.write(file_output)
-        else:
-            
-            with open(f"Output_Files{path_escape}list.txt", "w") as f:
-                f.write(file_output)
+        with open(output_filename, "w") as f:
+            f.write(file_output)
 
         del file_output
 

@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with GRATIS. If not, see <https://www.gnu.org/licenses/>.
 """
-
+from Graphs.graph import GraphRepresentationType
 from gui.pages.page import *
 from Analyze.Analyze import *
 from tkinter import filedialog
@@ -24,6 +24,7 @@ from Analyze.Geodesic_Paths import find_geodesics
 from Analyze.Centrality import closeness_centrality
 from Analyze.Paths import find_all_paths, find_shortest_paths
 from Analyze.Betweenness_Centrality import betweenness_centrality
+from utils.file import locate_latest_file
 
 
 class GraphAnalyzePage(Page):
@@ -449,8 +450,9 @@ class GraphAnalyzePage(Page):
 
                     if self.adjacency_type_selected.get() == "Matrix":
                         try:
-                            self.Edges, self.Vertices = self.matrix_to_tuple_list("Output_Files{}matrix.txt"
-                                                                                  .format(path_escape))
+                            self.Edges, self.Vertices = self.matrix_to_tuple_list(
+                                f"Output_Files{path_escape}"
+                                f"{locate_latest_file('Output_Files', GraphRepresentationType.MATRIX.value)}")
 
                         except FileNotFoundError:
                             message = "Please make sure that you have generated a graph!"
@@ -461,8 +463,9 @@ class GraphAnalyzePage(Page):
                             self.text_area.update()
                     else:
                         try:
-                            self.Edges, self.Vertices = self.list_file_to_tuple_list("Output_Files{}list.txt"
-                                                                                     .format(path_escape))
+                            self.Edges, self.Vertices = self.list_file_to_tuple_list(
+                                f"Output_Files{path_escape}"
+                                f"{locate_latest_file('Output_Files', GraphRepresentationType.LIST.value)}")
 
                         except FileNotFoundError:
                             message = "Please make sure that you have generated a graph!"

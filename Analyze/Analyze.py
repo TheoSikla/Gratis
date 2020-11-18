@@ -21,6 +21,8 @@ import re
 import datetime
 from tkinter import END
 from tkinter import messagebox
+
+from Graphs.graph import AVAILABLE_GRAPH_TYPE_FULL_NAMES
 from sqlite3_db.Database import Graph
 from os_recon.define_os import path_escape
 
@@ -41,7 +43,7 @@ class Analyze:
 
             analysis = {
                         'Graph_Representation_Type': graph_representation_type,
-                        'Graph_Type': graph_type,
+                        'Graph_Type': AVAILABLE_GRAPH_TYPE_FULL_NAMES[graph_type],
                         'Number_Of_Vertices': number_of_vertices,
                         'Graph_Degree': graph_degree,
                         'Number_Of_Maximum_Edges': number_of_edges,
