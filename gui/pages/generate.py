@@ -60,7 +60,7 @@ class GraphGeneratePage(Page):
 
         self.rle_var = BooleanVar(False)
         self.rle = ttk.Checkbutton(self, text="Run Length Encoder", variable=self.rle_var)
-        self.rle.grid(row=1, column=2, sticky="w")
+        # self.rle.grid(row=1, column=2, sticky="w")
 
         # Main Label
         self.main_label = Label(self, bg="azure3", text="Generate a graph\n",
