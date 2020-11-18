@@ -1,12 +1,28 @@
-__author__ = "Theodoros Siklafidis"
-__name__ = "Gratis"
-__version__ = "1.0"
-__license__ = "GNU General Public License v3.0"
+"""
+                Copyright (C) 2020 Theodoros Siklafidis
+
+    This file is part of GRATIS.
+
+    GRATIS is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    GRATIS is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with GRATIS. If not, see <https://www.gnu.org/licenses/>.
+"""
 
 import re
 import datetime
 from tkinter import END
 from tkinter import messagebox
+
+from Graphs.graph import AVAILABLE_GRAPH_TYPE_FULL_NAMES
 from sqlite3_db.Database import Graph
 from os_recon.define_os import path_escape
 
@@ -27,7 +43,7 @@ class Analyze:
 
             analysis = {
                         'Graph_Representation_Type': graph_representation_type,
-                        'Graph_Type': graph_type,
+                        'Graph_Type': AVAILABLE_GRAPH_TYPE_FULL_NAMES[graph_type],
                         'Number_Of_Vertices': number_of_vertices,
                         'Graph_Degree': graph_degree,
                         'Number_Of_Maximum_Edges': number_of_edges,
@@ -101,10 +117,14 @@ class Analyze:
         text_area.delete('1.0', END)
         text_area.update()
 
-        with open(f"Output_Files{path_escape}graph_analysis_{adjacency_type.lower()}.txt", "r") as f:
-            for line in f:
-                text_area.insert(END, line)
-            text_area.update()
+        try:
+            with open(f"Output_Files{path_escape}graph_analysis_{adjacency_type.lower()}.txt", "r") as f:
+                for line in f:
+                    text_area.insert(END, line)
+                text_area.update()
+        except FileNotFoundError:
+            message = f"Please generate a graph first!"
+            messagebox.showerror("Error", message)
 
     @staticmethod
     def pajek_file_to_dict(path):

@@ -1,20 +1,42 @@
-__author__ = "Theodoros Siklafidis"
-__name__ = "Gratis"
-__version__ = "1.0"
-__license__ = "GNU General Public License v3.0"
+"""
+                Copyright (C) 2020 Theodoros Siklafidis
+
+    This file is part of GRATIS.
+
+    GRATIS is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    GRATIS is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with GRATIS. If not, see <https://www.gnu.org/licenses/>.
+"""
 
 import sys
+
+from Graphs.graph import Graph, AVAILABLE_GRAPH_TYPE_FULL_NAMES
 from os_recon.define_os import path_escape
 from Support_Folders.run_length_encoder import RunLengthEncoder
+from datetime import datetime
+
+date_format = '%d-%m-%Y_%H:%M:%S'
 
 
 class Generate:
 
     @staticmethod
-    def generate(adjacency_type, graph, thread):
+    def generate(adjacency_type, graph: Graph, thread):
         """ Generates the file that will be used to visualize the graph. """
 
         file_output = ''
+        output_filename = f"Output_Files{path_escape}{datetime.now().strftime(date_format)}_" \
+                          f"{graph.graph_representation_type}_{len(graph.vertices)}_" \
+                          f"{AVAILABLE_GRAPH_TYPE_FULL_NAMES[graph.graph_type].replace(' ', '_')}.txt"
 
         if adjacency_type == "matrix":
             if hasattr(graph, 'mode'):
@@ -56,15 +78,9 @@ class Generate:
 
                     file_output = file_output[:-1]
                 file_output += "\n"
-        
-        if adjacency_type == "matrix":
 
-            with open(f"Output_Files{path_escape}matrix.txt", "w") as f:
-                f.write(file_output)
-        else:
-            
-            with open(f"Output_Files{path_escape}list.txt", "w") as f:
-                f.write(file_output)
+        with open(output_filename, "w") as f:
+            f.write(file_output)
 
         del file_output
 

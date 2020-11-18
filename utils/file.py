@@ -17,19 +17,22 @@
     along with GRATIS. If not, see <https://www.gnu.org/licenses/>.
 """
 
-from tkinter import *
-from tkinter import ttk
-from tkinter import messagebox
-from sqlite3_db.Database import *
-from gui.pages.mousewheel import *
-from os_recon.define_os import transform, platform_type
-from Support_Folders.multithreading import StoppableThread
-from Support_Folders.run_length_encoder import RunLengthEncoder
+import re
+from os import listdir
+from os.path import isfile, join
+
+file_format_regex = '^[0-9]{2}-[0-9]{2}-[0-9]{4}_[0-9]{2}:[0-9]{2}:[0-9]{2}'
+file_format_regex_compiled = re.compile(file_format_regex)
 
 
-class Page(Frame):
-    def __init__(self, *args, **kwargs):
-        Frame.__init__(self, *args, **kwargs)
-
-    def retrieve_frame(self, controller, frame_name: str):
-        return next(val for val in controller.frames.keys() if val.__name__ == frame_name)
+def locate_latest_file(directory: str, graph_file_type: str):
+    """
+    Locate latest file inside a given directory using a date format of '%d-%m-%Y_%H:%M:%S'
+    """
+    return [
+        f for f in listdir(directory) if (
+                isfile(join(directory, f)) and
+                file_format_regex_compiled.search(f) and
+                graph_file_type in f.lower()
+        )
+    ][-1]
