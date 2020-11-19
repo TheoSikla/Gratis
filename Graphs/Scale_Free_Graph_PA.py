@@ -137,10 +137,8 @@ class ScaleFreePA:
 
         generator.generate(self.graph.graph_representation_type, self.graph, thread)
 
-        analyzer.analyze_generated_graph(self.graph.edges, self.graph.graph_representation_type,
-                                         f'{self.graph.graph_type} '
-                                         f'with Preferential Attachment', number_of_vertices, None,
-                                         None, None, None, None, seed)
+        analyzer.analyze_generated_graph(self.graph.edges, self.graph.graph_representation_type, self.graph.graph_type,
+                                         number_of_vertices, None, None, None, None, None, seed)
 
     def create_custom_scale_free_graph(self, number_of_vertices, total_number_of_edges, seed, thread, **kwargs):
         """ Commented lines of code serve debugging purposes. """
@@ -229,7 +227,5 @@ class ScaleFreePA:
         # self.graph.get_number_of_edges()
 
         generator.generate(self.graph.graph_representation_type, self.graph, thread)
-        analyzer.analyze_generated_graph(self.graph.edges, self.graph.graph_representation_type,
-                                         f'Custom {self.graph.graph_type} '
-                                         f'with Preferential Attachment', number_of_vertices, None,
-                                         total_number_of_edges, None, None, None, seed)
+        analyzer.analyze_generated_graph(self.graph.edges, self.graph.graph_representation_type, self.graph.graph_type,
+                                         number_of_vertices, None, total_number_of_edges, None, None, None, seed)

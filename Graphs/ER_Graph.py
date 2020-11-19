@@ -201,6 +201,5 @@ class ErdosRenyi:
         # self.graph.get_number_of_edges()
 
         generator.generate(self.graph.graph_representation_type, self.graph, thread)
-        analyzer.analyze_generated_graph(self.graph.edges, self.graph.graph_representation_type,
-                                         f'Custom {self.graph.graph_type}', number_of_vertices,
-                                         None, total_number_of_edges, None, None, probability, seed)
+        analyzer.analyze_generated_graph(self.graph.edges, self.graph.graph_representation_type, self.graph.graph_type,
+                                         number_of_vertices, None, total_number_of_edges, None, None, probability, seed)
