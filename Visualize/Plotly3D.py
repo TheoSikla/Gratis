@@ -23,7 +23,6 @@ import igraph as ig
 import plotly.plotly as py
 import plotly.graph_objs as go
 from tkinter import messagebox
-import igraph.vendor.texttable
 
 from Graphs.graph import GraphRepresentationType
 from os_recon.define_os import path_escape
