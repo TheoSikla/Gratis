@@ -161,7 +161,5 @@ class FullScaleFree:
         # self.graph.get_number_of_edges()
 
         generator.generate(self.graph.graph_representation_type, self.graph, thread)
-        analyzer.analyze_generated_graph(self.graph.edges, self.graph.graph_representation_type,
-                                         f'{"Custom " if number_of_initial_edges is not None else ""}'
-                                         f'Full {self.graph.graph_type}',
+        analyzer.analyze_generated_graph(self.graph.edges, self.graph.graph_representation_type, self.graph.graph_type,
                                          number_of_vertices, None, None, number_of_initial_edges, None, None, seed)

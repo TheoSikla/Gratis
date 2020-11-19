@@ -21,7 +21,7 @@ import re
 from os import listdir
 from os.path import isfile, join
 
-file_format_regex = '^[0-9]{2}-[0-9]{2}-[0-9]{4}_[0-9]{2}:[0-9]{2}:[0-9]{2}'
+file_format_regex = '^[0-9]{2}-[0-9]{2}-[0-9]{4}_[0-9]{2}-[0-9]{2}-[0-9]{2}'
 file_format_regex_compiled = re.compile(file_format_regex)
 
 

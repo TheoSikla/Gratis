@@ -79,7 +79,12 @@ class Plot2D:
                           f"{locate_latest_file('Output_Files', GraphRepresentationType.LIST.value)}",
                           buffering=20000) as f:
                     # Number of Vertices
-                    self.num_of_vertices = int(f.readlines()[-1].split(':')[0]) + 1
+                    lines = f.readlines()
+                    max = 0
+                    for line in lines:
+                        if int(line.split(':')[0]) > max:
+                            max = int(line.split(':')[0])
+                    self.num_of_vertices = max + 1
                     f.seek(0)
                     # ===============================================
 
