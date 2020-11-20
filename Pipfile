@@ -9,7 +9,8 @@ verify_ssl = true
 matplotlib = "==3.1.0"
 plotly = "==3.10.0"
 cryptography = "==2.7"
-python-igraph = "==0.7.1.post6"
+python-igraph = "==0.8.3"
+numpy = "==1.19.3"
 
 [requires]
 python_version = "3.6"

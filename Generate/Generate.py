@@ -24,7 +24,7 @@ from os_recon.define_os import path_escape
 from Support_Folders.run_length_encoder import RunLengthEncoder
 from datetime import datetime
 
-date_format = '%d-%m-%Y_%H:%M:%S'
+date_format = '%d-%m-%Y_%H-%M-%S'
 
 
 class Generate:
@@ -34,7 +34,7 @@ class Generate:
         """ Generates the file that will be used to visualize the graph. """
 
         file_output = ''
-        output_filename = f"Output_Files{path_escape}{datetime.now().strftime(date_format)}_" \
+        output_filename = rf"Output_Files{path_escape}{datetime.now().strftime(date_format)}_" \
                           f"{graph.graph_representation_type}_{len(graph.vertices)}_" \
                           f"{AVAILABLE_GRAPH_TYPE_FULL_NAMES[graph.graph_type].replace(' ', '_')}.txt"
 

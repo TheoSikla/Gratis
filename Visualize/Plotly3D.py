@@ -23,9 +23,11 @@ import igraph as ig
 import plotly.plotly as py
 import plotly.graph_objs as go
 from tkinter import messagebox
-import igraph.vendor.texttable
+
+from Graphs.graph import GraphRepresentationType
 from os_recon.define_os import path_escape
 from Support_Folders.run_length_encoder import RunLengthEncoder
+from utils.file import locate_latest_file
 
 
 class Plotly3D:
@@ -48,7 +50,9 @@ class Plotly3D:
 
         # Create a list with all the connections between the nodes with source file: matrix.txt
         try:
-            with open(f"Output_Files{path_escape}matrix.txt", buffering=20000) as f:
+            with open(f"Output_Files{path_escape}"
+                      f"{locate_latest_file('Output_Files', GraphRepresentationType.MATRIX.value)}",
+                      buffering=20000) as f:
                 # Number of Vertices
                 encoder = RunLengthEncoder()
                 line = f.readline()
@@ -204,7 +208,9 @@ class Plotly3D:
 
         # Create a list with all the connections between the nodes with source file: list.txt
         try:
-            with open(f"Output_Files{path_escape}list.txt", buffering=20000) as f:
+            with open(f"Output_Files{path_escape}"
+                      f"{locate_latest_file('Output_Files', GraphRepresentationType.LIST.value)}",
+                      buffering=20000) as f:
                 # Number of Vertices
                 vertices = int(f.readlines()[-1].split(':')[0]) + 1
                 f.seek(0)
