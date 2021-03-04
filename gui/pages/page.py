@@ -20,11 +20,11 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
-from sqlite3_db.Database import *
+from sqlite3_db.database import *
 from gui.pages.mousewheel import *
 from os_recon.define_os import transform, platform_type
-from Support_Folders.multithreading import StoppableThread
-from Support_Folders.run_length_encoder import RunLengthEncoder
+from support_folders.multithreading import StoppableThread
+from support_folders.run_length_encoder import RunLengthEncoder
 
 
 class Page(Frame):

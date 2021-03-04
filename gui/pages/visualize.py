@@ -119,7 +119,7 @@ class GraphVisualizePage(Page):
 
     def pajek_visualize(self):
         """ Visualizes the generated graph with the appropriate file format that pajek needs. """
-        from Visualize.Pajek_Visualize import Visualizer
+        from visualize.pajek_visualize import Visualizer
 
         if self.adjacency_type_selected.get() == "":
             message = "You must choose visualisation via matrix or list generated!"
@@ -169,7 +169,7 @@ class GraphVisualizePage(Page):
     def plotly_visualize(self, username, api_key, output_filename):
         """ Visualizes the generated graph in 3D form with the appropriate file format that plotly needs. """
 
-        from Visualize.Plotly3D import Plotly3D
+        from visualize.plotly_3d import Plotly3D
         plotly_visualizer = Plotly3D(edges_pixels=5)
         start = time()
 
@@ -227,9 +227,9 @@ class GraphVisualizePage(Page):
             self.text_area.update()
 
     def Plot_2D(self):
-        import Visualize.Plot_2D
+        import visualize.plot_2d
 
-        plot = Visualize.Plot_2D.Plot2D()
+        plot = visualize.plot_2d.Plot2D()
 
         if self.adjacency_type_selected.get() == "":
             message = "You must choose visualisation via matrix or list generated!"

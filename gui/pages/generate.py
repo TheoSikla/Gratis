@@ -19,7 +19,7 @@
 
 from time import time
 from gui.pages.page import *
-from Graphs.graph import GraphRepresentationType
+from graphs.graph import GraphRepresentationType
 
 
 class GraphGeneratePage(Page):
@@ -620,7 +620,7 @@ class GraphGeneratePage(Page):
                 self.text_area.insert(END, message1)
                 self.text_area.update()
 
-                from Graphs.Homogeneous import Homogeneous
+                from graphs.homogeneous import Homogeneous
                 self.cancel_button.configure(state=NORMAL)
                 self.generate_button.configure(state=DISABLED)
                 self.back_button.configure(state=DISABLED)
@@ -645,7 +645,7 @@ class GraphGeneratePage(Page):
                 else:
                     self.text_area.insert(END, message1)
                     self.text_area.update()
-                    from Graphs.Random_Fixed_Graph import RandomFixed
+                    from graphs.random_fixed_graph import RandomFixed
                     self.cancel_button.configure(state=NORMAL)
                     self.generate_button.config(state=DISABLED)
                     self.back_button.configure(state=DISABLED)
@@ -684,7 +684,7 @@ class GraphGeneratePage(Page):
 
                         self.text_area.insert(END, message1)
                         self.text_area.update()
-                        from Graphs.Scale_Free_Graph_PA import ScaleFreePA
+                        from graphs.scale_free_graph_pa import ScaleFreePA
                         self.cancel_button.configure(state=NORMAL)
                         self.generate_button.config(state=DISABLED)
                         self.back_button.configure(state=DISABLED)
@@ -719,7 +719,7 @@ class GraphGeneratePage(Page):
                     else:
                         self.text_area.insert(END, message1)
                         self.text_area.update()
-                        from Graphs.Full_Scale_Free_Graph import FullScaleFree
+                        from graphs.full_scale_free_graph import FullScaleFree
                         self.cancel_button.configure(state=NORMAL)
                         self.generate_button.config(state=DISABLED)
 
@@ -744,7 +744,7 @@ class GraphGeneratePage(Page):
                 else:
                     self.text_area.insert(END, message1)
                     self.text_area.update()
-                    from Graphs.ER_Graph import ErdosRenyi
+                    from graphs.er_graph import ErdosRenyi
                     self.cancel_button.configure(state=NORMAL)
                     self.generate_button.config(state=DISABLED)
                     self.back_button.configure(state=DISABLED)
@@ -801,7 +801,7 @@ class GraphGeneratePage(Page):
                 self.text_area.insert(END, message1)
                 self.text_area.update()
 
-                from Graphs.ER_Graph import ErdosRenyi
+                from graphs.er_graph import ErdosRenyi
                 self.cancel_button.configure(state=NORMAL)
                 self.generate_button.config(state=DISABLED)
                 self.back_button.configure(state=DISABLED)
@@ -853,7 +853,7 @@ class GraphGeneratePage(Page):
 
                         self.text_area.insert(END, message1)
                         self.text_area.update()
-                        from Graphs.Scale_Free_Graph_PA import ScaleFreePA
+                        from graphs.scale_free_graph_pa import ScaleFreePA
                         self.cancel_button.configure(state=NORMAL)
                         self.generate_button.config(state=DISABLED)
                         self.back_button.configure(state=DISABLED)
@@ -900,7 +900,7 @@ class GraphGeneratePage(Page):
                     else:
                         self.text_area.insert(END, message1)
                         self.text_area.update()
-                        from Graphs.Full_Scale_Free_Graph import FullScaleFree
+                        from graphs.full_scale_free_graph import FullScaleFree
                         self.cancel_button.configure(state=NORMAL)
                         self.generate_button.config(state=DISABLED)
 

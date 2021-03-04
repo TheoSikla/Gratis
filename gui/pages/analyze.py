@@ -16,14 +16,14 @@
     You should have received a copy of the GNU General Public License
     along with GRATIS. If not, see <https://www.gnu.org/licenses/>.
 """
-from Graphs.graph import GraphRepresentationType
+from graphs.graph import GraphRepresentationType
 from gui.pages.page import *
-from Analyze.Analyze import *
+from analyze.analyze import *
 from tkinter import filedialog
-from Analyze.Geodesic_Paths import find_geodesics
-from Analyze.Centrality import closeness_centrality
-from Analyze.Paths import find_all_paths, find_shortest_paths
-from Analyze.Betweenness_Centrality import betweenness_centrality
+from analyze.geodesic_paths import find_geodesics
+from analyze.centrality import closeness_centrality
+from analyze.paths import find_all_paths, find_shortest_paths
+from analyze.betweenness_centrality import betweenness_centrality
 from utils.file import locate_latest_file
 
 

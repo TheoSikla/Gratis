@@ -20,7 +20,7 @@
 import sys
 from time import sleep
 from tkinter import END
-from Analyze.Dijkstra import dijkstra
+from analyze.dijkstra import dijkstra
 
 
 def find_geodesics(edges, num_of_vertices, text_area, thread):

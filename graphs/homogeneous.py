@@ -17,12 +17,12 @@
     along with GRATIS. If not, see <https://www.gnu.org/licenses/>.
 """
 
-from Analyze.Analyze import *
-from Generate.Generate import *
-from Graphs.vertex import Vertex
-from Graphs.graph_adjacency_list import AdjacencyListGraph
-from Graphs.graph import GraphRepresentationType, GraphType
-from Graphs.graph_adjacency_matrix import AdjacencyMatrixGraph
+from analyze.analyze import *
+from generate.generate import *
+from graphs.vertex import Vertex
+from graphs.graph_adjacency_list import AdjacencyListGraph
+from graphs.graph import GraphRepresentationType, GraphType
+from graphs.graph_adjacency_matrix import AdjacencyMatrixGraph
 
 
 class Homogeneous:

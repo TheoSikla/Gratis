@@ -19,9 +19,9 @@
 
 import sys
 
-from Graphs.graph import Graph, AVAILABLE_GRAPH_TYPE_FULL_NAMES
+from graphs.graph import Graph, AVAILABLE_GRAPH_TYPE_FULL_NAMES
 from os_recon.define_os import path_escape
-from Support_Folders.run_length_encoder import RunLengthEncoder
+from support_folders.run_length_encoder import RunLengthEncoder
 from datetime import datetime
 
 date_format = '%d-%m-%Y_%H-%M-%S'

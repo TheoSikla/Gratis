@@ -17,8 +17,8 @@
     along with GRATIS. If not, see <https://www.gnu.org/licenses/>.
 """
 
-from Graphs.graph import Graph
-from Graphs.vertex import Vertex
+from graphs.graph import Graph
+from graphs.vertex import Vertex
 from collections import OrderedDict
 
 

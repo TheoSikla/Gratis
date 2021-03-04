@@ -22,8 +22,8 @@ import datetime
 from tkinter import END
 from tkinter import messagebox
 
-from Graphs.graph import AVAILABLE_GRAPH_TYPE_FULL_NAMES
-from sqlite3_db.Database import Graph
+from graphs.graph import AVAILABLE_GRAPH_TYPE_FULL_NAMES
+from sqlite3_db.database import Graph
 from os_recon.define_os import path_escape
 
 

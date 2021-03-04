@@ -23,9 +23,9 @@ from math import pow
 import matplotlib.ticker
 import matplotlib.pyplot as plt
 
-from Graphs.graph import GraphRepresentationType
+from graphs.graph import GraphRepresentationType
 from os_recon.define_os import path_escape
-from Support_Folders.run_length_encoder import RunLengthEncoder
+from support_folders.run_length_encoder import RunLengthEncoder
 from utils.file import locate_latest_file
 
 
