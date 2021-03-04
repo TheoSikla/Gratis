@@ -22,62 +22,53 @@ from tkinter import *
 from tkinter import ttk
 from gui.pages import *
 from os_recon.define_os import transform
+from conf.base import *
 
 
 class App(Tk):
 
     def __init__(self, *args, **kwargs):
-        # Root initiate
         Tk.__init__(self)
-        # ================================
-
         self.center()
-
         # Create required directories
         self.create_directories()
-        # ================================
 
         # Root - Frame Configuration
-        self.title("Gratis")
-        self.config(bg="azure3")
-        self['padx'] = 20
-        self['pady'] = 20
+        self.title(APP_NAME)
+        self.config(bg=MAIN_FRAME_BACKGROUND)
+        self['padx'] = MAIN_FRAME_PADX
+        self['pady'] = MAIN_FRAME_PADY
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
-        # =================================
 
         # ttk style configuration
-        self.button_font = ("Dialog", 9, "bold italic")
+        self.button_font = BUTTON_FONT
         self.style = ttk.Style()
-        self.style.configure('TButton', background='seashell3', foreground='black', relief='flat', width=15)
-        self.style.configure('TFrame', background='azure3')
-        self.style.configure('TRadiobutton', background='azure3', foreground='black', relief='flat',
-                             font=self.button_font)
-        self.style.configure('TCheckbutton', background='azure3', foreground='black', relief='flat',
-                             font=self.button_font)
-        # ================================
+        self.style.configure('TButton', background=BUTTON_BACKGROUND, foreground=BUTTON_FOREGROUND,
+                             relief=BUTTON_RELIEF, width=BUTTON_WIDTH)
+        self.style.configure('TFrame', background=FRAME_BACKGROUND)
+        self.style.configure('TRadiobutton', background=RADIOBUTTON_BACKGROUND, foreground=RADIOBUTTON_FOREGROUND,
+                             relief=RADIOBUTTON_RELIEF, font=self.button_font)
+        self.style.configure('TCheckbutton', background=CHECKBUTTON_BACKGROUND, foreground=CHECKBUTTON_FOREGROUND,
+                             relief=CHECKBUTTON_RELIEF, font=self.button_font)
 
         # Main container for Frames
         container = ttk.Frame(self)
         container.grid(column=0, row=0, sticky="nsew")
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
-        # =================================
 
         # Dictionary with all the Frames of the application
         self.frames = {}
-        # =================================
 
         # Load all the Frames
         for F in (MainPage, GraphGeneratePage, GraphAnalyzePage, GraphVisualizePage, GraphHistoryPage):
             frame = F(container, self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky='nsew')
-        # =================================
 
         # Initiate the MainFrame
         self.show_frame(MainPage, transform)
-        # =================================
 
     def show_frame(self, cont, size):
         self.geometry(size)
@@ -103,13 +94,9 @@ class App(Tk):
         # Create the output folder if it doesn't exist.
         if not os.path.exists("Output_Files"):
             os.makedirs("Output_Files")
-        # ================================
 
 
 if __name__ == "__main__":
     GUI = App()
     GUI.center()
-    # user_connection_handler = User()
-    # Graph().populate(500)
     GUI.mainloop()
-    # user_connection_handler.close()
