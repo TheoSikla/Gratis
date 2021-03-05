@@ -17,8 +17,10 @@
     along with GRATIS. If not, see <https://www.gnu.org/licenses/>.
 """
 
+from os.path import join
 import webbrowser
 from gui.pages.page import *
+from conf.base import OUTPUT_FILES_DIRECTORY
 
 
 class CustomPopUp:
@@ -64,25 +66,25 @@ class CustomPopUp:
 
     @staticmethod
     def store_link(url, root2):
-        with open("Output_Files{}Plotly_link.txt".format(path_escape), "w") as f:
+        with open(join(OUTPUT_FILES_DIRECTORY, 'plotly_link.txt'), "w") as f:
             f.write(url)
             f.close()
 
         root2.destroy()
 
-        message_info = "Plotly 3D url stored in plaintext for later usage under the Output_Files folder" \
+        message_info = f"Plotly 3D url stored in plaintext for later usage under the {OUTPUT_FILES_DIRECTORY} folder" \
                        " with name Plotly_link.txt"
         messagebox.showinfo("Saved!", message_info)
 
     @staticmethod
     def callback(url, root2):
-        with open("Output_Files{}Plotly_link.txt".format(path_escape), "w") as f:
+        with open(join(OUTPUT_FILES_DIRECTORY, 'plotly_link.txt'), "w") as f:
             f.write(url)
             f.close()
 
         root2.destroy()
 
-        message_info = "Plotly 3D url stored in plaintext for later usage under the Output_Files folder" \
+        message_info = f"Plotly 3D url stored in plaintext for later usage under the {OUTPUT_FILES_DIRECTORY} folder" \
                        " with name Plotly_link.txt"
         messagebox.showinfo("Saved!", message_info)
         webbrowser.open_new(r"{}".format(url))

@@ -347,9 +347,9 @@ class GraphAnalyzePage(Page):
 
     def save_output(self):
         if not self.text_area.compare("end-1c", "==", "1.0"):
-            with open("Output_Files{}log.txt".format(path_escape), "w") as f:
+            with open(join(OUTPUT_FILES_DIRECTORY, "log.txt"), "w") as f:
                 f.write(self.text_area.get("1.0", "end-1c"))
-                message = "Successfully saved output to Output_Files\\log.txt!"
+                message = f"Successfully saved output to {join(OUTPUT_FILES_DIRECTORY, 'log.txt')}!"
                 messagebox.showinfo("Success!", message)
         else:
             message = "No available output to save!"
@@ -451,8 +451,8 @@ class GraphAnalyzePage(Page):
                     if self.adjacency_type_selected.get() == "Matrix":
                         try:
                             self.Edges, self.Vertices = self.matrix_to_tuple_list(
-                                f"Output_Files{path_escape}"
-                                f"{locate_latest_file('Output_Files', GraphRepresentationType.MATRIX.value)}")
+                                join(OUTPUT_FILES_DIRECTORY,
+                                     f"{locate_latest_file(OUTPUT_FILES_DIRECTORY, GraphRepresentationType.MATRIX.value)}"))
 
                         except FileNotFoundError:
                             message = "Please make sure that you have generated a graph!"
@@ -464,8 +464,10 @@ class GraphAnalyzePage(Page):
                     else:
                         try:
                             self.Edges, self.Vertices = self.list_file_to_tuple_list(
-                                f"Output_Files{path_escape}"
-                                f"{locate_latest_file('Output_Files', GraphRepresentationType.LIST.value)}")
+                                join(
+                                    OUTPUT_FILES_DIRECTORY,
+                                    f"{locate_latest_file(OUTPUT_FILES_DIRECTORY, GraphRepresentationType.LIST.value)}")
+                            )
 
                         except FileNotFoundError:
                             message = "Please make sure that you have generated a graph!"

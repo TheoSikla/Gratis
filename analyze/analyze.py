@@ -19,9 +19,11 @@
 
 import re
 import datetime
+from os.path import join
 from tkinter import END
 from tkinter import messagebox
 
+from conf.base import OUTPUT_FILES_DIRECTORY
 from graphs.graph import AVAILABLE_GRAPH_TYPE_FULL_NAMES
 from sqlite3_db.database import Graph
 from os_recon.define_os import path_escape
@@ -38,9 +40,7 @@ class Analyze:
                                 initial_connections_per_node=None, probability=None, seed=None):
         
         """ Analyzes a generated graph. """
-
-        with open(f'Output_Files{path_escape}graph_analysis_{graph_representation_type.lower()}.txt', "w") as f:
-
+        with open(join(OUTPUT_FILES_DIRECTORY, f'graph_analysis_{graph_representation_type.lower()}.txt'), "w") as f:
             analysis = {
                         'Graph_Representation_Type': graph_representation_type,
                         'Graph_Type': AVAILABLE_GRAPH_TYPE_FULL_NAMES[graph_type],
@@ -118,7 +118,7 @@ class Analyze:
         text_area.update()
 
         try:
-            with open(f"Output_Files{path_escape}graph_analysis_{adjacency_type.lower()}.txt", "r") as f:
+            with open(join(OUTPUT_FILES_DIRECTORY, f'graph_analysis_{adjacency_type.lower()}.txt'), 'r') as f:
                 for line in f:
                     text_area.insert(END, line)
                 text_area.update()

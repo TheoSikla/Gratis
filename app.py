@@ -92,8 +92,8 @@ class App(Tk):
     @staticmethod
     def create_directories():
         # Create the output folder if it doesn't exist.
-        if not os.path.exists("Output_Files"):
-            os.makedirs("Output_Files")
+        if not os.path.exists(OUTPUT_FILES_DIRECTORY):
+            os.makedirs(OUTPUT_FILES_DIRECTORY)
 
 
 if __name__ == "__main__":

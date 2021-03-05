@@ -19,7 +19,11 @@
 
 import json
 import sqlite3
+from os.path import join
+
 from cryptography.fernet import Fernet
+
+from conf.base import OUTPUT_FILES_DIRECTORY
 from os_recon.define_os import path_escape
 
 
@@ -27,7 +31,7 @@ class Connection:
     def __init__(self):
         """ Init function creates a .sqlite file if it doesn't already exists and connects with it. """
 
-        self.db = sqlite3.connect(f"Output_Files{path_escape}db.sqlite")
+        self.db = sqlite3.connect(join(OUTPUT_FILES_DIRECTORY, "db.sqlite"))
         self.cursor = self.db.cursor()
 
         # Key generated with Fernet.generate_key() --> b'_irWyTD7X1KHYq0UiBdY9yECvBFpY_MLyOD3AOrpMYM='

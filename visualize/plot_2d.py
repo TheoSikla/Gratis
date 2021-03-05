@@ -20,9 +20,12 @@
 import re
 import operator
 from math import pow
+from os.path import join
+
 import matplotlib.ticker
 import matplotlib.pyplot as plt
 
+from conf.base import OUTPUT_FILES_DIRECTORY
 from graphs.graph import GraphRepresentationType
 from os_recon.define_os import path_escape
 from support_folders.run_length_encoder import RunLengthEncoder
@@ -37,11 +40,12 @@ class Plot2D:
 
     def graph_topology_matrix(self):
         file_output = ''
-        with open(f"Output_Files{path_escape}Graph_topology.txt", "w") as graph_topology:
+
+        with open(join(OUTPUT_FILES_DIRECTORY, 'Graph_topology.txt'), 'w') as graph_topology:
 
             try:
-                with open(f"Output_Files{path_escape}"
-                          f"{locate_latest_file('Output_Files', GraphRepresentationType.MATRIX.value)}",
+                with open(join(OUTPUT_FILES_DIRECTORY,
+                               f"{locate_latest_file(OUTPUT_FILES_DIRECTORY, GraphRepresentationType.MATRIX.value)}"),
                           buffering=20000) as f:
                     # Number of Vertices
                     encoder = RunLengthEncoder()
@@ -72,11 +76,11 @@ class Plot2D:
 
     def graph_topology_list(self):
         file_output = ''
-        with open(f"Output_Files{path_escape}Graph_topology.txt", "w") as graph_topology:
+        with open(join(OUTPUT_FILES_DIRECTORY, "Graph_topology.txt"), "w") as graph_topology:
 
             try:
-                with open(f"Output_Files{path_escape}"
-                          f"{locate_latest_file('Output_Files', GraphRepresentationType.LIST.value)}",
+                with open(join(OUTPUT_FILES_DIRECTORY,
+                               f"{locate_latest_file(OUTPUT_FILES_DIRECTORY, GraphRepresentationType.LIST.value)}"),
                           buffering=20000) as f:
                     # Number of Vertices
                     lines = f.readlines()
@@ -102,7 +106,7 @@ class Plot2D:
                 return False
 
     def extract_possibilities(self):
-        with open(f"Output_Files{path_escape}Graph_topology.txt") as f:
+        with open(join(OUTPUT_FILES_DIRECTORY, "Graph_topology.txt")) as f:
             num_of_edges = {i: 0 for i in range(self.num_of_vertices)}
 
             line = f.readline()
@@ -130,7 +134,7 @@ class Plot2D:
         # for key, value in edges_n_nodes.items():
         #     print("{} nodes has {} edges.".format(value, key))
 
-        with open(f"Output_Files{path_escape}2D_data.txt", "w") as f:
+        with open(join(OUTPUT_FILES_DIRECTORY, "2D_data.txt"), "w") as f:
             for key, value in sorted(edges_n_nodes.items(), key=operator.itemgetter(0), reverse=True):
                 if value != 0:
                     f.write(f"{key} {value / self.num_of_vertices}\n")
@@ -143,7 +147,7 @@ class Plot2D:
 
     @staticmethod
     def plot_2d(graph_adjacency_type):
-        with open(f"Output_Files{path_escape}2D_data.txt") as f:
+        with open(join(OUTPUT_FILES_DIRECTORY, "2D_data.txt")) as f:
             connections = []
             probabilities = []
             graph_type = None
@@ -159,10 +163,10 @@ class Plot2D:
             f.close()
 
         if graph_adjacency_type == "Matrix":
-            f = open(f"Output_Files{path_escape}graph_analysis_matrix.txt")
+            f = open(join(OUTPUT_FILES_DIRECTORY, "graph_analysis_matrix.txt"))
 
         elif graph_adjacency_type == "List":
-            f = open(f"Output_Files{path_escape}graph_analysis_list.txt")
+            f = open(join(OUTPUT_FILES_DIRECTORY, "graph_analysis_list.txt"))
 
         try:
             line = f.readline().replace("\n", "")

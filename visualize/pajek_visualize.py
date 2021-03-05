@@ -18,7 +18,9 @@
 """
 
 import re
+from os.path import join
 
+from conf.base import OUTPUT_FILES_DIRECTORY
 from graphs.graph import GraphRepresentationType
 from os_recon.define_os import path_escape
 from support_folders.run_length_encoder import RunLengthEncoder
@@ -31,11 +33,11 @@ class PajekVisualize:
     @staticmethod
     def pajek_visualize_matrix():
         file_output = ''
-        with open(f"Output_Files{path_escape}Visualized_Graph.net", "w") as pajek_file:
+        with open(join(OUTPUT_FILES_DIRECTORY, "Visualized_Graph.net"), "w") as pajek_file:
 
             try:
-                with open(f"Output_Files{path_escape}"
-                          f"{locate_latest_file('Output_Files', GraphRepresentationType.MATRIX.value)}",
+                with open(join(OUTPUT_FILES_DIRECTORY,
+                               f"{locate_latest_file(OUTPUT_FILES_DIRECTORY, GraphRepresentationType.MATRIX.value)}"),
                           buffering=20000) as f:
                     # Number of Vertices
 
@@ -73,11 +75,11 @@ class PajekVisualize:
     @staticmethod
     def pajek_visualize_list():
         file_output = ''
-        with open(f"Output_Files{path_escape}Visualized_Graph.net", "w") as pajek_file:
+        with open(join(OUTPUT_FILES_DIRECTORY, "Visualized_Graph.net"), "w") as pajek_file:
 
             try:
-                with open(f"Output_Files{path_escape}"
-                          f"{locate_latest_file('Output_Files', GraphRepresentationType.LIST.value)}",
+                with open(join(OUTPUT_FILES_DIRECTORY,
+                               f"{locate_latest_file(OUTPUT_FILES_DIRECTORY, GraphRepresentationType.LIST.value)}"),
                           buffering=20000) as f:
                     # Number of Vertices
                     vertices = int(f.readlines()[-1].split(':')[0]) + 1

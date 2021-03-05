@@ -18,12 +18,15 @@
 """
 
 import re
+from os.path import join
+
 import plotly
 import igraph as ig
 import plotly.plotly as py
 import plotly.graph_objs as go
 from tkinter import messagebox
 
+from conf.base import OUTPUT_FILES_DIRECTORY
 from graphs.graph import GraphRepresentationType
 from os_recon.define_os import path_escape
 from support_folders.run_length_encoder import RunLengthEncoder
@@ -50,8 +53,8 @@ class Plotly3D:
 
         # Create a list with all the connections between the nodes with source file: matrix.txt
         try:
-            with open(f"Output_Files{path_escape}"
-                      f"{locate_latest_file('Output_Files', GraphRepresentationType.MATRIX.value)}",
+            with open(join(OUTPUT_FILES_DIRECTORY,
+                           f"{locate_latest_file(OUTPUT_FILES_DIRECTORY, GraphRepresentationType.MATRIX.value)}"),
                       buffering=20000) as f:
                 # Number of Vertices
                 encoder = RunLengthEncoder()
@@ -208,8 +211,8 @@ class Plotly3D:
 
         # Create a list with all the connections between the nodes with source file: list.txt
         try:
-            with open(f"Output_Files{path_escape}"
-                      f"{locate_latest_file('Output_Files', GraphRepresentationType.LIST.value)}",
+            with open(join(OUTPUT_FILES_DIRECTORY,
+                           f"{locate_latest_file(OUTPUT_FILES_DIRECTORY, GraphRepresentationType.LIST.value)}"),
                       buffering=20000) as f:
                 # Number of Vertices
                 vertices = int(f.readlines()[-1].split(':')[0]) + 1

@@ -17,6 +17,10 @@
     along with GRATIS. If not, see <https://www.gnu.org/licenses/>.
 """
 
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 APP_NAME = 'Gratis'
 
 STYLES = {
@@ -95,3 +99,7 @@ CHECKBUTTON_FONT = (
 CHECKBUTTON_BACKGROUND = STYLE['checkbutton']['bg']
 CHECKBUTTON_FOREGROUND = STYLE['checkbutton']['fg']
 CHECKBUTTON_RELIEF = STYLE['checkbutton']['relief']
+
+# Directories
+OUTPUT_FILES_DIRECTORY_NAME = 'output_files'
+OUTPUT_FILES_DIRECTORY = os.path.join(BASE_DIR, OUTPUT_FILES_DIRECTORY_NAME)

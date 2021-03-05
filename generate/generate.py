@@ -18,7 +18,9 @@
 """
 
 import sys
+from os.path import join
 
+from conf.base import OUTPUT_FILES_DIRECTORY
 from graphs.graph import Graph, AVAILABLE_GRAPH_TYPE_FULL_NAMES
 from os_recon.define_os import path_escape
 from support_folders.run_length_encoder import RunLengthEncoder
@@ -34,9 +36,10 @@ class Generate:
         """ Generates the file that will be used to visualize the graph. """
 
         file_output = ''
-        output_filename = rf"Output_Files{path_escape}{datetime.now().strftime(date_format)}_" \
-                          f"{graph.graph_representation_type}_{len(graph.vertices)}_" \
-                          f"{AVAILABLE_GRAPH_TYPE_FULL_NAMES[graph.graph_type].replace(' ', '_')}.txt"
+        output_filename = join(
+            OUTPUT_FILES_DIRECTORY,
+            rf"{datetime.now().strftime(date_format)}_{graph.graph_representation_type}_{len(graph.vertices)}_"
+            rf"{AVAILABLE_GRAPH_TYPE_FULL_NAMES[graph.graph_type].replace(' ', '_')}.txt")
 
         if adjacency_type == "matrix":
             if hasattr(graph, 'mode'):
