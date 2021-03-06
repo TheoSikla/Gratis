@@ -19,12 +19,6 @@
 
 import os
 
-from conf.styles import *
-from conf.strings import *
-from conf.general import BASE_DIR
-
-APP_NAME = 'Gratis'
-
-# Directories
-OUTPUT_FILES_DIRECTORY_NAME = 'output_files'
-OUTPUT_FILES_DIRECTORY = os.path.join(BASE_DIR, OUTPUT_FILES_DIRECTORY_NAME)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+STRINGS_PATH = os.path.join(BASE_DIR, 'conf', 'fixtures', 'strings.json')
+STYLES_PATH = os.path.join(BASE_DIR, 'conf', 'fixtures', 'styles.json')

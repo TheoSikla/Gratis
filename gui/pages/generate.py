@@ -18,6 +18,36 @@
 """
 
 from time import time
+
+from conf.base import MAIN_FRAME_BACKGROUND, BUTTON_FONT, LABEL_BACKGROUND, LABEL_FONT_LARGE, \
+    GENERATE_PAGE_MAIN_LABEL_TEXT, \
+    SCROLLABLE_FRAME_FONT, SCROLLABLE_FRAME_BACKGROUND, GENERATE_PAGE_SELECT_GRAPH_LABEL_TEXT, LABEL_FONT_MEDIUM, \
+    GRAPH_TYPE_MATRIX_TEXT, GRAPH_TYPE_LIST_TEXT, GENERATE_PAGE_INCREMENTAL_GROWTH_TEXT, \
+    GENERATE_PAGE_PREFERENTIAL_ATTACHMENT_TEXT, GENERATE_PAGE_NUMBER_OF_VERTICES_LABEL_TEXT, \
+    GENERATE_PAGE_NUMBER_OF_INITIAL_NODES_LABEL_TEXT, \
+    GENERATE_PAGE_GRAPH_DEGREE_LABEL_TEXT, GENERATE_PAGE_NUMBER_OF_EDGES_LABEL_TEXT, \
+    GENERATE_PAGE_INITIAL_CONNECTIONS_PER_NODE_LABEL_TEXT, \
+    GENERATE_PAGE_PROBABILITY_LABEL_TEXT, GENERATE_PAGE_SEED_LABEL_TEXT, GENERATE_PAGE_CLASSPATH_LABEL_TEXT, \
+    GENERATE_PAGE_GENERATE_BUTTON_TEXT, GENERATE_PAGE_BACK_BUTTON_TEXT, GENERATE_PAGE_EXIT_BUTTON_TEXT, \
+    GENERATE_PAGE_CANCEL_BUTTON_TEXT, GENERATE_PAGE_GRAPH_CREATION_CANCEL_IN_PROGRESS_INFO, \
+    GENERATE_PAGE_GRAPH_CREATION_CANCEL_COMPLETED_INFO, GENERATE_PAGE_VERTICES_NON_ZERO_ERROR, \
+    GENERATE_PAGE_VERTICES_GREATER_THAN_ONE_ERROR, GENERATE_PAGE_ADJACENCY_TYPE_SELECT_ERROR, \
+    GENERATE_PAGE_FULL_SCALE_FREE_GENERATE_INFO, GENERATE_PAGE_CUSTOM_FULL_SCALE_FREE_GENERATE_INFO, \
+    GENERATE_PAGE_GRAPH_CREATION_SUCCESS, GENERATE_PAGE_GRAPH_DEGREE_GREATER_THAN_ZERO_ERROR, \
+    GENERATE_PAGE_SCALE_FREE_PROPERTIES_ERROR, GENERATE_PAGE_INCREMENTAL_GROWTH_ONLY_ERROR, \
+    GENERATE_PAGE_SCALE_FREE_VERTICES_GREATER_THAN_ONE_ERROR, GENERATE_PAGE_SCALE_FREE_INITIAL_NODES_NON_ZERO_ERROR, \
+    GENERATE_PAGE_SCALE_FREE_VERTICES_INITIAL_NODES_NUMBER_EQUAL_ONE_ERROR, \
+    GENERATE_PAGE_SCALE_FREE_VERTICES_LESS_THAN_INITIAL_NODES_ERROR, \
+    GENERATE_PAGE_ER_PROBABILITY_GREATER_THAN_ZERO_ERROR, GENERATE_PAGE_CUSTOM_ER_EDGES_GREATER_THAN_ZERO_ERROR, \
+    GENERATE_PAGE_CUSTOM_ER_PROBABILITY_GREATER_THAN_ZERO_ERROR, GENERATE_PAGE_CUSTOM_ER_INVALID_NUMBER_OF_EDGES_ERROR, \
+    GENERATE_PAGE_CUSTOM_ER_HOMOGENEOUS_WARNING, GENERATE_PAGE_CUSTOM_SCALE_FREE_PROPERTIES_ERROR, \
+    GENERATE_PAGE_CUSTOM_SCALE_FREE_VERTICES_GREATER_THAN_ONE_ERROR, \
+    GENERATE_PAGE_CUSTOM_SCALE_FREE_MAX_NUMBER_OF_EDGES_GREATER_THAN_ZERO_ERROR, \
+    GENERATE_PAGE_CUSTOM_SCALE_FREE_INVALID_NUMBER_OF_EDGES_ERROR, \
+    GENERATE_PAGE_CUSTOM_SCALE_FREE_INITIAL_NODES_NON_ZERO_ERROR, \
+    GENERATE_PAGE_CUSTOM_SCALE_FREE_INITIAL_CONNECTIONS_PER_NODE_NON_ZERO_ERROR, \
+    GENERATE_PAGE_CUSTOM_SCALE_FREE_VERTICES_INITIAL_NODES_NUMBER_EQUAL_ONE_ERROR, \
+    GENERATE_PAGE_CUSTOM_SCALE_FREE_VERTICES_LESS_THAN_INITIAL_NODES_ERROR
 from gui.pages.page import *
 from graphs.graph import GraphRepresentationType
 
@@ -31,42 +61,35 @@ class GraphGeneratePage(Page):
         self.controller = controller
 
         # MainPage Frame configuration
-        self.configure(bg="azure3")
+        self.configure(bg=MAIN_FRAME_BACKGROUND)
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(20, weight=1)
         self.grid_columnconfigure(20, weight=1)
-        # ================================
 
         # Thread define
         self.thread = StoppableThread(target=self.generate)
-        # ================================
 
         # Button font
-        self.button_font = ("Dialog", 9, "bold italic")
-        # ================================
+        self.button_font = BUTTON_FONT
 
         # Validators
         self.vcmd_int = (self.master.register(self.validate_int),
                          '%P', '%d')
         self.vcmd_float = (self.master.register(self.validate_float),
                            '%P', '%S', '%d')
-        # ================================
 
         # Type of graph being generated
         self.graph_types = ['', 'Homogeneous', 'Random Fixed Graph', 'Scale-Free', 'ER Random Graph',
                             'Custom ER Random Graph', 'Custom Scale-Free Graph']
-        # ================================
 
         self.rle_var = BooleanVar(False)
         self.rle = ttk.Checkbutton(self, text="Run Length Encoder", variable=self.rle_var)
         # self.rle.grid(row=1, column=2, sticky="w")
 
         # Main Label
-        self.main_label = Label(self, bg="azure3", text="Generate a graph\n",
-                                font=("Arial", 20, "bold"))
+        self.main_label = Label(self, bg=LABEL_BACKGROUND, text=GENERATE_PAGE_MAIN_LABEL_TEXT, font=LABEL_FONT_LARGE)
         self.main_label.grid(row=2, column=1)
-        # ================================
 
         # Text Area Frame
         # create a Frame for the Text and Scrollbar
@@ -74,23 +97,21 @@ class GraphGeneratePage(Page):
         # create a Scrollbar and associate it with txt
         self.my_scroll = Scrollbar(self.my_frame_inner, orient='vertical')
         # create a Text widget
-        self.text_area = Text(self.my_frame_inner, background="lavender blush", yscrollcommand=self.my_scroll.set,
+        self.text_area = Text(self.my_frame_inner, background=SCROLLABLE_FRAME_BACKGROUND, yscrollcommand=self.my_scroll.set,
                               width=35,
                               height=23, relief=FLAT, borderwidth=5)
         self.text_area.bind("<FocusIn>", self.defocus)
-        self.text_area.config(font=("consolas", 11), undo=True, wrap='word')
+        self.text_area.config(font=SCROLLABLE_FRAME_FONT, undo=True, wrap='word')
         self.my_scroll.config(command=self.text_area.yview)
 
         self.my_frame_inner.grid(row=2, column=2, rowspan=13, columnspan=2, sticky='nesw')
         self.text_area.grid(row=2, column=2, rowspan=13)
         self.my_scroll.grid(row=2, column=3, rowspan=13, columnspan=2, sticky='nesw')
-        # ================================
 
         # Type Label
-        self.main_label = Label(self, bg="azure3", text="Select type of graph:\n",
-                                font=("Arial", 10, "bold"))
+        self.main_label = Label(self, bg=LABEL_BACKGROUND, text=GENERATE_PAGE_SELECT_GRAPH_LABEL_TEXT,
+                                font=LABEL_FONT_MEDIUM)
         self.main_label.grid(row=3, column=1)
-        # ================================
 
         self.chosen_graph = StringVar()
         self.chosen_graph.set(self.graph_types[1])
@@ -105,53 +126,56 @@ class GraphGeneratePage(Page):
         self.parameters_frame.grid(row=6, column=1)
 
         # Incremental Growth, Preferential Attachment Checkbuttons for Scale-free Radiobutton
-
         self.adjacency_type_selected = StringVar()
-        self.matrix = ttk.Radiobutton(self.parameters_frame, text="Adjacency Matrix",
+        self.matrix = ttk.Radiobutton(self.parameters_frame, text=GRAPH_TYPE_MATRIX_TEXT,
                                       value=GraphRepresentationType.MATRIX,
                                       variable=self.adjacency_type_selected,
                                       command=self.handle_run_length_encoder_button)
         self.matrix.grid(row=0, column=0, padx=30, pady=10, sticky="w")
 
-        self.list = ttk.Radiobutton(self.parameters_frame, text="Adjacency List",
+        self.list = ttk.Radiobutton(self.parameters_frame, text=GRAPH_TYPE_LIST_TEXT,
                                     value=GraphRepresentationType.LIST,
                                     variable=self.adjacency_type_selected,
                                     command=self.handle_run_length_encoder_button)
         self.list.grid(row=0, column=1, padx=30, pady=10, sticky="w")
 
         self.incremental_growth_selected = BooleanVar()
-        self.incremental_growth = ttk.Checkbutton(self.parameters_frame, text="Incremental Growth",
+        self.incremental_growth = ttk.Checkbutton(self.parameters_frame, text=GENERATE_PAGE_INCREMENTAL_GROWTH_TEXT,
                                                   variable=self.incremental_growth_selected,
                                                   command=self.incremental_growth_func)
 
         self.preferential_attachment_selected = BooleanVar()
-        self.preferential_attachment = ttk.Checkbutton(self.parameters_frame, text="Preferential Attachment",
+        self.preferential_attachment = ttk.Checkbutton(self.parameters_frame,
+                                                       text=GENERATE_PAGE_PREFERENTIAL_ATTACHMENT_TEXT,
                                                        variable=self.preferential_attachment_selected,
                                                        command=self.preferential_attachment_func)
         # ==============================================================================================================
 
         # Parameter's Labels
-
-        self.number_of_vertices_label = Label(self.parameters_frame, bg="azure3", text="Number of Vertices:",
-                                              font=self.button_font)
+        self.number_of_vertices_label = Label(self.parameters_frame, bg=LABEL_BACKGROUND,
+                                              text=GENERATE_PAGE_NUMBER_OF_VERTICES_LABEL_TEXT, font=self.button_font)
         self.number_of_vertices_label.grid(row=2, column=0, pady=10, sticky="e", padx=10)
 
-        self.graph_degree_label = Label(self.parameters_frame, bg="azure3", text="Graph Degree:", font=self.button_font)
+        self.graph_degree_label = Label(self.parameters_frame, bg=LABEL_BACKGROUND, text=GENERATE_PAGE_GRAPH_DEGREE_LABEL_TEXT,
+                                        font=self.button_font)
 
-        self.number_of_edges_label = Label(self.parameters_frame, bg="azure3", text="Number of Edges:",
+        self.number_of_edges_label = Label(self.parameters_frame, bg=LABEL_BACKGROUND, text=GENERATE_PAGE_NUMBER_OF_EDGES_LABEL_TEXT,
                                            font=self.button_font)
 
-        self.number_of_initial_nodes_label = Label(self.parameters_frame, bg="azure3", text="Number of Initial Nodes:",
-                                                   font=self.button_font)
+        self.number_of_initial_nodes_label = Label(self.parameters_frame, bg=LABEL_BACKGROUND,
+                                                   text=GENERATE_PAGE_NUMBER_OF_INITIAL_NODES_LABEL_TEXT, font=self.button_font)
 
-        self.initial_connections_per_node_label = Label(self.parameters_frame, bg="azure3",
-                                                        text="Initial Connections per Node:", font=self.button_font)
+        self.initial_connections_per_node_label = Label(self.parameters_frame, bg=LABEL_BACKGROUND,
+                                                        text=GENERATE_PAGE_INITIAL_CONNECTIONS_PER_NODE_LABEL_TEXT,
+                                                        font=self.button_font)
 
-        self.probability_label = Label(self.parameters_frame, bg="azure3", text="Probability:", font=self.button_font)
+        self.probability_label = Label(self.parameters_frame, bg=LABEL_BACKGROUND, text=GENERATE_PAGE_PROBABILITY_LABEL_TEXT,
+                                       font=self.button_font)
 
-        self.seed_label = Label(self.parameters_frame, bg="azure3", text="Seed:", font=self.button_font)
+        self.seed_label = Label(self.parameters_frame, bg=LABEL_BACKGROUND, text=GENERATE_PAGE_SEED_LABEL_TEXT, font=self.button_font)
 
-        self.classpath_label = Label(self.parameters_frame, bg="azure3", text="Classpath:", font=self.button_font)
+        self.classpath_label = Label(self.parameters_frame, bg=LABEL_BACKGROUND, text=GENERATE_PAGE_CLASSPATH_LABEL_TEXT,
+                                     font=self.button_font)
 
         # ==============================================================================================================
 
@@ -215,30 +239,27 @@ class GraphGeneratePage(Page):
         else:
             self.buttons_frames.configure(height=50, width=670)
         self.buttons_frames.grid(row=7, column=1, padx=10)
-        # ================================
-
-        # ================================
 
         # Generate button
-        self.generate_button = ttk.Button(self.buttons_frames, text="GENERATE", command=self.thread_generate)
+        self.generate_button = ttk.Button(self.buttons_frames, text=GENERATE_PAGE_GENERATE_BUTTON_TEXT,
+                                          command=self.thread_generate)
         self.generate_button.grid(row=0, column=0, ipady=10, ipadx=10, padx=10)
-        # ================================
 
         # Back button
-        self.back_button = ttk.Button(self.buttons_frames, text="BACK", command=lambda: self.back(self.controller))
+        self.back_button = ttk.Button(self.buttons_frames, text=GENERATE_PAGE_BACK_BUTTON_TEXT,
+                                      command=lambda: self.back(self.controller))
         self.back_button.grid(row=0, column=1, ipady=10, ipadx=10, padx=10)
-        # ================================
 
         # Exit Button
-        self.exit_button = ttk.Button(self.buttons_frames, text="EXIT", command=self.exit)
+        self.exit_button = ttk.Button(self.buttons_frames, text=GENERATE_PAGE_EXIT_BUTTON_TEXT,
+                                      command=self.exit)
         self.exit_button.grid(row=0, column=2, ipady=10, ipadx=10, padx=10)
-        # ============================================
 
         # Cancel Button
-        self.cancel_button = ttk.Button(self.buttons_frames, text="Cancel", command=self.cancel)
+        self.cancel_button = ttk.Button(self.buttons_frames, text=GENERATE_PAGE_CANCEL_BUTTON_TEXT,
+                                        command=self.cancel)
         self.cancel_button.grid(row=0, column=3, ipady=10, ipadx=10, padx=10)
         self.cancel_button.configure(state=DISABLED)
-        # ============================================
 
     @staticmethod
     def validate_int(inStr, acttyp):
@@ -527,15 +548,13 @@ class GraphGeneratePage(Page):
 
     def cancel(self):
         if self.thread.is_alive():
-            message = "[+] Terminating graph creation...\n"
-            self.text_area.insert(END, message)
+            self.text_area.insert(END, GENERATE_PAGE_GRAPH_CREATION_CANCEL_IN_PROGRESS_INFO)
             self.text_area.update()
 
             while self.thread.is_alive():
                 self.thread.stop()
 
-            message = "[!] Graph creation was canceled!\n"
-            self.text_area.insert(END, message)
+            self.text_area.insert(END, GENERATE_PAGE_GRAPH_CREATION_CANCEL_COMPLETED_INFO)
             self.text_area.update()
 
             self.cancel_button.configure(state=DISABLED)
@@ -589,32 +608,27 @@ class GraphGeneratePage(Page):
         self.text_area.update()
 
         if self.number_of_vertices_entry_result.get() == 0:
-            message = "- Number of vertices must be non zero!"
-            messagebox.showerror("Error", message)
+            messagebox.showerror("Error", GENERATE_PAGE_VERTICES_NON_ZERO_ERROR)
 
         elif self.number_of_vertices_entry_result.get() == 1:
-            message = "- Number of vertices must be greater than one!"
-            messagebox.showerror("Error", message)
+            messagebox.showerror("Error", GENERATE_PAGE_VERTICES_GREATER_THAN_ONE_ERROR)
 
         elif self.adjacency_type_selected.get() == "":
-            message = "- You must select either adjacency matrix or adjacency list!"
-            messagebox.showerror("Error", message)
+            messagebox.showerror("Error", GENERATE_PAGE_ADJACENCY_TYPE_SELECT_ERROR)
 
         else:
             if self.chosen_graph.get() == 'Scale-Free' and self.incremental_growth_selected.get() and \
                     self.preferential_attachment_selected.get():
 
-                message1 = "[+] Please wait while Full Scale-Free graph is being generated...\n\n"
+                message1 = GENERATE_PAGE_FULL_SCALE_FREE_GENERATE_INFO
 
             elif self.chosen_graph.get() == 'Custom Scale-Free Graph' and self.incremental_growth_selected.get() and \
                     self.preferential_attachment_selected.get():
 
-                message1 = "[+] Please wait while Custom Full Scale-Free graph is being generated...\n\n"
+                message1 = GENERATE_PAGE_CUSTOM_FULL_SCALE_FREE_GENERATE_INFO
 
             else:
                 message1 = "[+] Please wait while {} graph is being generated...\n\n".format(self.chosen_graph.get())
-
-            message2 = "[+] The graph was generated successfully!\n\n"
 
             if self.chosen_graph.get() == 'Homogeneous':
                 self.text_area.insert(END, message1)
@@ -639,7 +653,7 @@ class GraphGeneratePage(Page):
 
             elif self.chosen_graph.get() == 'Random Fixed Graph':
                 if self.graph_degree_result.get() == 0:
-                    message = "- Graph degree must be greater than 0\n"
+                    message = GENERATE_PAGE_GRAPH_DEGREE_GREATER_THAN_ZERO_ERROR
                     messagebox.showerror("Error", message)
 
                 else:
@@ -665,23 +679,16 @@ class GraphGeneratePage(Page):
 
             elif self.chosen_graph.get() == 'Scale-Free':
                 if not self.preferential_attachment_selected.get() and not self.incremental_growth_selected.get():
-                    message = "- You must either create a Scale-Free graph with preferential attachment or " \
-                              "a Scale-Free graph with incremental growth and preferential attachment!"
+                    message = GENERATE_PAGE_SCALE_FREE_PROPERTIES_ERROR
                     messagebox.showerror("Error", message)
-
                 elif not self.preferential_attachment_selected.get() and self.incremental_growth_selected.get():
-                    message = "- Incremental growth cannot be solely selected!"
+                    message = GENERATE_PAGE_INCREMENTAL_GROWTH_ONLY_ERROR
                     messagebox.showerror("Error", message)
-
                 elif self.preferential_attachment_selected.get() and not self.incremental_growth_selected.get():
-
                     if self.number_of_vertices_entry_result.get() in [0, 1]:
-                        message = "- Number of vertices must be greater than 1 in order\n" \
-                                  "to generate a Scale-Free Graph."
+                        message = GENERATE_PAGE_SCALE_FREE_VERTICES_GREATER_THAN_ONE_ERROR
                         messagebox.showerror("Error", message)
-
                     else:
-
                         self.text_area.insert(END, message1)
                         self.text_area.update()
                         from graphs.scale_free_graph_pa import ScaleFreePA
@@ -690,12 +697,10 @@ class GraphGeneratePage(Page):
                         self.back_button.configure(state=DISABLED)
 
                         start = time()
-
                         scale_free_graph_pa = ScaleFreePA(self.adjacency_type_selected.get())
                         scale_free_graph_pa.create_scale_free_graph(self.number_of_vertices_entry_result.get(),
                                                                     self.seed_result.get(), self.thread,
                                                                     rle=self.rle_var.get())
-
                         end = time() - start
 
                         self.cancel_button.configure(state=DISABLED)
@@ -703,19 +708,15 @@ class GraphGeneratePage(Page):
                         self.back_button.configure(state=NORMAL)
 
                 else:
-
                     if self.number_of_initial_nodes_result.get() == 0:
-                        message = "- Number of initial nodes must be non zero!"
+                        message = GENERATE_PAGE_SCALE_FREE_INITIAL_NODES_NON_ZERO_ERROR
                         messagebox.showerror("Error", message)
-
                     elif self.number_of_vertices_entry_result.get() == self.number_of_initial_nodes_result.get() == 1:
-                        message = "- Number of vertices and number of initial node cannot be simultaneously equal to 1."
+                        message = GENERATE_PAGE_SCALE_FREE_VERTICES_INITIAL_NODES_NUMBER_EQUAL_ONE_ERROR
                         messagebox.showerror("Error", message)
-
                     elif self.number_of_vertices_entry_result.get() < self.number_of_initial_nodes_result.get():
-                        message = "- Number of vertices must not be less than the number of initial nodes."
+                        message = GENERATE_PAGE_SCALE_FREE_VERTICES_LESS_THAN_INITIAL_NODES_ERROR
                         messagebox.showerror("Error", message)
-
                     else:
                         self.text_area.insert(END, message1)
                         self.text_area.update()
@@ -738,7 +739,7 @@ class GraphGeneratePage(Page):
 
             elif self.chosen_graph.get() == 'ER Random Graph':
                 if float(self.probability_result.get()) == 0.0:
-                    message = "- Probability must be greater than 0.0!"
+                    message = GENERATE_PAGE_ER_PROBABILITY_GREATER_THAN_ZERO_ERROR
                     messagebox.showerror("Error", message)
 
                 else:
@@ -765,19 +766,19 @@ class GraphGeneratePage(Page):
 
             elif self.chosen_graph.get() == 'Custom ER Random Graph':
                 if self.number_of_edges_result.get() == 0:
-                    message = "- Number of edges must be greater than 0."
+                    message = GENERATE_PAGE_CUSTOM_ER_EDGES_GREATER_THAN_ZERO_ERROR
                     messagebox.showerror("Error", message)
                     sys.exit(0)
 
                 elif float(self.probability_result.get()) == 0.0:
-                    message = "- Probability must be greater than 0.0!"
+                    message = GENERATE_PAGE_CUSTOM_ER_PROBABILITY_GREATER_THAN_ZERO_ERROR
                     messagebox.showerror("Error", message)
                     sys.exit(0)
 
                 elif self.number_of_edges_result.get() > (pow(self.number_of_vertices_entry_result.get(), 2)
                                                           - self.number_of_vertices_entry_result.get()) // 2:
 
-                    message1 = "[-] Critical error: Cannot have that much edges with this number of nodes.\n"
+                    message1 = GENERATE_PAGE_CUSTOM_ER_INVALID_NUMBER_OF_EDGES_ERROR
 
                     self.text_area.insert(END, message1)
                     self.text_area.update()
@@ -788,7 +789,7 @@ class GraphGeneratePage(Page):
                 elif self.number_of_edges_result.get() == (pow(self.number_of_vertices_entry_result.get(), 2)
                                                            - self.number_of_vertices_entry_result.get()) // 2:
 
-                    message4 = "[!] Warning: You will end up with a Homogeneous graph!\n\n"
+                    message4 = GENERATE_PAGE_CUSTOM_ER_HOMOGENEOUS_WARNING
 
                     try:
                         self.text_area.insert(END, message4)
@@ -824,29 +825,26 @@ class GraphGeneratePage(Page):
 
             elif self.chosen_graph.get() == 'Custom Scale-Free Graph':
                 if not self.preferential_attachment_selected.get() and not self.incremental_growth_selected.get():
-                    message = "- You must either create a Custom Scale-Free graph with preferential attachment or " \
-                              "a Custom Scale-Free graph with incremental growth and preferential attachment!"
+                    message = GENERATE_PAGE_CUSTOM_SCALE_FREE_PROPERTIES_ERROR
                     messagebox.showerror("Error", message)
 
                 elif not self.preferential_attachment_selected.get() and self.incremental_growth_selected.get():
-                    message = "- Incremental growth cannot be solely selected!"
+                    message = GENERATE_PAGE_INCREMENTAL_GROWTH_ONLY_ERROR
                     messagebox.showerror("Error", message)
 
                 elif self.preferential_attachment_selected.get() and not self.incremental_growth_selected.get():
 
                     if self.number_of_vertices_entry_result.get() in [0, 1]:
-                        message = "- Number of vertices must be greater than 1 in order\n" \
-                                  "to generate a Custom Scale-Free Graph."
+                        message = GENERATE_PAGE_CUSTOM_SCALE_FREE_VERTICES_GREATER_THAN_ONE_ERROR
                         messagebox.showerror("Error", message)
 
                     elif self.number_of_edges_result.get() == 0:
-                        message = "- Number of maximum edges that the graph can have" \
-                                  " must be greater than 0."
+                        message = GENERATE_PAGE_CUSTOM_SCALE_FREE_MAX_NUMBER_OF_EDGES_GREATER_THAN_ZERO_ERROR
                         messagebox.showerror("Error", message)
 
                     elif self.number_of_edges_result.get() > self.number_of_vertices_entry_result.get() \
                             * (self.number_of_vertices_entry_result.get() - 1) / 2:
-                        message = "- Cannot have that much edges with this number of Vertices."
+                        message = GENERATE_PAGE_CUSTOM_SCALE_FREE_INVALID_NUMBER_OF_EDGES_ERROR
                         messagebox.showerror("Error", message)
 
                     else:
@@ -875,26 +873,26 @@ class GraphGeneratePage(Page):
                 else:
 
                     if self.number_of_initial_nodes_result.get() == 0:
-                        message = "- Number of initial nodes must be non zero!"
+                        message = GENERATE_PAGE_CUSTOM_SCALE_FREE_INITIAL_NODES_NON_ZERO_ERROR
                         messagebox.showerror("Error", message)
 
                     elif self.initial_connections_per_node_result.get() == 0:
-                        message = "- Number of initial connections per node must be non zero!"
+                        message = GENERATE_PAGE_CUSTOM_SCALE_FREE_INITIAL_CONNECTIONS_PER_NODE_NON_ZERO_ERROR
                         messagebox.showerror("Error", message)
 
                     elif self.number_of_vertices_entry_result.get() == self.number_of_initial_nodes_result.get() == 1:
-                        message = "- Number of vertices and number of initial node cannot be simultaneously equal to 1."
+                        message = GENERATE_PAGE_CUSTOM_SCALE_FREE_VERTICES_INITIAL_NODES_NUMBER_EQUAL_ONE_ERROR
                         messagebox.showerror("Error", message)
 
                     elif self.number_of_vertices_entry_result.get() < self.number_of_initial_nodes_result.get():
-                        message = "- Number of vertices must not be less than the number of initial nodes."
+                        message = GENERATE_PAGE_CUSTOM_SCALE_FREE_VERTICES_LESS_THAN_INITIAL_NODES_ERROR
                         messagebox.showerror("Error", message)
 
                     elif self.initial_connections_per_node_result.get() > \
                             (pow(self.number_of_initial_nodes_result.get(), 2)
                              - self.number_of_initial_nodes_result.get()) // 2:
 
-                        message = "- Cannot have that much edges with this number of initial nodes."
+                        message = GENERATE_PAGE_CUSTOM_SCALE_FREE_INVALID_NUMBER_OF_EDGES_ERROR
                         messagebox.showerror("Error", message)
 
                     else:
@@ -978,7 +976,7 @@ class GraphGeneratePage(Page):
 
                 else:
                     message3 = "[+] Elapsed time: {:>.2f} sec\n".format(end)
-                    self.text_area.insert(END, message2)
+                    self.text_area.insert(END, GENERATE_PAGE_GRAPH_CREATION_SUCCESS)
                     self.text_area.insert(END, message3)
                     self.text_area.update()
 

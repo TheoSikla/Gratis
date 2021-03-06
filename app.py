@@ -17,7 +17,6 @@
     along with GRATIS. If not, see <https://www.gnu.org/licenses/>.
 """
 
-import os
 from tkinter import *
 from tkinter import ttk
 from gui.pages import *
@@ -51,6 +50,7 @@ class App(Tk):
                              relief=RADIOBUTTON_RELIEF, font=self.button_font)
         self.style.configure('TCheckbutton', background=CHECKBUTTON_BACKGROUND, foreground=CHECKBUTTON_FOREGROUND,
                              relief=CHECKBUTTON_RELIEF, font=self.button_font)
+        self.style.configure('TLabel', background=CHECKBUTTON_BACKGROUND)
 
         # Main container for Frames
         container = ttk.Frame(self)

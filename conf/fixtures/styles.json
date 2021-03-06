@@ -1,0 +1,60 @@
+{
+  "default":{
+    "main_frame_bg":"azure3",
+    "button":{
+      "font":{
+        "family":"Dialog",
+        "size":9,
+        "style":"bold italic"
+      },
+      "bg":"seashell3",
+      "fg":"black",
+      "relief":"flat",
+      "width":15
+    },
+    "frame":{
+      "bg":"azure3"
+    },
+    "radiobutton":{
+      "font":{
+        "family":"Dialog",
+        "size":9,
+        "style":"bold italic"
+      },
+      "bg":"azure3",
+      "fg":"black",
+      "relief":"flat"
+    },
+    "checkbutton":{
+      "font":{
+        "family":"Dialog",
+        "size":9,
+        "style":"bold italic"
+      },
+      "bg":"azure3",
+      "fg":"black",
+      "relief":"flat"
+    },
+    "label":{
+      "font":{
+        "family":"Arial",
+        "size":{
+          "large":20,
+          "medium":10
+        },
+        "style":"bold"
+      },
+      "bg":"azure3",
+      "fg":"black",
+      "relief":"flat"
+    },
+    "scrollable_frame":{
+      "font":{
+        "family":"consolas",
+        "size":11,
+        "style":""
+      },
+      "bg":"lavender blush"
+    }
+  }
+}
