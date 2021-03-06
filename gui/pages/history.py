@@ -23,7 +23,7 @@ from gui.pages.page import *
 
 class GraphHistoryPage(Page):
     def __init__(self, parent, controller):
-        Page.__init__(self, parent)
+        super(GraphHistoryPage, self).__init__(parent)
 
         self.parent = parent
         self.controller = controller

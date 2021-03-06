@@ -29,7 +29,7 @@ from utils.file import locate_latest_file
 
 class GraphAnalyzePage(Page):
     def __init__(self, parent, controller):
-        Frame.__init__(self, parent)
+        super(GraphAnalyzePage, self).__init__(parent)
 
         # Graph Analyze Frame configuration
         self.configure(bg="azure3")

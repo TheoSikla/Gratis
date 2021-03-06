@@ -25,7 +25,7 @@ from gui.pages.custom_pop_up import CustomPopUp
 
 class GraphVisualizePage(Page):
     def __init__(self, parent, controller):
-        Frame.__init__(self, parent)
+        super(GraphVisualizePage, self).__init__(parent)
 
         # MainPage Frame configuration
         self.configure(bg="azure3")

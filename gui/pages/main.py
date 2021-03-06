@@ -23,7 +23,7 @@ from gui.pages.page import *
 class MainPage(Page):
 
     def __init__(self, parent, controller):
-        Page.__init__(self, parent)
+        super(MainPage, self).__init__(parent)
 
         # MainPage Frame configuration
         self.configure(bg="azure3")

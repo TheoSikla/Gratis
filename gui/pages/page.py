@@ -29,7 +29,7 @@ from support_folders.run_length_encoder import RunLengthEncoder
 
 class Page(Frame):
     def __init__(self, *args, **kwargs):
-        Frame.__init__(self, *args, **kwargs)
+        super(Page, self).__init__(*args, **kwargs)
 
     def retrieve_frame(self, controller, frame_name: str):
         return next(val for val in controller.frames.keys() if val.__name__ == frame_name)

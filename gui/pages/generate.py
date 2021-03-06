@@ -25,7 +25,7 @@ from graphs.graph import GraphRepresentationType
 class GraphGeneratePage(Page):
 
     def __init__(self, parent, controller):
-        Page.__init__(self, parent)
+        super(GraphGeneratePage, self).__init__(parent)
 
         self.parent = parent
         self.controller = controller

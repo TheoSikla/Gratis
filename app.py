@@ -28,7 +28,7 @@ from conf.base import *
 class App(Tk):
 
     def __init__(self, *args, **kwargs):
-        Tk.__init__(self)
+        super(App, self).__init__(*args, **kwargs)
         self.center()
         # Create required directories
         self.create_directories()
