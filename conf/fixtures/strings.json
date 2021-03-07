@@ -100,6 +100,33 @@
             "calculate_betweenness_centrality": "\n[+] Finished Betweenness Centrality analysis.\n",
             "last_generated_graph_analysis": "\n[+] Finished last generated graph analysis!\n"
           },
+          "warning": {}
+        }
+      },
+      "visualize": {
+        "widgets": {
+          "main_label_text": "Visualize a graph\n",
+          "pajek_button_text": "Pajek Visualize",
+          "plotly_button_text": "Plotly 3D Visualize",
+          "matplotlib_button_text": "2D Matplotlib\nVisualize",
+          "back_button_text": "Back",
+          "exit_button_text": "Exit"
+        },
+        "messages": {
+          "error": {
+            "visualization_via_matrix_list": "You must choose visualisation via matrix or list generated!",
+            "3d_visualization_via_matrix_list": "You must choose 3D visualisation via matrix or list generated!",
+            "visualization_failed": "Visualization failed!\nMake sure that you have generated a graph.",
+            "plotly_failed": "[-] Failed to create 3D Graph with Plotly.\n\n",
+            "plotly_failed_no_graph_generated": "3D Visualization failed!\nMake sure that you have generated a graph."
+          },
+          "info": {
+            "plotly_wait": "[+] Please wait while 3D Plotly Graph is being created.\nThis will probably take a moment...\n\n"
+          },
+          "success": {
+            "visualization_completed": "Visualization was successfully completed!",
+            "plotly_graph_create": "[+] The 3D Plotly Graph was generated successfully!\n\n"
+          },
           "warning": {
           }
         }
