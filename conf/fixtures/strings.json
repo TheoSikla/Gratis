@@ -63,6 +63,46 @@
             "custom_er_homogeneous": "[!] Warning: You will end up with a Homogeneous graph!\n\n"
           }
         }
+      },
+      "analyze": {
+        "widgets": {
+          "main_label_text": "Analyze a graph",
+          "select_file_type_label_text": "Select type of file",
+          "classpath_label_text": "Classpath:",
+          "calculate_metrics_label_text": "Calculate metrics",
+          "geodesic_paths_checkbutton_text": "Geodesic Paths",
+          "closeness_centrality_checkbutton_text": "Closeness Centrality",
+          "betweenness_centrality_checkbutton_text": "Betweenness Centrality",
+          "analyze_button_text": "Analyze",
+          "save_output_button_text": "Save output",
+          "back_button_text": "Back",
+          "exit_button_text": "Exit",
+          "cancel_button_text": "Cancel",
+          "browse_button_fallback_text": "Browse"
+        },
+        "messages": {
+          "error": {
+            "generate_graph": "Please make sure that you have generated a graph!",
+            "analysis_failed": "\n[-] Failed to perform analysis.\n",
+            "no_available_output": "No available output to save!",
+            "either_adjacency_matrix_or_list": "You must choose either adjacency matrix or adjacency list!"
+          },
+          "info": {
+            "calculate_geodesic_paths": "[*] Calculating Geodesic path for each node...\n",
+            "calculate_closeness_centrality": "\n[*] Calculating Closeness Centrality of the graph...\n",
+            "calculate_betweenness_centrality": "\n[*] Calculating Betweenness Centrality of each node...\n",
+            "graph_analysis_cancel_in_progress":  "[+] Terminating graph analysis...\n",
+            "graph_analysis_cancel_completed": "[!] Graph analysis was canceled!\n"
+          },
+          "success": {
+            "calculate_geodesic_paths": "\n[+] Finished Geodesic path analysis.\n",
+            "calculate_closeness_centrality": "\n[+] Finished Closeness Centrality analysis.\n",
+            "calculate_betweenness_centrality": "\n[+] Finished Betweenness Centrality analysis.\n",
+            "last_generated_graph_analysis": "\n[+] Finished last generated graph analysis!\n"
+          },
+          "warning": {
+          }
+        }
       }
     }
   },

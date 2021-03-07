@@ -21,6 +21,8 @@ import sys
 from time import sleep
 from tkinter import END
 
+from conf.strings import ANALYZE_PAGE_CALCULATE_BETWEENNESS_CENTRALITY_SUCCESS
+
 
 def betweenness_centrality(shortest_paths, num_of_vertices, text_area, thread):
     nodes_betweenness = {}
@@ -64,7 +66,6 @@ def betweenness_centrality(shortest_paths, num_of_vertices, text_area, thread):
 
         # print(f"Node {k} with betweenness centrality: {v}")
 
-    message = "\n[+] Finished Betweenness Centrality analysis.\n"
-    text_area.insert(END, message)
+    text_area.insert(END, ANALYZE_PAGE_CALCULATE_BETWEENNESS_CENTRALITY_SUCCESS)
     text_area.see("end")
     sleep(.01)  # Do not remove this.

@@ -16,14 +16,29 @@
     You should have received a copy of the GNU General Public License
     along with GRATIS. If not, see <https://www.gnu.org/licenses/>.
 """
+from tkinter import filedialog
+
+from analyze.analyze import *
+from analyze.betweenness_centrality import betweenness_centrality
+from analyze.centrality import closeness_centrality
+from analyze.geodesic_paths import find_geodesics
+from analyze.paths import find_all_paths, find_shortest_paths
+from conf.base import ANALYZE_PAGE_MAIN_LABEL_TEXT, ANALYZE_PAGE_SELECT_FILE_TYPE_LABEL_TEXT, \
+    ANALYZE_PAGE_CLASSPATH_LABEL_TEXT, GRAPH_TYPE_MATRIX_TEXT, GRAPH_TYPE_LIST_TEXT, \
+    ANALYZE_PAGE_CALCULATE_METRICS_LABEL_TEXT, ANALYZE_PAGE_GEODESIC_PATHS_CHECKBUTTON_TEXT, \
+    ANALYZE_PAGE_CLOSENESS_CENTRALITY_CHECKBUTTON_TEXT, ANALYZE_PAGE_BETWEENNESS_CENTRALITY_CHECKBUTTON_TEXT, \
+    ANALYZE_PAGE_ANALYZE_BUTTON_TEXT, ANALYZE_PAGE_SAVE_OUTPUT_BUTTON_TEXT, ANALYZE_PAGE_BACK_BUTTON_TEXT, \
+    ANALYZE_PAGE_EXIT_BUTTON_TEXT, ANALYZE_PAGE_CANCEL_BUTTON_TEXT, BROWSE_IMAGE_PATH, \
+    ANALYZE_PAGE_BROWSE_BUTTON_FALLBACK_TEXT, ANALYZE_PAGE_GENERATE_GRAPH_ERROR, ANALYZE_PAGE_ANALYSIS_FAILED_ERROR, \
+    ANALYZE_PAGE_CALCULATE_GEODESIC_PATHS_INFO, ANALYZE_PAGE_CALCULATE_GEODESIC_PATHS_SUCCESS, \
+    ANALYZE_PAGE_CALCULATE_CLOSENESS_CENTRALITY_INFO, ANALYZE_PAGE_CALCULATE_CLOSENESS_CENTRALITY_SUCCESS, \
+    ANALYZE_PAGE_CALCULATE_BETWEENNESS_CENTRALITY_INFO, ANALYZE_PAGE_GRAPH_ANALYSIS_CANCEL_IN_PROGRESS_INFO, \
+    ANALYZE_PAGE_GRAPH_ANALYSIS_CANCEL_COMPLETED_INFO, ANALYZE_PAGE_NO_AVAILABLE_OUTPUT_ERROR, \
+    ANALYZE_PAGE_LAST_GENERATED_GRAPH_ANALYSIS_SUCCESS, ANALYZE_PAGE_EITHER_ADJACENCY_MATRIX_OR_LIST_ERROR
+from conf.styles import MAIN_FRAME_BACKGROUND, BUTTON_FONT, FRAME_BACKGROUND, LABEL_BACKGROUND, LABEL_FONT_LARGE, \
+    LABEL_FONT_MEDIUM, SCROLLABLE_FRAME_BACKGROUND, SCROLLABLE_FRAME_FONT
 from graphs.graph import GraphRepresentationType
 from gui.pages.page import *
-from analyze.analyze import *
-from tkinter import filedialog
-from analyze.geodesic_paths import find_geodesics
-from analyze.centrality import closeness_centrality
-from analyze.paths import find_all_paths, find_shortest_paths
-from analyze.betweenness_centrality import betweenness_centrality
 from utils.file import locate_latest_file
 
 
@@ -32,61 +47,58 @@ class GraphAnalyzePage(Page):
         super(GraphAnalyzePage, self).__init__(parent)
 
         # Graph Analyze Frame configuration
-        self.configure(bg="azure3")
+        self.configure(bg=MAIN_FRAME_BACKGROUND)
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
         self.rowconfigure(0, weight=1)
 
         self.widget_pady = 10
-        # ================================
 
         # Thread define
         self.thread_analyze = StoppableThread(target=self.analyze_button_func)
-        # ================================
 
         # Button font
-        self.button_font = ("Dialog", 9, "bold italic")
-        # ================================
+        self.button_font = BUTTON_FONT
 
         # Define Frames
         # Parameter's Frame
-        self.parameters_frame = Frame(self, bg="azure3", width=300)
+        self.parameters_frame = Frame(self, bg=FRAME_BACKGROUND, width=300)
         self.parameters_frame.grid_propagate(0)
         self.parameters_frame.columnconfigure(0, weight=1)
         self.parameters_frame.columnconfigure(1, weight=1)
         self.parameters_frame.rowconfigure(4, weight=1)
         self.parameters_frame.grid(row=0, column=0, sticky="news")
 
-        self.parameters_frame_row_0_column_0 = Frame(self.parameters_frame, height=170, bg="azure3")
+        self.parameters_frame_row_0_column_0 = Frame(self.parameters_frame, height=170, bg=FRAME_BACKGROUND)
         self.parameters_frame_row_0_column_0.grid_propagate(0)
         self.parameters_frame_row_0_column_0.columnconfigure(0, weight=1)
         self.parameters_frame_row_0_column_0.grid(row=0, column=0, columnspan=2, padx=5, pady=5, sticky='news')
 
-        self.parameters_frame_row_1_column_0 = Frame(self.parameters_frame, width=30, height=50, bg="azure3")
+        self.parameters_frame_row_1_column_0 = Frame(self.parameters_frame, width=30, height=50, bg=FRAME_BACKGROUND)
         self.parameters_frame_row_1_column_0.grid_propagate(0)
         self.parameters_frame_row_1_column_0.columnconfigure(0, weight=1)
         self.parameters_frame_row_1_column_0.rowconfigure(0, weight=1)
         self.parameters_frame_row_1_column_0.grid(row=1, column=0, padx=5, sticky='news')
 
-        self.parameters_frame_row_1_column_1 = Frame(self.parameters_frame, width=30, height=50, bg="azure3")
+        self.parameters_frame_row_1_column_1 = Frame(self.parameters_frame, width=30, height=50, bg=FRAME_BACKGROUND)
         self.parameters_frame_row_1_column_1.grid_propagate(0)
         self.parameters_frame_row_1_column_1.columnconfigure(0, weight=1)
         self.parameters_frame_row_1_column_1.rowconfigure(0, weight=1)
         self.parameters_frame_row_1_column_1.grid(row=1, column=1, padx=5, sticky='news')
 
-        self.parameters_frame_row_2_column_0 = Frame(self.parameters_frame, bg="azure3")
+        self.parameters_frame_row_2_column_0 = Frame(self.parameters_frame, bg=FRAME_BACKGROUND)
         self.parameters_frame_row_2_column_0.columnconfigure(0, weight=1)
         self.parameters_frame_row_2_column_0.grid(row=2, column=0, columnspan=2, sticky='news')
 
-        self.parameters_frame_row_3_column_0 = Frame(self.parameters_frame, bg="azure3")
+        self.parameters_frame_row_3_column_0 = Frame(self.parameters_frame, bg=FRAME_BACKGROUND)
         self.parameters_frame_row_3_column_0.columnconfigure(0, weight=1)
         self.parameters_frame_row_3_column_0.grid(row=3, column=0, padx=5, pady=5, sticky='news')
 
-        self.parameters_frame_row_3_column_1 = Frame(self.parameters_frame, bg="azure3")
+        self.parameters_frame_row_3_column_1 = Frame(self.parameters_frame, bg=FRAME_BACKGROUND)
         self.parameters_frame_row_3_column_1.columnconfigure(0, weight=1)
         self.parameters_frame_row_3_column_1.grid(row=3, column=1, padx=5, pady=5, sticky='news')
 
-        self.buttons_frame = Frame(self.parameters_frame, bg="azure3")
+        self.buttons_frame = Frame(self.parameters_frame, bg=FRAME_BACKGROUND)
         self.buttons_frame.columnconfigure(0, weight=1)
         self.buttons_frame.columnconfigure(1, weight=1)
         self.buttons_frame.rowconfigure(0, weight=1)
@@ -99,46 +111,45 @@ class GraphAnalyzePage(Page):
         self.scroll_area_frame.grid(row=0, column=1, sticky='news')
 
         # Main Label
-        self.main_label = Label(self.parameters_frame_row_0_column_0, bg="azure3", text="Analyze a graph",
-                                font=("Arial", 20, "bold"))
+        self.main_label = Label(self.parameters_frame_row_0_column_0, bg=LABEL_BACKGROUND,
+                                text=ANALYZE_PAGE_MAIN_LABEL_TEXT, font=LABEL_FONT_LARGE)
         self.main_label.grid(row=0, column=0, pady=self.widget_pady)
-        # ================================
 
         # Type Label
-        self.main_label = Label(self.parameters_frame_row_0_column_0, bg="azure3", text="Select type of file",
-                                font=("Arial", 10, "bold"))
+        self.main_label = Label(self.parameters_frame_row_0_column_0, bg=LABEL_BACKGROUND,
+                                text=ANALYZE_PAGE_SELECT_FILE_TYPE_LABEL_TEXT, font=LABEL_FONT_MEDIUM)
         self.main_label.grid(row=1, column=0, pady=self.widget_pady)
-        # ================================
 
         # Type of graph being generated
         self.file_types = ['', 'Last Generated Graph', 'Pajek file']
-        # ================================
 
         self.chosen_file_type = StringVar()
         self.chosen_file_type.set(self.file_types[1])
 
-        self.graphs = ttk.OptionMenu(self.parameters_frame_row_0_column_0, self.chosen_file_type, *self.file_types, command=self.show_parameters)
+        self.graphs = ttk.OptionMenu(self.parameters_frame_row_0_column_0, self.chosen_file_type, *self.file_types,
+                                     command=self.show_parameters)
         self.graphs.grid(row=2, column=0, pady=self.widget_pady)
 
-        self.classpath_label = Label(self.parameters_frame_row_0_column_0, bg="azure3", text="Classpath:", font=self.button_font)
+        self.classpath_label = Label(self.parameters_frame_row_0_column_0, bg=LABEL_BACKGROUND,
+                                     text=ANALYZE_PAGE_CLASSPATH_LABEL_TEXT, font=self.button_font)
 
         self.classpath_result = StringVar()
-        self.classpath_entry_box = ttk.Entry(self.parameters_frame_row_1_column_0, textvariable=self.classpath_result, width=25)
-        # ==============================================================================================================
+        self.classpath_entry_box = ttk.Entry(self.parameters_frame_row_1_column_0, textvariable=self.classpath_result,
+                                             width=25)
 
         # Adjacency Matrix, List Radiobuttons
         self.adjacency_type_selected = StringVar()
-        self.matrix = ttk.Radiobutton(self.parameters_frame_row_1_column_0, text="Adjacency Matrix", value="Matrix",
+        self.matrix = ttk.Radiobutton(self.parameters_frame_row_1_column_0, text=GRAPH_TYPE_MATRIX_TEXT, value="Matrix",
                                       variable=self.adjacency_type_selected)
         self.matrix.grid(row=3, column=0)
 
-        self.list = ttk.Radiobutton(self.parameters_frame_row_1_column_1, text="Adjacency List", value="List",
+        self.list = ttk.Radiobutton(self.parameters_frame_row_1_column_1, text=GRAPH_TYPE_LIST_TEXT, value="List",
                                     variable=self.adjacency_type_selected)
         self.list.grid(row=3, column=0)
         # ==============================================================================================================
 
-        self.metrics_label = Label(self.parameters_frame_row_2_column_0, bg="azure3", text="Calculate metrics",
-                                   font=("Arial", 10, "bold"))
+        self.metrics_label = Label(self.parameters_frame_row_2_column_0, bg=LABEL_BACKGROUND,
+                                   text=ANALYZE_PAGE_CALCULATE_METRICS_LABEL_TEXT, font=LABEL_FONT_MEDIUM)
         self.metrics_label.grid(row=0, column=0, pady=self.widget_pady)
 
         # Geodesic path, closeness centrality, betweenness centrality
@@ -148,71 +159,73 @@ class GraphAnalyzePage(Page):
         self.geodesic_paths = None
 
         self.geodesic_path_selected = BooleanVar(False)
-        self.geodesic_path = ttk.Checkbutton(self.parameters_frame_row_3_column_0, text="Geodesic Paths",
+        self.geodesic_path = ttk.Checkbutton(self.parameters_frame_row_3_column_0,
+                                             text=ANALYZE_PAGE_GEODESIC_PATHS_CHECKBUTTON_TEXT,
                                              variable=self.geodesic_path_selected)
         self.geodesic_path.grid(row=0, column=0, pady=self.widget_pady)
 
         self.closeness_centrality_selected = BooleanVar(False)
-        self.closeness_centrality = ttk.Checkbutton(self.parameters_frame_row_3_column_1, text="Closeness Centrality",
+        self.closeness_centrality = ttk.Checkbutton(self.parameters_frame_row_3_column_1,
+                                                    text=ANALYZE_PAGE_CLOSENESS_CENTRALITY_CHECKBUTTON_TEXT,
                                                     variable=self.closeness_centrality_selected)
         self.closeness_centrality.grid(row=0, column=0, pady=self.widget_pady)
 
         self.betweenness_centrality_selected = BooleanVar(False)
-        self.betweenness_centrality = ttk.Checkbutton(self.parameters_frame_row_3_column_0, text="Betweenness Centrality",
+        self.betweenness_centrality = ttk.Checkbutton(self.parameters_frame_row_3_column_0,
+                                                      text=ANALYZE_PAGE_BETWEENNESS_CENTRALITY_CHECKBUTTON_TEXT,
                                                       variable=self.betweenness_centrality_selected)
         self.betweenness_centrality.grid(row=1, column=0, pady=self.widget_pady)
         # ==============================================================================================================
 
         # Analyze Button
-        self.analyze_button = ttk.Button(self.buttons_frame, text="Analyze",
+        self.analyze_button = ttk.Button(self.buttons_frame, text=ANALYZE_PAGE_ANALYZE_BUTTON_TEXT,
                                          command=lambda: self.thread_generate())
         self.analyze_button.grid(row=0, column=0, ipady=10, ipadx=10, pady=self.widget_pady)
-        # ============================================
 
         # Log Button
-        self.log_button = ttk.Button(self.buttons_frame, text="Save output", command=self.save_output)
+        self.log_button = ttk.Button(self.buttons_frame, text=ANALYZE_PAGE_SAVE_OUTPUT_BUTTON_TEXT,
+                                     command=self.save_output)
         self.log_button.grid(row=0, column=1, ipady=10, ipadx=10, pady=self.widget_pady)
-        # ============================================
 
         # Back Button
-        self.back_button = ttk.Button(self.buttons_frame, text="Back", command=lambda: self.back(controller))
+        self.back_button = ttk.Button(self.buttons_frame, text=ANALYZE_PAGE_BACK_BUTTON_TEXT,
+                                      command=lambda: self.back(controller))
         self.back_button.grid(row=1, column=0, ipady=10, ipadx=10, pady=self.widget_pady)
-        # ================================
 
         # Exit Button
-        self.exit_button = ttk.Button(self.buttons_frame, text="Exit", command=lambda: sys.exit(0))
+        self.exit_button = ttk.Button(self.buttons_frame, text=ANALYZE_PAGE_EXIT_BUTTON_TEXT,
+                                      command=lambda: sys.exit(0))
         self.exit_button.grid(row=1, column=1, ipady=10, ipadx=10, pady=self.widget_pady)
-        # ================================
 
         # Cancel Button
-        self.cancel_button = ttk.Button(self.buttons_frame, text="Cancel", command=self.cancel)
-        # ============================================
+        self.cancel_button = ttk.Button(self.buttons_frame, text=ANALYZE_PAGE_CANCEL_BUTTON_TEXT, command=self.cancel)
 
         # Browse Button
         try:
-            browse_icon = PhotoImage(file='./images{}folder.png'.format(path_escape))
-            self.browse_button = Button(self.parameters_frame_row_1_column_1, image=browse_icon, command=lambda: self.browse())
+            browse_icon = PhotoImage(file=BROWSE_IMAGE_PATH)
+            self.browse_button = Button(self.parameters_frame_row_1_column_1, image=browse_icon,
+                                        command=lambda: self.browse())
             self.browse_button.image = browse_icon
-            self.browse_button.config(bg='azure3', relief='flat', borderwidth=0, highlightbackground="azure3")
+            self.browse_button.config(bg=MAIN_FRAME_BACKGROUND, relief='flat', borderwidth=0,
+                                      highlightbackground=MAIN_FRAME_BACKGROUND)
         except TclError:
-            self.browse_button = Button(self.parameters_frame_row_1_column_1, text='Browse', command=lambda: self.browse())
-            self.browse_button.config(bg='azure3', relief='flat', borderwidth=1)
-        # ================================
+            self.browse_button = Button(self.parameters_frame_row_1_column_1,
+                                        text=ANALYZE_PAGE_BROWSE_BUTTON_FALLBACK_TEXT, command=lambda: self.browse())
+            self.browse_button.config(bg=MAIN_FRAME_BACKGROUND, relief='flat', borderwidth=1)
 
         # Text Area Frame
         # create a Scrollbar and associate it with txt
         self.my_scroll = Scrollbar(self.scroll_area_frame, orient='vertical')
         # create a Text widget
-        self.text_area = Text(self.scroll_area_frame, background="lavender blush", yscrollcommand=self.my_scroll.set, relief=FLAT,
-                              width=35)
+        self.text_area = Text(self.scroll_area_frame, background=SCROLLABLE_FRAME_BACKGROUND,
+                              yscrollcommand=self.my_scroll.set, relief=FLAT, width=35)
         self.text_area.bind("<FocusIn>", self.defocus)
-        self.text_area.config(font=("consolas", 11), undo=True, wrap='word')
+        self.text_area.config(font=SCROLLABLE_FRAME_FONT, undo=True, wrap='word')
         self.my_scroll.config(command=self.text_area.yview)
         MousewheelSupport(self).add_support_to(self.text_area, yscrollbar=self.my_scroll, what="units")
 
         self.text_area.grid(row=0, column=0, sticky='news')
         self.my_scroll.grid(row=0, column=1, sticky='news')
-        # ================================
 
     @staticmethod
     def defocus(event):
@@ -240,8 +253,7 @@ class GraphAnalyzePage(Page):
     def calculate_geodesic_paths(self):
         geodesic_paths = None
 
-        message = "[*] Calculating Geodesic path for each node...\n"
-        self.text_area.insert(END, message)
+        self.text_area.insert(END, ANALYZE_PAGE_CALCULATE_GEODESIC_PATHS_INFO)
         self.text_area.update()
 
         if self.adjacency_type_selected.get() == "Matrix":
@@ -249,42 +261,35 @@ class GraphAnalyzePage(Page):
 
                 geodesic_paths = find_geodesics(self.Edges, self.Vertices, self.text_area, self.thread_analyze)
 
-                message = "\n[+] Finished Geodesic path analysis.\n"
-                self.text_area.insert(END, message)
+                self.text_area.insert(END, ANALYZE_PAGE_CALCULATE_GEODESIC_PATHS_SUCCESS)
                 self.text_area.update()
 
             except FileNotFoundError:
-                message = "Please make sure that you have generated a graph!"
-                messagebox.showerror("Error!", message)
+                messagebox.showerror("Error!", ANALYZE_PAGE_GENERATE_GRAPH_ERROR)
 
-                message = "\n[-] Failed to perform analysis.\n"
-                self.text_area.insert(END, message)
+                self.text_area.insert(END, ANALYZE_PAGE_ANALYSIS_FAILED_ERROR)
                 self.text_area.update()
 
         elif self.adjacency_type_selected.get() == "List":
             geodesic_paths = find_geodesics(self.Edges, self.Vertices, self.text_area, self.thread_analyze)
 
-            message = "\n[+] Finished Geodesic path analysis.\n"
-            self.text_area.insert(END, message)
+            self.text_area.insert(END, ANALYZE_PAGE_CALCULATE_GEODESIC_PATHS_SUCCESS)
             self.text_area.update()
 
         return geodesic_paths
 
     def calculate_closeness_centrality(self, geodesic_paths):
-        message = "\n[*] Calculating Closeness Centrality of the graph...\n"
-        self.text_area.insert(END, message)
+        self.text_area.insert(END, ANALYZE_PAGE_CALCULATE_CLOSENESS_CENTRALITY_INFO)
         self.text_area.update()
 
         closeness_centrality(self.Vertices, geodesic_paths, self.text_area, self.thread_analyze)
 
-        message = "\n[+] Finished Closeness Centrality analysis.\n"
-        self.text_area.insert(END, message)
+        self.text_area.insert(END, ANALYZE_PAGE_CALCULATE_CLOSENESS_CENTRALITY_SUCCESS)
         self.text_area.see("end")
         self.text_area.update()
 
     def calculate_betweenness_centrality(self):
-        message = "\n[*] Calculating Betweenness Centrality of each node...\n"
-        self.text_area.insert(END, message)
+        self.text_area.insert(END, ANALYZE_PAGE_CALCULATE_BETWEENNESS_CENTRALITY_INFO)
         self.text_area.see("end")
         self.text_area.update()
 
@@ -329,15 +334,13 @@ class GraphAnalyzePage(Page):
 
     def cancel(self):
         if self.thread_analyze.is_alive():
-            message = "[+] Terminating graph analysis...\n"
-            self.text_area.insert(END, message)
+            self.text_area.insert(END, ANALYZE_PAGE_GRAPH_ANALYSIS_CANCEL_IN_PROGRESS_INFO)
             self.text_area.update()
 
             while self.thread_analyze.is_alive():
                 self.thread_analyze.stop()
 
-            message = "[!] Graph analysis was canceled!\n"
-            self.text_area.insert(END, message)
+            self.text_area.insert(END, ANALYZE_PAGE_GRAPH_ANALYSIS_CANCEL_COMPLETED_INFO)
             self.text_area.see("end")
             self.text_area.update()
 
@@ -352,8 +355,7 @@ class GraphAnalyzePage(Page):
                 message = f"Successfully saved output to {join(OUTPUT_FILES_DIRECTORY, 'log.txt')}!"
                 messagebox.showinfo("Success!", message)
         else:
-            message = "No available output to save!"
-            messagebox.showerror("Error!", message)
+            messagebox.showerror("Error!", ANALYZE_PAGE_NO_AVAILABLE_OUTPUT_ERROR)
 
     @staticmethod
     def matrix_to_tuple_list(path_to_matrix_file):
@@ -455,11 +457,9 @@ class GraphAnalyzePage(Page):
                                      f"{locate_latest_file(OUTPUT_FILES_DIRECTORY, GraphRepresentationType.MATRIX.value)}"))
 
                         except FileNotFoundError:
-                            message = "Please make sure that you have generated a graph!"
-                            messagebox.showerror("Error!", message)
+                            messagebox.showerror("Error!", ANALYZE_PAGE_GENERATE_GRAPH_ERROR)
 
-                            message = "[-] Failed to perform analysis.\n"
-                            self.text_area.insert(END, message)
+                            self.text_area.insert(END, ANALYZE_PAGE_ANALYSIS_FAILED_ERROR)
                             self.text_area.update()
                     else:
                         try:
@@ -470,11 +470,9 @@ class GraphAnalyzePage(Page):
                             )
 
                         except FileNotFoundError:
-                            message = "Please make sure that you have generated a graph!"
-                            messagebox.showerror("Error!", message)
+                            messagebox.showerror("Error!", ANALYZE_PAGE_GENERATE_GRAPH_ERROR)
 
-                            message = "[-] Failed to perform analysis.\n"
-                            self.text_area.insert(END, message)
+                            self.text_area.insert(END, ANALYZE_PAGE_ANALYSIS_FAILED_ERROR)
                             self.text_area.update()
 
                     if self.Edges is not None and self.Vertices is not None:
@@ -498,14 +496,12 @@ class GraphAnalyzePage(Page):
                         elif self.betweenness_centrality_selected.get() is True:
                             self.calculate_betweenness_centrality()
 
-                        message = "\n[+] Finished last generated graph analysis!\n"
-                        self.text_area.insert(END, message)
+                        self.text_area.insert(END, ANALYZE_PAGE_LAST_GENERATED_GRAPH_ANALYSIS_SUCCESS)
                         self.text_area.see("end")
                         self.text_area.update()
 
             else:
-                message = "You must choose either adjacency matrix or adjacency list!"
-                messagebox.showerror("Error!", message)
+                messagebox.showerror("Error!", ANALYZE_PAGE_EITHER_ADJACENCY_MATRIX_OR_LIST_ERROR)
 
         elif self.chosen_file_type.get() == "Pajek file":
             self.adjacency_type_selected.set("List")
@@ -538,8 +534,7 @@ class GraphAnalyzePage(Page):
                         elif self.betweenness_centrality_selected.get() is True:
                             self.calculate_betweenness_centrality()
 
-                        message = "\n[+] Finished last generated graph analysis!\n"
-                        self.text_area.insert(END, message)
+                        self.text_area.insert(END, ANALYZE_PAGE_LAST_GENERATED_GRAPH_ANALYSIS_SUCCESS)
                         self.text_area.see("end")
                         self.text_area.update()
 

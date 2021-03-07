@@ -28,3 +28,10 @@ APP_NAME = 'Gratis'
 # Directories
 OUTPUT_FILES_DIRECTORY_NAME = 'output_files'
 OUTPUT_FILES_DIRECTORY = os.path.join(BASE_DIR, OUTPUT_FILES_DIRECTORY_NAME)
+
+# Images
+IMAGES_FOLDER = os.path.join(BASE_DIR, 'images')
+BROWSE_IMAGE_FILENAME = 'folder.png'
+BROWSE_IMAGE_PATH = os.path.join(IMAGES_FOLDER, BROWSE_IMAGE_FILENAME)
+
+
