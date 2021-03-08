@@ -18,6 +18,11 @@
 """
 
 import json
+
+from conf.base import MAIN_FRAME_BACKGROUND, SCROLLABLE_FRAME_SCROLLBAR_BACKGROUND, FRAME_BACKGROUND, \
+    LABEL_BACKGROUND, DELETE_IMAGE_PATH, BUTTON_IMAGE_BACKGROUND, DOWN_IMAGE_PATH, UP_IMAGE_PATH, \
+    HISTORY_PAGE_DELETE_BUTTON_FALLBACK_TEXT, HISTORY_PAGE_MORE_BUTTON_FALLBACK_TEXT, \
+    HISTORY_PAGE_LESS_BUTTON_FALLBACK_TEXT, HISTORY_PAGE_BACK_BUTTON_TEXT
 from gui.pages.page import *
 
 
@@ -28,7 +33,7 @@ class GraphHistoryPage(Page):
         self.parent = parent
         self.controller = controller
 
-        self.configure(bg="azure3")
+        self.configure(bg=MAIN_FRAME_BACKGROUND)
         self.rowconfigure(0, weight=1)
         self.columnconfigure(0, weight=1)
 
@@ -43,10 +48,11 @@ class GraphHistoryPage(Page):
         self.less_buttons = []
         self.load_counter = 0
 
-        self.canvas = Canvas(self, borderwidth=0, background="azure3", highlightthickness=1,
-                             highlightbackground="azure3")
-        self.graphs_frame = Frame(self.canvas, background="azure3")
-        self.vsb = Scrollbar(self, orient="vertical", command=self.canvas.yview, bg="black")
+        self.canvas = Canvas(self, borderwidth=0, background=MAIN_FRAME_BACKGROUND, highlightthickness=1,
+                             highlightbackground=MAIN_FRAME_BACKGROUND)
+        self.graphs_frame = Frame(self.canvas, background=MAIN_FRAME_BACKGROUND)
+        self.vsb = Scrollbar(self, orient="vertical", command=self.canvas.yview,
+                             bg=SCROLLABLE_FRAME_SCROLLBAR_BACKGROUND)
         self.canvas.configure(yscrollcommand=self.vsb.set)
 
         self.vsb.grid(row=0, column=1, sticky="ns")
@@ -58,7 +64,8 @@ class GraphHistoryPage(Page):
 
         MousewheelSupport(self).add_support_to(self.canvas, yscrollbar=self.vsb, what="units")
 
-        self.back_button = ttk.Button(self, text="Back", command=lambda: self.back(self.controller))
+        self.back_button = ttk.Button(self, text=HISTORY_PAGE_BACK_BUTTON_TEXT,
+                                      command=lambda: self.back(self.controller))
         self.back_button.grid(row=1, column=0, ipady=10, ipadx=15, pady=10, sticky="e")
 
     def scroll_possition_check(self):
@@ -90,7 +97,7 @@ class GraphHistoryPage(Page):
             graph_contents = ''
 
             self.graph_mini_frames.append(
-                Frame(self.graphs_frame, bg="azure3", height=77, borderwidth="1", relief="solid"))
+                Frame(self.graphs_frame, bg=FRAME_BACKGROUND, height=77, borderwidth="1", relief="solid"))
             if platform_type == "Windows":
                 self.graph_mini_frames[-1].config(width=900)
             else:
@@ -100,7 +107,7 @@ class GraphHistoryPage(Page):
             self.graph_mini_frames[-1].columnconfigure(1, weight=1)
 
             self.graph_label_id.append(
-                Label(self.graph_mini_frames[-1], text=f"{counter + 1}", bg="azure3", width=5, height=10,
+                Label(self.graph_mini_frames[-1], text=f"{counter + 1}", bg=LABEL_BACKGROUND, width=5, height=10,
                       font='Arial 18 bold'))
             self.graph_label_id[-1].grid_propagate(0)
 
@@ -110,48 +117,51 @@ class GraphHistoryPage(Page):
                 graph_contents += f"{k.replace('_', ' ')}: {v}\n"
 
             self.graphs.append(
-                Label(self.graph_mini_frames[-1], text=graph_contents, width=10, bg="azure3", justify="left",
+                Label(self.graph_mini_frames[-1], text=graph_contents, width=10, bg=LABEL_BACKGROUND, justify="left",
                       anchor="nw", font='Arial 15'))
 
-            self.buttons_frames.append(Frame(self.graph_mini_frames[-1], bg="azure3", width=300))
+            self.buttons_frames.append(Frame(self.graph_mini_frames[-1], bg=FRAME_BACKGROUND, width=300))
             self.buttons_frames[-1].grid_propagate(False)
             self.buttons_frames[-1].rowconfigure(0, weight=1)
             self.buttons_frames[-1].columnconfigure(0, weight=1)
             self.buttons_frames[-1].columnconfigure(1, weight=1)
 
             try:
-                delete_graph = PhotoImage(file='./images{}delete.png'.format(path_escape))
+                delete_graph = PhotoImage(file=DELETE_IMAGE_PATH)
                 self.delete_buttons.append(Button(self.buttons_frames[-1], image=delete_graph, highlightthickness=1,
-                                                  highlightbackground="azure3",
+                                                  highlightbackground=BUTTON_IMAGE_BACKGROUND,
                                                   command=lambda x=(int(counter), graph[0]): self.delete_button_func(
                                                       x[0], x[1])))
                 self.delete_buttons[-1].image = delete_graph
-                self.delete_buttons[-1].config(bg='azure3', relief='sunken', borderwidth=0)
+                self.delete_buttons[-1].config(bg=BUTTON_IMAGE_BACKGROUND, relief='sunken', borderwidth=0)
 
-                more_graph = PhotoImage(file='./images{}down.png'.format(path_escape))
+                more_graph = PhotoImage(file=DOWN_IMAGE_PATH)
                 self.more_buttons.append(
                     Button(self.buttons_frames[-1], image=more_graph, text=counter, highlightthickness=1,
-                           highlightbackground="azure3", command=lambda x=int(counter): self.more_button_func(x)))
+                           highlightbackground=BUTTON_IMAGE_BACKGROUND,
+                           command=lambda x=int(counter): self.more_button_func(x)))
                 self.more_buttons[-1].image = more_graph
-                self.more_buttons[-1].config(bg='azure3', relief='sunken', borderwidth=0)
+                self.more_buttons[-1].config(bg=BUTTON_IMAGE_BACKGROUND, relief='sunken', borderwidth=0)
 
-                less_graph = PhotoImage(file='./images{}up.png'.format(path_escape))
+                less_graph = PhotoImage(file=UP_IMAGE_PATH)
                 self.less_buttons.append(
                     Button(self.buttons_frames[-1], image=less_graph, text=counter, highlightthickness=1,
-                           highlightbackground="azure3", command=lambda x=int(counter): self.less_button_func(x)))
+                           highlightbackground=BUTTON_IMAGE_BACKGROUND,
+                           command=lambda x=int(counter): self.less_button_func(x)))
                 self.less_buttons[-1].image = less_graph
-                self.less_buttons[-1].config(bg='azure3', relief='sunken', borderwidth=0)
+                self.less_buttons[-1].config(bg=BUTTON_IMAGE_BACKGROUND, relief='sunken', borderwidth=0)
             except TclError:
-                self.delete_buttons.append(Button(self.buttons_frames[-1], text='Delete',
+                self.delete_buttons.append(Button(self.buttons_frames[-1],
+                                                  text=HISTORY_PAGE_DELETE_BUTTON_FALLBACK_TEXT,
                                                   command=lambda x=(int(counter), graph[0]): self.delete_button_func(
                                                       x[0], x[1])))
-                self.delete_buttons[-1].config(bg='azure3', relief='sunken', borderwidth=1)
-                self.more_buttons.append(Button(self.buttons_frames[-1], text='More',
+                self.delete_buttons[-1].config(bg=BUTTON_IMAGE_BACKGROUND, relief='sunken', borderwidth=1)
+                self.more_buttons.append(Button(self.buttons_frames[-1], text=HISTORY_PAGE_MORE_BUTTON_FALLBACK_TEXT,
                                                 command=lambda x=int(counter): self.more_button_func(x)))
-                self.more_buttons[-1].config(bg='azure3', relief='sunken', borderwidth=1)
-                self.less_buttons.append(Button(self.buttons_frames[-1], text='Less',
+                self.more_buttons[-1].config(bg=BUTTON_IMAGE_BACKGROUND, relief='sunken', borderwidth=1)
+                self.less_buttons.append(Button(self.buttons_frames[-1], text=HISTORY_PAGE_LESS_BUTTON_FALLBACK_TEXT,
                                                 command=lambda x=int(counter): self.less_button_func(x)))
-                self.less_buttons[-1].config(bg='azure3', relief='sunken', borderwidth=1)
+                self.less_buttons[-1].config(bg=BUTTON_IMAGE_BACKGROUND, relief='sunken', borderwidth=1)
 
             graph_contents = ''
             counter += 1

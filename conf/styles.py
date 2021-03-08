@@ -40,6 +40,7 @@ BUTTON_FONT = (
     STYLE['button']['font']['family'], STYLE['button']['font']['size'], STYLE['button']['font']['style']
 )
 BUTTON_BACKGROUND = STYLE['button']['bg']
+BUTTON_IMAGE_BACKGROUND = STYLE['button']['image_bg']
 BUTTON_FOREGROUND = STYLE['button']['fg']
 BUTTON_RELIEF = STYLE['button']['relief']
 BUTTON_WIDTH = STYLE['button']['width']
@@ -81,3 +82,4 @@ SCROLLABLE_FRAME_FONT = (
     STYLE['scrollable_frame']['font']['style']
 )
 SCROLLABLE_FRAME_BACKGROUND = STYLE['scrollable_frame']['bg']
+SCROLLABLE_FRAME_SCROLLBAR_BACKGROUND = STYLE['scrollable_frame']['scrollbar_bg']

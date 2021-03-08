@@ -8,6 +8,7 @@
         "style":"bold italic"
       },
       "bg":"seashell3",
+      "image_bg": "azure3",
       "fg":"black",
       "relief":"flat",
       "width":15
@@ -54,7 +55,8 @@
         "size":11,
         "style":""
       },
-      "bg":"lavender blush"
+      "bg":"lavender blush",
+      "scrollbar_bg": null
     }
   }
 }

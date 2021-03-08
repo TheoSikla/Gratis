@@ -127,8 +127,21 @@
             "visualization_completed": "Visualization was successfully completed!",
             "plotly_graph_create": "[+] The 3D Plotly Graph was generated successfully!\n\n"
           },
-          "warning": {
-          }
+          "warning": {}
+        }
+      },
+      "history": {
+        "widgets": {
+          "delete_button_fallback_text": "Delete",
+          "more_button_fallback_text": "More",
+          "less_button_fallback_text": "Less",
+          "back_button_text": "Back"
+        },
+        "messages": {
+          "error": {},
+          "info": {},
+          "success": {},
+          "warning": {}
         }
       }
     }
