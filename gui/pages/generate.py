@@ -49,7 +49,7 @@ from conf.base import MAIN_FRAME_BACKGROUND, BUTTON_FONT, LABEL_BACKGROUND, LABE
     GENERATE_PAGE_CUSTOM_SCALE_FREE_VERTICES_INITIAL_NODES_NUMBER_EQUAL_ONE_ERROR, \
     GENERATE_PAGE_CUSTOM_SCALE_FREE_VERTICES_LESS_THAN_INITIAL_NODES_ERROR
 from gui.pages.page import *
-from graphs.graph import GraphRepresentationType
+from graphs.graph import GraphRepresentationType, AVAILABLE_GRAPH_TYPES, GraphType
 
 
 class GraphGeneratePage(Page):
@@ -80,8 +80,7 @@ class GraphGeneratePage(Page):
                            '%P', '%S', '%d')
 
         # Type of graph being generated
-        self.graph_types = ['', 'Homogeneous', 'Random Fixed Graph', 'Scale-Free', 'ER Random Graph',
-                            'Custom ER Random Graph', 'Custom Scale-Free Graph']
+        self.graph_types = [''] + AVAILABLE_GRAPH_TYPES
 
         self.rle_var = BooleanVar(False)
         self.rle = ttk.Checkbutton(self, text="Run Length Encoder", variable=self.rle_var)
@@ -284,8 +283,7 @@ class GraphGeneratePage(Page):
     def show_parameters(self, *args):
         self.parameters_frame.grid(row=6, column=1, padx=10)
 
-        if self.chosen_graph.get() == 'Homogeneous':
-
+        if self.chosen_graph.get() == GraphType.HOMOGENEOUS.value:
             self.incremental_growth_selected.set(False)
             self.preferential_attachment_selected.set(False)
             self.incremental_growth.grid_forget()
@@ -308,8 +306,7 @@ class GraphGeneratePage(Page):
             self.number_of_vertices_label.grid(row=2, column=0, pady=10, sticky="e", padx=10)
             self.number_of_vertices_entry_box.grid(row=2, column=1, sticky="w")
 
-        elif self.chosen_graph.get() == 'Random Fixed Graph':
-
+        elif self.chosen_graph.get() == GraphType.RANDOM_FIXED.value:
             self.incremental_growth_selected.set(False)
             self.preferential_attachment_selected.set(False)
             self.incremental_growth.grid_forget()
@@ -335,8 +332,7 @@ class GraphGeneratePage(Page):
             self.seed_label.grid(row=8, column=0, pady=10, sticky="e", padx=10)
             self.seed_entry_box.grid(row=8, column=1, sticky="w")
 
-        elif self.chosen_graph.get() == 'Scale-Free':
-
+        elif self.chosen_graph.get() == GraphType.SCALE_FREE.value:
             self.incremental_growth_selected.set(False)
             self.preferential_attachment_selected.set(False)
             self.number_of_vertices_entry_box.grid_forget()
@@ -362,7 +358,7 @@ class GraphGeneratePage(Page):
             self.seed_label.grid(row=8, column=0, pady=10, sticky="e", padx=10)
             self.seed_entry_box.grid(row=8, column=1, sticky="w")
 
-        elif self.chosen_graph.get() == 'ER Random Graph':
+        elif self.chosen_graph.get() == GraphType.ER.value:
             self.incremental_growth_selected.set(False)
             self.preferential_attachment_selected.set(False)
             self.incremental_growth.grid_forget()
@@ -386,7 +382,7 @@ class GraphGeneratePage(Page):
             self.probability_entry_box.grid(row=7, column=1, sticky="w")
             self.seed_entry_box.grid(row=8, column=1, sticky="w")
 
-        elif self.chosen_graph.get() == 'Custom ER Random Graph':
+        elif self.chosen_graph.get() == GraphType.CUSTOM_ER.value:
             self.incremental_growth_selected.set(False)
             self.preferential_attachment_selected.set(False)
             self.incremental_growth.grid_forget()
@@ -410,7 +406,7 @@ class GraphGeneratePage(Page):
             self.probability_entry_box.grid(row=7, column=1, sticky="w")
             self.seed_entry_box.grid(row=8, column=1, sticky="w")
 
-        elif self.chosen_graph.get() == 'Custom Scale-Free Graph':
+        elif self.chosen_graph.get() == GraphType.CUSTOM_SCALE_FREE.value:
             self.incremental_growth_selected.set(False)
             self.preferential_attachment_selected.set(False)
             self.graph_degree_label.grid_forget()
@@ -447,7 +443,7 @@ class GraphGeneratePage(Page):
             self.rle.configure(state=NORMAL)
 
     def preferential_attachment_func(self):
-        if self.chosen_graph.get() == 'Scale-Free':
+        if self.chosen_graph.get() == GraphType.SCALE_FREE.value:
             if self.incremental_growth_selected.get() is False:
                 self.number_of_initial_nodes_label.grid_forget()
                 self.number_of_initial_nodes_entry_box.grid_forget()
@@ -456,7 +452,7 @@ class GraphGeneratePage(Page):
                 self.number_of_initial_nodes_label.grid(row=5, column=0, pady=10, sticky="e", padx=10)
                 self.number_of_initial_nodes_entry_box.grid(row=5, column=1, sticky="w")
 
-        if self.chosen_graph.get() == 'Custom Scale-Free Graph':
+        if self.chosen_graph.get() == GraphType.CUSTOM_SCALE_FREE.value:
             if self.incremental_growth_selected.get() is False:
 
                 self.number_of_edges_label.grid(row=4, column=0, pady=10, sticky="e", padx=10)
@@ -487,7 +483,7 @@ class GraphGeneratePage(Page):
                 self.number_of_edges_entry_box.grid_forget()
 
     def incremental_growth_func(self):
-        if self.chosen_graph.get() == 'Scale-Free':
+        if self.chosen_graph.get() == GraphType.SCALE_FREE.value:
             if self.preferential_attachment_selected.get() is True:
                 self.number_of_initial_nodes_label.grid(row=5, column=0, pady=10, sticky="e", padx=10)
                 self.number_of_initial_nodes_entry_box.grid(row=5, column=1, sticky="w")
@@ -496,7 +492,7 @@ class GraphGeneratePage(Page):
                 self.number_of_initial_nodes_label.grid_forget()
                 self.number_of_initial_nodes_entry_box.grid_forget()
 
-        if self.chosen_graph.get() == 'Custom Scale-Free Graph':
+        if self.chosen_graph.get() == GraphType.CUSTOM_SCALE_FREE.value:
             if self.preferential_attachment_selected.get() is True:
                 self.number_of_initial_nodes_label.grid(row=5, column=0, pady=10, sticky="e", padx=10)
                 self.number_of_initial_nodes_entry_box.grid(row=5, column=1, sticky="w")
@@ -617,20 +613,17 @@ class GraphGeneratePage(Page):
             messagebox.showerror("Error", GENERATE_PAGE_ADJACENCY_TYPE_SELECT_ERROR)
 
         else:
-            if self.chosen_graph.get() == 'Scale-Free' and self.incremental_growth_selected.get() and \
+            if self.chosen_graph.get() == GraphType.SCALE_FREE.value and self.incremental_growth_selected.get() and \
                     self.preferential_attachment_selected.get():
-
                 message1 = GENERATE_PAGE_FULL_SCALE_FREE_GENERATE_INFO
 
-            elif self.chosen_graph.get() == 'Custom Scale-Free Graph' and self.incremental_growth_selected.get() and \
-                    self.preferential_attachment_selected.get():
-
+            elif self.chosen_graph.get() == GraphType.CUSTOM_SCALE_FREE.value and \
+                    self.incremental_growth_selected.get() and self.preferential_attachment_selected.get():
                 message1 = GENERATE_PAGE_CUSTOM_FULL_SCALE_FREE_GENERATE_INFO
-
             else:
                 message1 = "[+] Please wait while {} graph is being generated...\n\n".format(self.chosen_graph.get())
 
-            if self.chosen_graph.get() == 'Homogeneous':
+            if self.chosen_graph.get() == GraphType.HOMOGENEOUS.value:
                 self.text_area.insert(END, message1)
                 self.text_area.update()
 
@@ -651,7 +644,7 @@ class GraphGeneratePage(Page):
                 self.generate_button.config(state=NORMAL)
                 self.back_button.configure(state=NORMAL)
 
-            elif self.chosen_graph.get() == 'Random Fixed Graph':
+            elif self.chosen_graph.get() == GraphType.RANDOM_FIXED.value:
                 if self.graph_degree_result.get() == 0:
                     message = GENERATE_PAGE_GRAPH_DEGREE_GREATER_THAN_ZERO_ERROR
                     messagebox.showerror("Error", message)
@@ -677,7 +670,7 @@ class GraphGeneratePage(Page):
                     self.generate_button.config(state=NORMAL)
                     self.back_button.configure(state=NORMAL)
 
-            elif self.chosen_graph.get() == 'Scale-Free':
+            elif self.chosen_graph.get() == GraphType.SCALE_FREE.value:
                 if not self.preferential_attachment_selected.get() and not self.incremental_growth_selected.get():
                     message = GENERATE_PAGE_SCALE_FREE_PROPERTIES_ERROR
                     messagebox.showerror("Error", message)
@@ -737,7 +730,7 @@ class GraphGeneratePage(Page):
                         self.cancel_button.configure(state=DISABLED)
                         self.generate_button.config(state=NORMAL)
 
-            elif self.chosen_graph.get() == 'ER Random Graph':
+            elif self.chosen_graph.get() == GraphType.ER.value:
                 if float(self.probability_result.get()) == 0.0:
                     message = GENERATE_PAGE_ER_PROBABILITY_GREATER_THAN_ZERO_ERROR
                     messagebox.showerror("Error", message)
@@ -764,7 +757,7 @@ class GraphGeneratePage(Page):
                     self.generate_button.config(state=NORMAL)
                     self.back_button.configure(state=NORMAL)
 
-            elif self.chosen_graph.get() == 'Custom ER Random Graph':
+            elif self.chosen_graph.get() == GraphType.CUSTOM_ER.value:
                 if self.number_of_edges_result.get() == 0:
                     message = GENERATE_PAGE_CUSTOM_ER_EDGES_GREATER_THAN_ZERO_ERROR
                     messagebox.showerror("Error", message)
@@ -823,7 +816,7 @@ class GraphGeneratePage(Page):
                 self.generate_button.config(state=NORMAL)
                 self.back_button.configure(state=NORMAL)
 
-            elif self.chosen_graph.get() == 'Custom Scale-Free Graph':
+            elif self.chosen_graph.get() == GraphType.CUSTOM_SCALE_FREE.value:
                 if not self.preferential_attachment_selected.get() and not self.incremental_growth_selected.get():
                     message = GENERATE_PAGE_CUSTOM_SCALE_FREE_PROPERTIES_ERROR
                     messagebox.showerror("Error", message)
@@ -921,17 +914,17 @@ class GraphGeneratePage(Page):
 
             try:
 
-                if self.chosen_graph.get() == 'Random Fixed Graph' and self.graph_degree_result.get() == 0:
+                if self.chosen_graph.get() == GraphType.RANDOM_FIXED.value and self.graph_degree_result.get() == 0:
                     pass
 
-                elif ((self.chosen_graph.get() == 'Scale-Free'
+                elif ((self.chosen_graph.get() == GraphType.SCALE_FREE.value
                        and not self.incremental_growth_selected.get()
                        and not self.preferential_attachment_selected.get())
 
                       or (self.incremental_growth_selected.get()
                           and not self.preferential_attachment_selected.get())
 
-                      or (self.chosen_graph.get() == 'Scale-Free'
+                      or (self.chosen_graph.get() == GraphType.SCALE_FREE.value
                           and self.incremental_growth_selected.get()
                           and self.preferential_attachment_selected.get()
                           and self.number_of_initial_nodes_result.get() == 0)
@@ -940,34 +933,35 @@ class GraphGeneratePage(Page):
 
                       or (self.number_of_vertices_entry_result.get() < self.number_of_initial_nodes_result.get())
 
-                      or (self.chosen_graph.get() == 'Scale-Free' and self.number_of_vertices_entry_result.get()
-                          in [0, 1])):
+                      or (self.chosen_graph.get() == GraphType.SCALE_FREE.value and
+                          self.number_of_vertices_entry_result.get() in [0, 1])):
 
                     pass
 
-                elif self.chosen_graph.get() == 'ER Random Graph' and float(self.probability_result.get()) == 0.0:
+                elif self.chosen_graph.get() == GraphType.CUSTOM_ER.value and \
+                        float(self.probability_result.get()) == 0.0:
                     pass
 
-                elif ((self.chosen_graph.get() == 'Custom ER Random Graph'
+                elif ((self.chosen_graph.get() == GraphType.CUSTOM_ER.value
                        and (float(self.probability_result.get()) == 0.0))
-                      or (self.chosen_graph.get() == 'Custom ER Random Graph'
+                      or (self.chosen_graph.get() == GraphType.CUSTOM_ER.value
                           and self.number_of_edges_result.get() == 0)
-                      or (self.chosen_graph.get() == 'Custom ER Random Graph'
+                      or (self.chosen_graph.get() == GraphType.CUSTOM_ER.value
                           and self.number_of_edges_result.get() >
                           (pow(self.number_of_vertices_entry_result.get(), 2)
                            - self.number_of_vertices_entry_result.get()) // 2)):
                     pass
 
-                elif ((self.chosen_graph.get() == 'Custom Scale-Free Graph'
+                elif ((self.chosen_graph.get() == GraphType.CUSTOM_SCALE_FREE.value
                        and not self.incremental_growth_selected.get()
                        and not self.preferential_attachment_selected.get())
 
-                      or (self.chosen_graph.get() == 'Custom Scale-Free Graph'
+                      or (self.chosen_graph.get() == GraphType.CUSTOM_SCALE_FREE.value
                           and self.preferential_attachment_selected.get()
                           and not self.incremental_growth_selected.get()
                           and self.number_of_edges_result.get() == 0)
 
-                      or (self.chosen_graph.get() == 'Custom Scale-Free Graph'
+                      or (self.chosen_graph.get() == GraphType.CUSTOM_SCALE_FREE.value
                           and self.incremental_growth_selected.get()
                           and (self.number_of_initial_nodes_result.get() == 0
                                or self.initial_connections_per_node_result.get() == 0))):

@@ -21,7 +21,7 @@ import sys
 from os.path import join
 
 from conf.base import OUTPUT_FILES_DIRECTORY
-from graphs.graph import Graph, AVAILABLE_GRAPH_TYPE_FULL_NAMES
+from graphs.graph import Graph
 from os_recon.define_os import path_escape
 from support_folders.run_length_encoder import RunLengthEncoder
 from datetime import datetime
@@ -39,7 +39,7 @@ class Generate:
         output_filename = join(
             OUTPUT_FILES_DIRECTORY,
             rf"{datetime.now().strftime(date_format)}_{graph.graph_representation_type}_{len(graph.vertices)}_"
-            rf"{AVAILABLE_GRAPH_TYPE_FULL_NAMES[graph.graph_type].replace(' ', '_')}.txt")
+            rf"{graph.graph_type.replace(' ', '_')}.txt")
 
         if adjacency_type == "matrix":
             if hasattr(graph, 'mode'):
