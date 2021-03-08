@@ -42,12 +42,12 @@ class RandomFixed:
     """
 
     def __init__(self, graph_representation_type):
-        if graph_representation_type == str(GraphRepresentationType.MATRIX):
+        if graph_representation_type == GraphRepresentationType.MATRIX.value:
             self.graph = AdjacencyMatrixGraph(GraphRepresentationType.MATRIX, GraphType.RANDOM_FIXED)
         else:
             self.graph = AdjacencyListGraph(GraphRepresentationType.LIST, GraphType.RANDOM_FIXED)
 
-    def create_random_fixed_graph(self, number_of_vertices, connectivity, seed, thread, **kwargs):
+    def create_random_fixed_graph(self, number_of_vertices, connectivity, seed, thread=None, **kwargs):
         """ Commented lines of code serve debugging purposes. """
 
         self.graph.reset_graph()
@@ -61,7 +61,7 @@ class RandomFixed:
 
         for i in range(number_of_vertices):
 
-            if thread.isStopped():
+            if thread and thread.isStopped():
                 sys.exit(0)
 
             self.graph.add_vertex(Vertex(i))
@@ -76,7 +76,7 @@ class RandomFixed:
 
                 while number_of_edges[int(v)] < connectivity and len(graph_vector) != 0:
 
-                    if thread.isStopped():
+                    if thread and thread.isStopped():
                         sys.exit(0)
 
                     random_node = random.choice(list(graph_vector.keys()))

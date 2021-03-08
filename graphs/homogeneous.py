@@ -33,12 +33,12 @@ class Homogeneous:
     """
 
     def __init__(self, graph_representation_type):
-        if graph_representation_type == str(GraphRepresentationType.MATRIX):
+        if graph_representation_type == GraphRepresentationType.MATRIX.value:
             self.graph = AdjacencyMatrixGraph(GraphRepresentationType.MATRIX, GraphType.HOMOGENEOUS)
         else:
             self.graph = AdjacencyListGraph(GraphRepresentationType.LIST, GraphType.HOMOGENEOUS)
 
-    def create_homogeneous_graph(self, number_of_vertices, thread, **kwargs):
+    def create_homogeneous_graph(self, number_of_vertices, thread=None, **kwargs):
         self.graph.reset_graph()
 
         if self.graph.graph_representation_type == "matrix":
@@ -47,14 +47,14 @@ class Homogeneous:
 
         for i in range(number_of_vertices):
             self.graph.add_vertex(Vertex(str(i)))
-            if thread.isStopped():
+            if thread and thread.isStopped():
                 sys.exit(0)
 
         for i in range(number_of_vertices):
             for j in range(number_of_vertices):
                 if i != j and i < j:
                     self.graph.add_edge_undirected(i, j)
-                    if thread.isStopped():
+                    if thread and thread.isStopped():
                         sys.exit(0)
 
         generator.generate(self.graph.graph_representation_type, self.graph, thread)

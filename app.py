@@ -17,11 +17,16 @@
     along with GRATIS. If not, see <https://www.gnu.org/licenses/>.
 """
 
+import argparse
 from tkinter import *
 from tkinter import ttk
+
+from cli.utils import validate_model_cli_args, handle_graph_creation
+from conf.base import *
+from graphs.graph import AVAILABLE_GRAPH_TYPES, AVAILABLE_GRAPH_TYPES_NUMBERED, AVAILABLE_GRAPH_REPRESENTATION_TYPES, \
+    AVAILABLE_GRAPH_REPRESENTATION_TYPES_NUMBERED
 from gui.pages import *
 from os_recon.define_os import transform
-from conf.base import *
 
 
 class App(Tk):
@@ -97,6 +102,32 @@ class App(Tk):
 
 
 if __name__ == "__main__":
-    GUI = App()
-    GUI.center()
-    GUI.mainloop()
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('-g', '--generate', action='store_true', help='')
+    parser.add_argument('-m', '--model', type=int, choices=range(1, len(AVAILABLE_GRAPH_TYPES) + 1), help='')
+    parser.add_argument('-at', '--adjacency-type', type=int, help='', default=1,
+                        choices=range(1, len(AVAILABLE_GRAPH_REPRESENTATION_TYPES) + 1))
+    parser.add_argument('-nov', '--number-of-vertices', type=int, help='')
+    parser.add_argument('-noe', '--number-of-edges', type=int, help='')
+    parser.add_argument('-noin', '--number-of-initial-nodes', type=int, help='')
+    parser.add_argument('-ga', '--graph-degree', type=int, help='')
+    parser.add_argument('-icpn', '--initial-connections-per-node', type=int, help='')
+    parser.add_argument('-p', '--probability', type=float, help='')
+    parser.add_argument('-s', '--seed', type=int, help='')
+
+    args = parser.parse_args()
+
+    if not len(sys.argv) > 1:
+        GUI = App()
+        GUI.center()
+        GUI.mainloop()
+    else:
+        if args.generate:
+            args.model = AVAILABLE_GRAPH_TYPES_NUMBERED[args.model]
+            args.adjacency_type = AVAILABLE_GRAPH_REPRESENTATION_TYPES_NUMBERED[args.adjacency_type]
+            if not validate_model_cli_args(args):
+                print(f'Invalid arguments supplied for the creation of {args.model} graph')
+                sys.exit(1)
+            else:
+                handle_graph_creation(args)

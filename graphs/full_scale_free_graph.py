@@ -50,12 +50,12 @@ class FullScaleFree:
     """
 
     def __init__(self, graph_representation_type):
-        if graph_representation_type == str(GraphRepresentationType.MATRIX):
+        if graph_representation_type == GraphRepresentationType.MATRIX.value:
             self.graph = AdjacencyMatrixGraph(GraphRepresentationType.MATRIX, GraphType.SCALE_FREE)
         else:
             self.graph = AdjacencyListGraph(GraphRepresentationType.LIST, GraphType.SCALE_FREE)
 
-    def create_full_scale_free_graph(self, number_of_vertices, number_of_initial_nodes, seed, thread,
+    def create_full_scale_free_graph(self, number_of_vertices, number_of_initial_nodes, seed, thread=None,
                                      number_of_initial_edges=None, **kwargs):
         """ Commented lines of code serve debugging purposes. """
 
@@ -77,7 +77,7 @@ class FullScaleFree:
         # Generating tank with all nodes inside.
         for i in range(number_of_vertices):
 
-            if thread.isStopped():  # --> Thread Status.
+            if thread and thread.isStopped():  # --> Thread Status.
                 sys.exit(0)
 
             graph_vector[str(i)] = i
@@ -86,7 +86,7 @@ class FullScaleFree:
         # print("Initial nodes:")
 
         for i in range(number_of_initial_nodes):
-            if thread.isStopped():  # --> Thread Status.
+            if thread and thread.isStopped():  # --> Thread Status.
                 sys.exit(0)
 
             random_node = random.choice(list(graph_vector.keys()))
@@ -102,7 +102,7 @@ class FullScaleFree:
 
         for v, i in list(self.graph.edge_indices.items()):
             for b, j in list(self.graph.edge_indices.items()):
-                if thread.isStopped():  # --> Thread Status.
+                if thread and thread.isStopped():  # --> Thread Status.
                     sys.exit(0)
 
                 # If Custom Full Scale-Free Graph is chosen.
@@ -132,7 +132,7 @@ class FullScaleFree:
             del graph_vector[random_node]
 
             for v, i in list(self.graph.edge_indices.items()):
-                if thread.isStopped():  # --> Thread Status.
+                if thread and thread.isStopped():  # --> Thread Status.
                     sys.exit(0)
 
                 if v != random_node:

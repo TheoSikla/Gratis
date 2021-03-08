@@ -27,6 +27,11 @@ class GraphRepresentationType(Enum):
     LIST = 'list'
 
 
+AVAILABLE_GRAPH_REPRESENTATION_TYPES = [_.value for _ in GraphRepresentationType]
+AVAILABLE_GRAPH_REPRESENTATION_TYPES_NUMBERED = {count: _.value for count, _ in enumerate(
+    GraphRepresentationType, start=1)}
+
+
 class GraphType(Enum):
     """Enumeration Class for Graph types"""
 
@@ -39,6 +44,7 @@ class GraphType(Enum):
 
 
 AVAILABLE_GRAPH_TYPES = [_.value for _ in GraphType]
+AVAILABLE_GRAPH_TYPES_NUMBERED = {count: _.value for count, _ in enumerate(GraphType, start=1)}
 
 
 class AbstractGraph:

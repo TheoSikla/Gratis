@@ -51,12 +51,12 @@ class ErdosRenyi:
     """
 
     def __init__(self, graph_representation_type):
-        if graph_representation_type == str(GraphRepresentationType.MATRIX):
+        if graph_representation_type == GraphRepresentationType.MATRIX.value:
             self.graph = AdjacencyMatrixGraph(GraphRepresentationType.MATRIX, GraphType.ER)
         else:
             self.graph = AdjacencyListGraph(GraphRepresentationType.LIST, GraphType.ER)
 
-    def create_er_graph(self, number_of_vertices, probability, seed, thread, **kwargs):
+    def create_er_graph(self, number_of_vertices, probability, seed, thread=None, **kwargs):
         """ Commented lines of code serve debugging purposes. """
 
         self.graph.reset_graph()
@@ -70,7 +70,7 @@ class ErdosRenyi:
         number_of_edges = [0] * number_of_vertices
 
         for i in range(number_of_vertices):
-            if thread.isStopped():  # --> Thread Status.
+            if thread and thread.isStopped():  # --> Thread Status.
                 sys.exit(0)
 
             self.graph.add_vertex(Vertex(i))
@@ -85,7 +85,7 @@ class ErdosRenyi:
 
                 elif probability >= per:
 
-                    if thread.isStopped():  # --> Thread Status.
+                    if thread and thread.isStopped():  # --> Thread Status.
                         sys.exit(0)
 
                     if not self.graph.isAdjacent(new_node, adjacency_vertex):
@@ -107,7 +107,7 @@ class ErdosRenyi:
                                          number_of_vertices, None, None, None, None, probability, seed)
 
     def create_custom_er_graph(self, number_of_vertices, total_number_of_edges, probability,
-                               seed, thread, **kwargs):
+                               seed, thread=None, **kwargs):
         """ Commented lines of code serve debugging purposes. """
 
         self.graph.reset_graph()
@@ -122,7 +122,7 @@ class ErdosRenyi:
         number_of_connected_edges = 0
 
         for i in range(number_of_vertices):
-            if thread.isStopped():  # --> Thread Status.
+            if thread and thread.isStopped():  # --> Thread Status.
                 sys.exit(0)
 
             self.graph.add_vertex(Vertex(i))
@@ -138,7 +138,7 @@ class ErdosRenyi:
             per = random.uniform(0, 1)
 
             while new_node == adjacency_vertex or self.graph.isAdjacent(new_node, adjacency_vertex):
-                if thread.isStopped():  # --> Thread Status.
+                if thread and thread.isStopped():  # --> Thread Status.
                     sys.exit(0)
 
                 if len(graph_vector) > 1:
@@ -155,7 +155,7 @@ class ErdosRenyi:
                 per = random.uniform(0, 1)
 
             if probability > per:
-                if thread.isStopped():  # --> Thread Status.
+                if thread and thread.isStopped():  # --> Thread Status.
                     sys.exit(0)
 
                 self.graph.add_edge_undirected(new_node, adjacency_vertex)

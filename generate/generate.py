@@ -45,7 +45,7 @@ class Generate:
             if hasattr(graph, 'mode'):
                 if graph.mode == 'normal':
                     for i in range(len(graph.edges)):
-                        if thread.isStopped():
+                        if thread and thread.isStopped():
                             graph.reset_graph()
                             sys.exit(0)
 
@@ -58,7 +58,7 @@ class Generate:
                 else:
                     encoder = RunLengthEncoder()
                     for row in graph.edges:
-                        if thread.isStopped():
+                        if thread and thread.isStopped():
                             graph.reset_graph()
                             sys.exit(0)
 
@@ -70,7 +70,7 @@ class Generate:
             
         else:
             for vertex, edges in graph.edges.items():
-                if thread.isStopped():
+                if thread and thread.isStopped():
                     graph.reset_graph()
                     sys.exit(0)
 

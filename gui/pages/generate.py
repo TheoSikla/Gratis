@@ -127,13 +127,13 @@ class GraphGeneratePage(Page):
         # Incremental Growth, Preferential Attachment Checkbuttons for Scale-free Radiobutton
         self.adjacency_type_selected = StringVar()
         self.matrix = ttk.Radiobutton(self.parameters_frame, text=GRAPH_TYPE_MATRIX_TEXT,
-                                      value=GraphRepresentationType.MATRIX,
+                                      value=GraphRepresentationType.MATRIX.value,
                                       variable=self.adjacency_type_selected,
                                       command=self.handle_run_length_encoder_button)
         self.matrix.grid(row=0, column=0, padx=30, pady=10, sticky="w")
 
         self.list = ttk.Radiobutton(self.parameters_frame, text=GRAPH_TYPE_LIST_TEXT,
-                                    value=GraphRepresentationType.LIST,
+                                    value=GraphRepresentationType.LIST.value,
                                     variable=self.adjacency_type_selected,
                                     command=self.handle_run_length_encoder_button)
         self.list.grid(row=0, column=1, padx=30, pady=10, sticky="w")

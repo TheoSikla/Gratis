@@ -45,12 +45,12 @@ class ScaleFreePA:
     """
 
     def __init__(self, graph_representation_type):
-        if graph_representation_type == str(GraphRepresentationType.MATRIX):
+        if graph_representation_type == GraphRepresentationType.MATRIX.value:
             self.graph = AdjacencyMatrixGraph(GraphRepresentationType.MATRIX, GraphType.SCALE_FREE)
         else:
             self.graph = AdjacencyListGraph(GraphRepresentationType.LIST, GraphType.SCALE_FREE)
 
-    def create_scale_free_graph(self, number_of_vertices, seed, thread, **kwargs):
+    def create_scale_free_graph(self, number_of_vertices, seed, thread=None, **kwargs):
         """ Commented lines of code serve debugging purposes. """
 
         self.graph.reset_graph()
@@ -67,7 +67,7 @@ class ScaleFreePA:
         # Generate the tank with all nodes and a support graph vector.
         for i in range(number_of_vertices):
 
-            if thread.isStopped():  # --> Thread Status.
+            if thread and thread.isStopped():  # --> Thread Status.
                 sys.exit(0)
 
             self.graph.add_vertex(Vertex(i))
@@ -103,7 +103,7 @@ class ScaleFreePA:
         # Connected the rest of the nodes with all other with specified probability.
         while len(graph_vector) != 0:
 
-            if thread.isStopped():  # --> Thread Status.
+            if thread and thread.isStopped():  # --> Thread Status.
                 sys.exit(0)
 
             random_node3 = random.choice(list(graph_vector.keys()))
@@ -112,7 +112,7 @@ class ScaleFreePA:
 
             for j in range(number_of_vertices):
 
-                if thread.isStopped():  # --> Thread Status.
+                if thread and thread.isStopped():  # --> Thread Status.
                     sys.exit(0)
 
                 if int(random_node3) != j and number_of_edges[j] != 0:
@@ -140,7 +140,7 @@ class ScaleFreePA:
         analyzer.analyze_generated_graph(self.graph.edges, self.graph.graph_representation_type, self.graph.graph_type,
                                          number_of_vertices, None, None, None, None, None, seed)
 
-    def create_custom_scale_free_graph(self, number_of_vertices, total_number_of_edges, seed, thread, **kwargs):
+    def create_custom_scale_free_graph(self, number_of_vertices, total_number_of_edges, seed, thread=None, **kwargs):
         """ Commented lines of code serve debugging purposes. """
 
         self.graph.reset_graph()
@@ -157,7 +157,7 @@ class ScaleFreePA:
         # Generate the tank with all nodes and a support graph vector.
         for i in range(number_of_vertices):
 
-            if thread.isStopped():  # --> Thread Status.
+            if thread and thread.isStopped():  # --> Thread Status.
                 sys.exit(0)
 
             self.graph.add_vertex(Vertex(i))
@@ -193,7 +193,7 @@ class ScaleFreePA:
         # Connected the rest of the nodes with all other with specified probability.
         while len(graph_vector) != 0 and number_of_connected_edges < total_number_of_edges:
 
-            if thread.isStopped():  # --> Thread Status.
+            if thread and thread.isStopped():  # --> Thread Status.
                 sys.exit(0)
 
             random_node3 = random.choice(list(graph_vector.keys()))
@@ -202,7 +202,7 @@ class ScaleFreePA:
 
             for j in range(number_of_vertices):
 
-                if thread.isStopped():  # --> Thread Status.
+                if thread and thread.isStopped():  # --> Thread Status.
                     sys.exit(0)
 
                 if int(random_node3) != j and number_of_edges[j] != 0:
