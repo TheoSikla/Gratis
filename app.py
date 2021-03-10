@@ -128,8 +128,8 @@ if __name__ == "__main__":
             args.model = AVAILABLE_GRAPH_TYPES_NUMBERED[args.model]
             args.adjacency_type = AVAILABLE_GRAPH_REPRESENTATION_TYPES_NUMBERED[args.adjacency_type]
             if not validate_model_cli_args(args):
-                communicate_cli_message(f'Invalid arguments supplied for the creation of {args.model} graph',
-                                        MessageType.ERROR.value)
+                communicate_cli_message(message=f'Invalid arguments supplied for the creation of {args.model} graph',
+                                        _type=MessageType.ERROR.value)
                 sys.exit(1)
             else:
                 handle_graph_creation(args)

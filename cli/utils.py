@@ -17,7 +17,7 @@
     along with GRATIS. If not, see <https://www.gnu.org/licenses/>.
 """
 
-from cli.common import AVAILABLE_MESSAGE_PREFIXES, AVAILABLE_MESSAGE_PREFIX_COLOURS, MessageColor
+from cli.common import AVAILABLE_MESSAGE_PREFIXES, AVAILABLE_MESSAGE_PREFIX_COLOURS, MessageColor, MessageType
 from graphs.er_graph import ErdosRenyi
 from graphs.full_scale_free_graph import FullScaleFree
 from graphs.graph import GraphType
@@ -31,30 +31,112 @@ def communicate_cli_message(message, _type):
           f'{message}')
 
 
-def validate_model_cli_args(args):
+def validate_model_cli_arg_values(model: str, number_of_vertices=None, number_of_edges=None,
+                                  number_of_initial_nodes=None, graph_degree=None, initial_connections_per_node=None,
+                                  probability=None, seed=None) -> bool:
+    # Ensure non negative and non zero numbers
+    if any([_ is not None and float(_) <= 0 for _ in [number_of_vertices, number_of_edges, number_of_initial_nodes,
+                                                      graph_degree, initial_connections_per_node, probability, seed]]):
+        return False
+
+    # Ensure more than 1 vertices
+    if number_of_vertices <= 1:
+        return False
+
+    if model == GraphType.CUSTOM_ER.value:
+        if number_of_edges > ((number_of_vertices * (number_of_vertices - 1)) // 2):
+            communicate_cli_message(message=f'The maximum number of edges can be '
+                                            f'{(number_of_vertices * (number_of_vertices - 1)) // 2} for '
+                                            f'{number_of_vertices} vertices in an undirected graph',
+                                    _type=MessageType.ERROR.value)
+            return False
+        if number_of_edges == ((number_of_vertices * (number_of_vertices - 1)) // 2):
+            communicate_cli_message(message=f'The resulting graph for '
+                                            f'{(number_of_vertices * (number_of_vertices - 1)) // 2} edges and for '
+                                            f'{number_of_vertices} vertices will be a '
+                                            f'{GraphType.HOMOGENEOUS.value} graph',
+                                    _type=MessageType.WARNING.value)
+            return True
+
+    if model == GraphType.CUSTOM_SCALE_FREE.value:
+        if number_of_edges is not None and \
+                all([_ is None for _ in [number_of_initial_nodes, initial_connections_per_node]]) \
+                and number_of_edges > ((number_of_vertices * (number_of_vertices - 1)) // 2):
+            communicate_cli_message(message=f'The maximum number of edges can be '
+                                            f'{(number_of_vertices * (number_of_vertices - 1)) // 2} for '
+                                            f'{number_of_vertices} vertices in an undirected graph',
+                                    _type=MessageType.ERROR.value)
+            return False
+        if number_of_edges is not None and \
+                all([_ is None for _ in [number_of_initial_nodes, initial_connections_per_node]]) \
+                and number_of_edges == ((number_of_vertices * (number_of_vertices - 1)) // 2):
+            communicate_cli_message(message=f'The resulting graph for '
+                                            f'{(number_of_vertices * (number_of_vertices - 1)) // 2} edges and for '
+                                            f'{number_of_vertices} vertices will be a '
+                                            f'{GraphType.HOMOGENEOUS.value} graph',
+                                    _type=MessageType.WARNING.value)
+            return True
+        if number_of_edges is None and \
+                not any([_ is None for _ in [number_of_initial_nodes, initial_connections_per_node]]) and \
+                initial_connections_per_node > ((number_of_initial_nodes * (number_of_initial_nodes - 1)) // 2):
+            communicate_cli_message(message=f'The maximum number of edges can be '
+                                            f'{(number_of_initial_nodes * (number_of_initial_nodes - 1)) // 2} for '
+                                            f'{number_of_initial_nodes} initial vertices in an undirected graph',
+                                    _type=MessageType.ERROR.value)
+            return False
+
+    return True
+
+
+def validate_model_cli_args(args) -> bool:
     try:
         if not args.model:
             return False
-        if args.model == GraphType.HOMOGENEOUS.value and args.number_of_vertices is None:
+        if args.model == GraphType.HOMOGENEOUS.value and (
+                args.number_of_vertices is None or
+                not validate_model_cli_arg_values(model=GraphType.HOMOGENEOUS.value,
+                                                  number_of_vertices=args.number_of_vertices)
+        ):
             return False
         elif args.model == GraphType.ER.value and (
-                any([_ is None for _ in [args.number_of_vertices, args.probability, args.seed]])):
+                any([_ is None for _ in [args.number_of_vertices, args.probability, args.seed]]) or
+                not validate_model_cli_arg_values(model=GraphType.ER.value, number_of_vertices=args.number_of_vertices,
+                                                  probability=args.probability, seed=args.seed)
+        ):
             return False
         elif args.model == GraphType.CUSTOM_ER.value and (
-                any([_ is None for _ in [args.number_of_vertices, args.number_of_edges, args.probability, args.seed]])):
+                any([_ is None for _ in [args.number_of_vertices, args.number_of_edges, args.probability, args.seed]])
+                or not validate_model_cli_arg_values(model=GraphType.CUSTOM_ER.value,
+                                                     number_of_vertices=args.number_of_vertices,
+                                                     number_of_edges=args.number_of_edges, probability=args.probability,
+                                                     seed=args.seed)
+        ):
             return False
         elif args.model == GraphType.RANDOM_FIXED.value and (
-                any([_ is None for _ in [args.number_of_vertices, args.graph_degree, args.seed]])):
+                any([_ is None for _ in [args.number_of_vertices, args.graph_degree, args.seed]]) or
+                not validate_model_cli_arg_values(model=GraphType.RANDOM_FIXED.value,
+                                                  number_of_vertices=args.number_of_vertices,
+                                                  graph_degree=args.graph_degree, seed=args.seed)
+        ):
             return False
         elif args.model == GraphType.SCALE_FREE.value and (
-                any([_ is None for _ in [args.number_of_vertices, args.seed]])):
+                any([_ is None for _ in [args.number_of_vertices, args.seed]]) or
+                not validate_model_cli_arg_values(model=GraphType.SCALE_FREE.value,
+                                                  number_of_vertices=args.number_of_vertices,
+                                                  number_of_initial_nodes=args.number_of_initial_nodes, seed=args.seed)
+        ):
             return False
         elif args.model == GraphType.CUSTOM_SCALE_FREE.value and (
                 any([_ and _ is None for _ in [args.number_of_vertices, args.seed]]) or
                 (
                     args.number_of_edges is None and
                     any([_ is None for _ in [args.number_of_initial_nodes, args.initial_connections_per_node]])
-                )
+                ) or not validate_model_cli_arg_values(model=GraphType.CUSTOM_SCALE_FREE.value,
+                                                       number_of_vertices=args.number_of_vertices,
+                                                       number_of_edges=args.number_of_edges,
+                                                       number_of_initial_nodes=args.number_of_initial_nodes,
+                                                       initial_connections_per_node=args.initial_connections_per_node,
+                                                       seed=args.seed)
 
         ):
             return False
@@ -97,7 +179,7 @@ def handle_graph_creation(args):
                 number_of_vertices=args.number_of_vertices,
                 total_number_of_edges=args.number_of_edges,
                 seed=args.seed)
-        elif args.number_of_initial_nodes and args.number_of_initial_edges:
+        elif args.number_of_initial_nodes and args.initial_connections_per_node:
             # Full Scale Free with Preferential Attachment and Incremental Growth
             FullScaleFree(args.adjacency_type).create_full_scale_free_graph(
                 number_of_vertices=args.number_of_vertices,

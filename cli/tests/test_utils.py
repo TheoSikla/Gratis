@@ -1,7 +1,7 @@
 from itertools import product
 from unittest import TestCase
 
-from cli.utils import validate_model_cli_args
+from cli.utils import validate_model_cli_args, validate_model_cli_arg_values
 from graphs.graph import GraphType
 
 
@@ -46,7 +46,7 @@ class UtilsTests(TestCase):
         data = {
             'number_of_vertices': [None, 10],
             'probability': [None, 0.5],
-            'seed': [None, 0],
+            'seed': [None, 1],
         }
         combinations = [dict(zip(data, v)) for v in product(*data.values())][:-1]
         for combination in combinations:
@@ -56,7 +56,7 @@ class UtilsTests(TestCase):
         # Ensure valid result for Erdos Renyi model #
         # ----------------------------------------- #
         self.assertTrue(validate_model_cli_args(self.MockArgs(model=GraphType.ER.value, number_of_vertices=10,
-                                                              probability=0.5, seed=0)))
+                                                              probability=0.5, seed=1)))
 
         # -------------------------------------------------- #
         # Ensure invalid result for Custom Erdos Renyi model #
@@ -65,7 +65,7 @@ class UtilsTests(TestCase):
             'number_of_vertices': [None, 10],
             'number_of_edges': [None, 10],
             'probability': [None, 0.5],
-            'seed': [None, 0],
+            'seed': [None, 1],
         }
         combinations = [dict(zip(data, v)) for v in product(*data.values())][:-1]
         for combination in combinations:
@@ -75,7 +75,7 @@ class UtilsTests(TestCase):
         # Ensure valid result for Custom Erdos Renyi model #
         # ------------------------------------------------ #
         self.assertTrue(validate_model_cli_args(self.MockArgs(model=GraphType.CUSTOM_ER.value, number_of_vertices=10,
-                                                              number_of_edges=10, probability=0.5, seed=0)))
+                                                              number_of_edges=10, probability=0.5, seed=1)))
 
         # -------------------------------------------- #
         # Ensure invalid result for Random Fixed model #
@@ -83,7 +83,7 @@ class UtilsTests(TestCase):
         data = {
             'number_of_vertices': [None, 10],
             'graph_degree': [None, 10],
-            'seed': [None, 0],
+            'seed': [None, 1],
         }
         combinations = [dict(zip(data, v)) for v in product(*data.values())][:-1]
         for combination in combinations:
@@ -92,7 +92,7 @@ class UtilsTests(TestCase):
         # ------------------------------------------ #
         # Ensure valid result for Random Fixed model #
         # ------------------------------------------ #
-        mock_args = self.MockArgs(model=GraphType.RANDOM_FIXED.value, number_of_vertices=10, graph_degree=10, seed=0)
+        mock_args = self.MockArgs(model=GraphType.RANDOM_FIXED.value, number_of_vertices=10, graph_degree=10, seed=1)
         self.assertTrue(validate_model_cli_args(mock_args))
 
         # ------------------------------------------ #
@@ -100,7 +100,7 @@ class UtilsTests(TestCase):
         # ------------------------------------------ #
         data = {
             'number_of_vertices': [None, 10],
-            'seed': [None, 0],
+            'seed': [None, 1],
         }
         combinations = [dict(zip(data, v)) for v in product(*data.values())][:-1]
         for combination in combinations:
@@ -110,14 +110,14 @@ class UtilsTests(TestCase):
         # Ensure valid result for Scale Free model #
         # ---------------------------------------- #
         self.assertTrue(validate_model_cli_args(self.MockArgs(model=GraphType.SCALE_FREE.value, number_of_vertices=10,
-                                                              seed=0)))
+                                                              seed=1)))
 
         # ------------------------------------------------- #
         # Ensure invalid result for Custom Scale Free model #
         # ------------------------------------------------- #
         data = {
             'number_of_vertices': [None, 10],
-            'seed': [None, 0],
+            'seed': [None, 1],
         }
         combinations = [dict(zip(data, v)) for v in product(*data.values())][:-1]
         for combination in combinations:
@@ -126,16 +126,16 @@ class UtilsTests(TestCase):
             )
 
         self.assertFalse(validate_model_cli_args(
-            self.MockArgs(model=GraphType.CUSTOM_SCALE_FREE.value, number_of_vertices=10, seed=0))
+            self.MockArgs(model=GraphType.CUSTOM_SCALE_FREE.value, number_of_vertices=10, seed=1))
         )
 
         self.assertFalse(validate_model_cli_args(
-            self.MockArgs(model=GraphType.CUSTOM_SCALE_FREE.value, number_of_vertices=10, seed=0,
+            self.MockArgs(model=GraphType.CUSTOM_SCALE_FREE.value, number_of_vertices=10, seed=1,
                           number_of_initial_nodes=5))
         )
 
         self.assertFalse(validate_model_cli_args(
-            self.MockArgs(model=GraphType.CUSTOM_SCALE_FREE.value, number_of_vertices=10, seed=0,
+            self.MockArgs(model=GraphType.CUSTOM_SCALE_FREE.value, number_of_vertices=10, seed=1,
                           initial_connections_per_node=2))
         )
 
@@ -143,7 +143,10 @@ class UtilsTests(TestCase):
         # Ensure valid result for Custom Scale Free model #
         # ----------------------------------------------- #
         self.assertTrue(validate_model_cli_args(self.MockArgs(model=GraphType.CUSTOM_SCALE_FREE.value,
-                                                              number_of_vertices=10, number_of_edges=10, seed=0)))
+                                                              number_of_vertices=10, number_of_edges=10, seed=1)))
         self.assertTrue(validate_model_cli_args(self.MockArgs(model=GraphType.CUSTOM_SCALE_FREE.value,
-                                                              number_of_vertices=10, seed=0, number_of_initial_nodes=5,
+                                                              number_of_vertices=10, seed=1, number_of_initial_nodes=5,
                                                               initial_connections_per_node=2)))
+
+    def test_validate_model_cli_arg_values(self):
+        pass
