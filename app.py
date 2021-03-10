@@ -21,7 +21,8 @@ import argparse
 from tkinter import *
 from tkinter import ttk
 
-from cli.utils import validate_model_cli_args, handle_graph_creation
+from cli.common import MessageType
+from cli.utils import validate_model_cli_args, handle_graph_creation, communicate_cli_message
 from conf.base import *
 from graphs.graph import AVAILABLE_GRAPH_TYPES, AVAILABLE_GRAPH_TYPES_NUMBERED, AVAILABLE_GRAPH_REPRESENTATION_TYPES, \
     AVAILABLE_GRAPH_REPRESENTATION_TYPES_NUMBERED
@@ -123,11 +124,12 @@ if __name__ == "__main__":
         GUI.center()
         GUI.mainloop()
     else:
-        if args.generate:
+        if args.generate and args.model:
             args.model = AVAILABLE_GRAPH_TYPES_NUMBERED[args.model]
             args.adjacency_type = AVAILABLE_GRAPH_REPRESENTATION_TYPES_NUMBERED[args.adjacency_type]
             if not validate_model_cli_args(args):
-                print(f'Invalid arguments supplied for the creation of {args.model} graph')
+                communicate_cli_message(f'Invalid arguments supplied for the creation of {args.model} graph',
+                                        MessageType.ERROR.value)
                 sys.exit(1)
             else:
                 handle_graph_creation(args)
