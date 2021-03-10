@@ -33,6 +33,8 @@ def communicate_cli_message(message, _type):
 
 def validate_model_cli_args(args):
     try:
+        if not args.model:
+            return False
         if args.model == GraphType.HOMOGENEOUS.value and args.number_of_vertices is None:
             return False
         elif args.model == GraphType.ER.value and (
@@ -51,7 +53,7 @@ def validate_model_cli_args(args):
                 any([_ and _ is None for _ in [args.number_of_vertices, args.seed]]) or
                 (
                     args.number_of_edges is None and
-                    any([_ is None for _ in [args.number_of_initial_nodes, args.number_of_initial_edges]])
+                    any([_ is None for _ in [args.number_of_initial_nodes, args.initial_connections_per_node]])
                 )
 
         ):
@@ -100,7 +102,7 @@ def handle_graph_creation(args):
             FullScaleFree(args.adjacency_type).create_full_scale_free_graph(
                 number_of_vertices=args.number_of_vertices,
                 number_of_initial_nodes=args.number_of_initial_nodes,
-                number_of_initial_edges=args.number_of_initial_edges,
+                number_of_initial_edges=args.initial_connections_per_node,
                 seed=args.seed)
 
 
