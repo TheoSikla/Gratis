@@ -34,6 +34,11 @@ def communicate_cli_message(message, _type):
 def validate_model_cli_arg_values(model: str, number_of_vertices=None, number_of_edges=None,
                                   number_of_initial_nodes=None, graph_degree=None, initial_connections_per_node=None,
                                   probability=None, seed=None) -> bool:
+
+    if all(_ is None for _ in [number_of_vertices, number_of_edges, number_of_initial_nodes, graph_degree,
+                                   initial_connections_per_node, probability, seed]):
+        return False
+
     # Ensure non negative and non zero numbers
     if any([_ is not None and float(_) <= 0 for _ in [number_of_vertices, number_of_edges, number_of_initial_nodes,
                                                       graph_degree, initial_connections_per_node, probability, seed]]):
@@ -59,32 +64,31 @@ def validate_model_cli_arg_values(model: str, number_of_vertices=None, number_of
             return True
 
     if model == GraphType.CUSTOM_SCALE_FREE.value:
-        if number_of_edges is not None and \
-                all([_ is None for _ in [number_of_initial_nodes, initial_connections_per_node]]) \
-                and number_of_edges > ((number_of_vertices * (number_of_vertices - 1)) // 2):
-            communicate_cli_message(message=f'The maximum number of edges can be '
-                                            f'{(number_of_vertices * (number_of_vertices - 1)) // 2} for '
-                                            f'{number_of_vertices} vertices in an undirected graph',
-                                    _type=MessageType.ERROR.value)
-            return False
-        if number_of_edges is not None and \
-                all([_ is None for _ in [number_of_initial_nodes, initial_connections_per_node]]) \
-                and number_of_edges == ((number_of_vertices * (number_of_vertices - 1)) // 2):
-            communicate_cli_message(message=f'The resulting graph for '
-                                            f'{(number_of_vertices * (number_of_vertices - 1)) // 2} edges and for '
-                                            f'{number_of_vertices} vertices will be a '
-                                            f'{GraphType.HOMOGENEOUS.value} graph',
-                                    _type=MessageType.WARNING.value)
+        if number_of_edges is not None:
+            if not all([_ is None for _ in [number_of_initial_nodes, initial_connections_per_node]]):
+                return False
+            if number_of_edges > ((number_of_vertices * (number_of_vertices - 1)) // 2):
+                communicate_cli_message(message=f'The maximum number of edges can be '
+                                                f'{(number_of_vertices * (number_of_vertices - 1)) // 2} for '
+                                                f'{number_of_vertices} vertices in an undirected graph',
+                                        _type=MessageType.ERROR.value)
+                return False
+            if number_of_edges == ((number_of_vertices * (number_of_vertices - 1)) // 2):
+                communicate_cli_message(message=f'The resulting graph for '
+                                                f'{(number_of_vertices * (number_of_vertices - 1)) // 2} edges and for '
+                                                f'{number_of_vertices} vertices will be a '
+                                                f'{GraphType.HOMOGENEOUS.value} graph',
+                                        _type=MessageType.WARNING.value)
             return True
-        if number_of_edges is None and \
-                not any([_ is None for _ in [number_of_initial_nodes, initial_connections_per_node]]) and \
-                initial_connections_per_node > ((number_of_initial_nodes * (number_of_initial_nodes - 1)) // 2):
-            communicate_cli_message(message=f'The maximum number of edges can be '
-                                            f'{(number_of_initial_nodes * (number_of_initial_nodes - 1)) // 2} for '
-                                            f'{number_of_initial_nodes} initial vertices in an undirected graph',
-                                    _type=MessageType.ERROR.value)
-            return False
-
+        if number_of_edges is None:
+            if any([_ is None for _ in [number_of_initial_nodes, initial_connections_per_node]]):
+                return False
+            if initial_connections_per_node > ((number_of_initial_nodes * (number_of_initial_nodes - 1)) // 2):
+                communicate_cli_message(message=f'The maximum number of edges can be '
+                                                f'{(number_of_initial_nodes * (number_of_initial_nodes - 1)) // 2} for '
+                                                f'{number_of_initial_nodes} initial vertices in an undirected graph',
+                                        _type=MessageType.ERROR.value)
+                return False
     return True
 
 
@@ -186,5 +190,3 @@ def handle_graph_creation(args):
                 number_of_initial_nodes=args.number_of_initial_nodes,
                 number_of_initial_edges=args.initial_connections_per_node,
                 seed=args.seed)
-
-

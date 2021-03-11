@@ -1,5 +1,6 @@
 from itertools import product
 from unittest import TestCase
+from unittest.mock import patch
 
 from cli.utils import validate_model_cli_args, validate_model_cli_arg_values
 from graphs.graph import GraphType
@@ -149,4 +150,113 @@ class UtilsTests(TestCase):
                                                               initial_connections_per_node=2)))
 
     def test_validate_model_cli_arg_values(self):
-        pass
+        # -------------------------------------------------------- #
+        # Ensure invalid result for None, zero and negative values #
+        # -------------------------------------------------------- #
+        data = {
+            'number_of_vertices': [None, 0, -1],
+            'number_of_edges': [None, 0, -1],
+            'number_of_initial_nodes': [None, 0, -1],
+            'graph_degree': [None, 0, -1],
+            'initial_connections_per_node': [None, 0, -1],
+            'probability': [None, 0, -1],
+            'seed': [None, 0, -1],
+        }
+        combinations = [dict(zip(data, v)) for v in product(*data.values())]
+        for combination in combinations:
+            self.assertFalse(validate_model_cli_arg_values(model='', **combination))
+
+        # ------------------------------------------------ #
+        # Ensure invalid result for less than one vertices #
+        # ------------------------------------------------ #
+        self.assertFalse(validate_model_cli_arg_values(model='', number_of_vertices=1))
+
+        # ---------------------------------------------- #
+        # Ensure valid result for more than one vertices #
+        # ---------------------------------------------- #
+        self.assertTrue(validate_model_cli_arg_values(model='', number_of_vertices=2))
+
+        # ----------------------------------------------------------------- #
+        # Ensure invalid result for Custom Erdos Renyi graph when edges are #
+        # more than expected, for a specific amount of vertices             #
+        # ----------------------------------------------------------------- #
+        with patch('cli.utils.communicate_cli_message') as mock_communicate_cli_message:
+            self.assertFalse(validate_model_cli_arg_values(model=GraphType.CUSTOM_ER.value, number_of_vertices=5,
+                                                           number_of_edges=5 * 4 // 2 + 1))
+            self.assertEqual(mock_communicate_cli_message.call_count, 1)
+
+        # ----------------------------------------------------------------- #
+        # Ensure valid result for Custom Erdos Renyi graph when the given   #
+        # edges will result into a Homogeneous graph, for a specific amount #
+        # of vertices                                                       #
+        # ----------------------------------------------------------------- #
+        with patch('cli.utils.communicate_cli_message') as mock_communicate_cli_message:
+            self.assertTrue(validate_model_cli_arg_values(model=GraphType.CUSTOM_ER.value, number_of_vertices=5,
+                                                          number_of_edges=5 * 4 // 2))
+            self.assertEqual(mock_communicate_cli_message.call_count, 1)
+
+        # ------------------------------------------------------------------------------------- #
+        # Ensure invalid result for Custom Scale Free graph for wrong combination of parameters #
+        # ------------------------------------------------------------------------------------- #
+        data = {
+            'number_of_initial_nodes': [None, 10],
+            'initial_connections_per_node': [None, 2],
+        }
+        combinations = [dict(zip(data, v)) for v in product(*data.values())][1:]
+        with patch('cli.utils.communicate_cli_message') as mock_communicate_cli_message:
+            for combination in combinations:
+                self.assertFalse(validate_model_cli_arg_values(model=GraphType.CUSTOM_SCALE_FREE.value,
+                                                               number_of_vertices=5, number_of_edges=2, **combination))
+                self.assertEqual(mock_communicate_cli_message.call_count, 0)
+
+        # ---------------------------------------------------------------- #
+        # Ensure invalid result for Custom Scale Free graph when edges are #
+        # more than expected, for a specific amount of vertices            #
+        # ---------------------------------------------------------------- #
+        with patch('cli.utils.communicate_cli_message') as mock_communicate_cli_message:
+            self.assertFalse(validate_model_cli_arg_values(model=GraphType.CUSTOM_SCALE_FREE.value,
+                                                           number_of_vertices=5, number_of_edges=5 * 4 // 2 + 1))
+            self.assertEqual(mock_communicate_cli_message.call_count, 1)
+
+        # ----------------------------------------------------------------- #
+        # Ensure valid result for Custom Scale Free graph when the given    #
+        # edges will result into a Homogeneous graph, for a specific amount #
+        # of vertices                                                       #
+        # ----------------------------------------------------------------- #
+        with patch('cli.utils.communicate_cli_message') as mock_communicate_cli_message:
+            self.assertTrue(validate_model_cli_arg_values(model=GraphType.CUSTOM_SCALE_FREE.value,
+                                                          number_of_vertices=5, number_of_edges=5 * 4 // 2))
+            self.assertEqual(mock_communicate_cli_message.call_count, 1)
+
+        # ------------------------------------------------------------------------------------------ #
+        # Ensure invalid result for Custom Full Scale Free graph for wrong combination of parameters #
+        # ------------------------------------------------------------------------------------------ #
+        data = {
+            'number_of_edges': [None],
+            'number_of_initial_nodes': [None, 10],
+            'initial_connections_per_node': [None, 2],
+        }
+        combinations = [dict(zip(data, v)) for v in product(*data.values())][:-1]
+        with patch('cli.utils.communicate_cli_message') as mock_communicate_cli_message:
+            for combination in combinations:
+                self.assertFalse(validate_model_cli_arg_values(model=GraphType.CUSTOM_SCALE_FREE.value,
+                                                               number_of_vertices=5, **combination))
+                self.assertEqual(mock_communicate_cli_message.call_count, 0)
+
+        # ----------------------------------------------------------------------- #
+        # Ensure invalid result for Custom Full Scale Free graph when the initial #
+        # edges are more than expected, for a specific amount of initial vertices #
+        # ----------------------------------------------------------------------- #
+        with patch('cli.utils.communicate_cli_message') as mock_communicate_cli_message:
+            self.assertFalse(validate_model_cli_arg_values(model=GraphType.CUSTOM_SCALE_FREE.value,
+                                                           number_of_vertices=10, number_of_initial_nodes=3,
+                                                           initial_connections_per_node=4))
+            self.assertEqual(mock_communicate_cli_message.call_count, 1)
+
+        # ----------------------------------------------- #
+        # Ensure valid result for Custom Scale Free graph #
+        # ----------------------------------------------- #
+        with patch('cli.utils.communicate_cli_message') as mock_communicate_cli_message:
+            self.assertTrue(validate_model_cli_arg_values(model=GraphType.CUSTOM_SCALE_FREE.value,
+                                                          number_of_vertices=5, number_of_edges=2))
+            self.assertEqual(mock_communicate_cli_message.call_count, 0)
