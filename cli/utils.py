@@ -17,8 +17,6 @@
     along with GRATIS. If not, see <https://www.gnu.org/licenses/>.
 """
 
-import sys
-
 from cli.common import AVAILABLE_MESSAGE_PREFIXES, AVAILABLE_MESSAGE_PREFIX_COLOURS, MessageColor, MessageType
 from graphs.er_graph import ErdosRenyi
 from graphs.full_scale_free_graph import FullScaleFree
@@ -194,4 +192,3 @@ def handle_graph_creation(args):
                 seed=args.seed)
     else:
         communicate_cli_message('Unknown graph model', MessageType.ERROR.value)
-        sys.exit(1)
