@@ -17,6 +17,8 @@
     along with GRATIS. If not, see <https://www.gnu.org/licenses/>.
 """
 
+import sys
+
 from cli.common import AVAILABLE_MESSAGE_PREFIXES, AVAILABLE_MESSAGE_PREFIX_COLOURS, MessageColor, MessageType
 from graphs.er_graph import ErdosRenyi
 from graphs.full_scale_free_graph import FullScaleFree
@@ -36,7 +38,7 @@ def validate_model_cli_arg_values(model: str, number_of_vertices=None, number_of
                                   probability=None, seed=None) -> bool:
 
     if all(_ is None for _ in [number_of_vertices, number_of_edges, number_of_initial_nodes, graph_degree,
-                                   initial_connections_per_node, probability, seed]):
+                               initial_connections_per_node, probability, seed]):
         return False
 
     # Ensure non negative and non zero numbers
@@ -158,12 +160,12 @@ def handle_graph_creation(args):
                                                         seed=args.seed)
     elif args.model == GraphType.CUSTOM_ER.value:
         ErdosRenyi(args.adjacency_type).create_custom_er_graph(number_of_vertices=args.number_of_vertices,
-                                                               total_number_of_edges=args.number_of_edges,
+                                                               number_of_edges=args.number_of_edges,
                                                                probability=args.probability,
                                                                seed=args.seed)
     elif args.model == GraphType.RANDOM_FIXED.value:
         RandomFixed(args.adjacency_type).create_random_fixed_graph(number_of_vertices=args.number_of_vertices,
-                                                                   connectivity=args.graph_degree,
+                                                                   graph_degree=args.graph_degree,
                                                                    seed=args.seed)
     elif args.model == GraphType.SCALE_FREE.value:
         if not args.number_of_initial_nodes:
@@ -181,12 +183,15 @@ def handle_graph_creation(args):
             # Custom Scale Free with Preferential Attachment
             ScaleFreePA(args.adjacency_type).create_custom_scale_free_graph(
                 number_of_vertices=args.number_of_vertices,
-                total_number_of_edges=args.number_of_edges,
+                number_of_edges=args.number_of_edges,
                 seed=args.seed)
         elif args.number_of_initial_nodes and args.initial_connections_per_node:
-            # Full Scale Free with Preferential Attachment and Incremental Growth
+            # Custom Full Scale Free with Preferential Attachment and Incremental Growth
             FullScaleFree(args.adjacency_type).create_full_scale_free_graph(
                 number_of_vertices=args.number_of_vertices,
                 number_of_initial_nodes=args.number_of_initial_nodes,
-                number_of_initial_edges=args.initial_connections_per_node,
+                initial_connections_per_node=args.initial_connections_per_node,
                 seed=args.seed)
+    else:
+        communicate_cli_message('Unknown graph model', MessageType.ERROR.value)
+        sys.exit(1)

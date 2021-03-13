@@ -56,7 +56,7 @@ class FullScaleFree:
             self.graph = AdjacencyListGraph(GraphRepresentationType.LIST, GraphType.SCALE_FREE)
 
     def create_full_scale_free_graph(self, number_of_vertices, number_of_initial_nodes, seed, thread=None,
-                                     number_of_initial_edges=None, **kwargs):
+                                     initial_connections_per_node=None, **kwargs):
         """ Commented lines of code serve debugging purposes. """
 
         self.graph.reset_graph()
@@ -106,7 +106,7 @@ class FullScaleFree:
                     sys.exit(0)
 
                 # If Custom Full Scale-Free Graph is chosen.
-                if number_of_initial_edges is not None and number_of_connected_edges >= number_of_initial_edges:
+                if initial_connections_per_node is not None and number_of_connected_edges >= initial_connections_per_node:
                     break
 
                 if v != b and v < b:
@@ -116,7 +116,7 @@ class FullScaleFree:
                     number_of_connected_edges += 1
 
             # If Custom Full Scale-Free Graph is chosen.
-            if number_of_initial_edges is not None and number_of_connected_edges >= number_of_initial_edges:
+            if initial_connections_per_node is not None and number_of_connected_edges >= initial_connections_per_node:
                 break
 
         #         print(f"""Connected node {int(v) + 1} ({number_of_edges[int(v)]}) edges with """
@@ -162,4 +162,4 @@ class FullScaleFree:
 
         generator.generate(self.graph.graph_representation_type, self.graph, thread)
         analyzer.analyze_generated_graph(self.graph.edges, self.graph.graph_representation_type, self.graph.graph_type,
-                                         number_of_vertices, None, None, number_of_initial_edges, None, None, seed)
+                                         number_of_vertices, None, None, initial_connections_per_node, None, None, seed)

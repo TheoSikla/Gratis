@@ -140,7 +140,7 @@ class ScaleFreePA:
         analyzer.analyze_generated_graph(self.graph.edges, self.graph.graph_representation_type, self.graph.graph_type,
                                          number_of_vertices, None, None, None, None, None, seed)
 
-    def create_custom_scale_free_graph(self, number_of_vertices, total_number_of_edges, seed, thread=None, **kwargs):
+    def create_custom_scale_free_graph(self, number_of_vertices, number_of_edges, seed, thread=None, **kwargs):
         """ Commented lines of code serve debugging purposes. """
 
         self.graph.reset_graph()
@@ -149,7 +149,7 @@ class ScaleFreePA:
             if kwargs.get('rle'):
                 self.graph.mode = "memory efficient"
 
-        number_of_edges = [0] * number_of_vertices
+        node_edges = [0] * number_of_vertices
         number_of_connected_edges = 0
 
         random.seed(seed)
@@ -176,8 +176,8 @@ class ScaleFreePA:
 
         self.graph.add_edge_undirected(random_node1, random_node2)
 
-        number_of_edges[int(random_node1)] += 1
-        number_of_edges[int(random_node2)] += 1
+        node_edges[int(random_node1)] += 1
+        node_edges[int(random_node2)] += 1
 
         number_of_connected_edges += 1
 
@@ -185,13 +185,13 @@ class ScaleFreePA:
         del graph_vector[random_node2]
 
         # print("Initial connection: ")
-        # print(f"""Connected node {int(random_node1) + 1} ({number_of_edges[int(random_node1)]}) edges with """
-        #       f"""node {int(random_node2) + 1} ({number_of_edges[int(random_node2)]}) edges.\n""")
+        # print(f"""Connected node {int(random_node1) + 1} ({node_edges[int(random_node1)]}) edges with """
+        #       f"""node {int(random_node2) + 1} ({node_edges[int(random_node2)]}) edges.\n""")
 
         # ======================================
 
         # Connected the rest of the nodes with all other with specified probability.
-        while len(graph_vector) != 0 and number_of_connected_edges < total_number_of_edges:
+        while len(graph_vector) != 0 and number_of_connected_edges < number_of_edges:
 
             if thread and thread.isStopped():  # --> Thread Status.
                 sys.exit(0)
@@ -205,19 +205,19 @@ class ScaleFreePA:
                 if thread and thread.isStopped():  # --> Thread Status.
                     sys.exit(0)
 
-                if int(random_node3) != j and number_of_edges[j] != 0:
-                    probability = number_of_edges[j] / number_of_connected_edges
+                if int(random_node3) != j and node_edges[j] != 0:
+                    probability = node_edges[j] / number_of_connected_edges
                     probability_random = random.uniform(0, 1)
 
                     if probability > probability_random:
                         self.graph.add_edge_undirected(int(random_node3), j)
-                        number_of_edges[int(random_node3)] += 1
-                        number_of_edges[j] += 1
+                        node_edges[int(random_node3)] += 1
+                        node_edges[j] += 1
 
                         number_of_connected_edges += 1
 
-            #         print(f"""Connected node {int(random_node3) + 1} ({number_of_edges[int(random_node3)]}) """
-            #               f"""edges with node {j + 1} ({number_of_edges[j]}) edges with probability {probability}""")
+            #         print(f"""Connected node {int(random_node3) + 1} ({node_edges[int(random_node3)]}) """
+            #               f"""edges with node {j + 1} ({node_edges[j]}) edges with probability {probability}""")
             # print()
 
             del graph_vector[random_node3]
@@ -228,4 +228,4 @@ class ScaleFreePA:
 
         generator.generate(self.graph.graph_representation_type, self.graph, thread)
         analyzer.analyze_generated_graph(self.graph.edges, self.graph.graph_representation_type, self.graph.graph_type,
-                                         number_of_vertices, None, total_number_of_edges, None, None, None, seed)
+                                         number_of_vertices, None, number_of_edges, None, None, None, seed)

@@ -112,7 +112,7 @@ if __name__ == "__main__":
     parser.add_argument('-nov', '--number-of-vertices', type=int, help='')
     parser.add_argument('-noe', '--number-of-edges', type=int, help='')
     parser.add_argument('-noin', '--number-of-initial-nodes', type=int, help='')
-    parser.add_argument('-ga', '--graph-degree', type=int, help='')
+    parser.add_argument('-gd', '--graph-degree', type=int, help='')
     parser.add_argument('-icpn', '--initial-connections-per-node', type=int, help='')
     parser.add_argument('-p', '--probability', type=float, help='')
     parser.add_argument('-s', '--seed', type=int, help='')

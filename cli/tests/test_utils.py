@@ -2,7 +2,7 @@ from itertools import product
 from unittest import TestCase
 from unittest.mock import patch
 
-from cli.utils import validate_model_cli_args, validate_model_cli_arg_values
+from cli.utils import validate_model_cli_args, validate_model_cli_arg_values, handle_graph_creation
 from graphs.graph import GraphType
 
 
@@ -12,9 +12,11 @@ class UtilsTests(TestCase):
     """
 
     class MockArgs:
-        def __init__(self, model=None, number_of_vertices=None, number_of_edges=None, number_of_initial_nodes=None,
-                     graph_degree=None, initial_connections_per_node=None, probability=None, seed=None):
+        def __init__(self, model=None, adjacency_type=None, number_of_vertices=None, number_of_edges=None,
+                     number_of_initial_nodes=None, graph_degree=None, initial_connections_per_node=None,
+                     probability=None, seed=None):
             self.model = model
+            self.adjacency_type = adjacency_type
             self.number_of_vertices = number_of_vertices
             self.number_of_edges = number_of_edges
             self.number_of_initial_nodes = number_of_initial_nodes
@@ -260,3 +262,83 @@ class UtilsTests(TestCase):
             self.assertTrue(validate_model_cli_arg_values(model=GraphType.CUSTOM_SCALE_FREE.value,
                                                           number_of_vertices=5, number_of_edges=2))
             self.assertEqual(mock_communicate_cli_message.call_count, 0)
+
+    def test_handle_graph_creation(self):
+        # -------------------------------------- #
+        # Ensure Homogeneous graph creation call #
+        # -------------------------------------- #
+        data = {'number_of_vertices': 10}
+        with patch('cli.utils.Homogeneous.create_homogeneous_graph') as mock_create:
+            handle_graph_creation(self.MockArgs(model=GraphType.HOMOGENEOUS.value, **data))
+            self.assertEqual(mock_create.call_count, 1)
+            mock_create.assert_called_with(**data)
+
+        # --------------------------------------- #
+        # Ensure Custom Renyi graph creation call #
+        # --------------------------------------- #
+        data = {'number_of_vertices': 10, 'probability': 0.5, 'seed': 0}
+        with patch('cli.utils.ErdosRenyi.create_er_graph') as mock_create:
+            handle_graph_creation(self.MockArgs(model=GraphType.ER.value, **data))
+            self.assertEqual(mock_create.call_count, 1)
+            mock_create.assert_called_with(**data)
+
+        # --------------------------------------------- #
+        # Ensure Custom Erdos Renyi graph creation call #
+        # --------------------------------------------- #
+        data = {'number_of_vertices': 10, 'number_of_edges': 10, 'probability': 0.5, 'seed': 0}
+        with patch('cli.utils.ErdosRenyi.create_custom_er_graph') as mock_create:
+            handle_graph_creation(self.MockArgs(model=GraphType.CUSTOM_ER.value, **data))
+            self.assertEqual(mock_create.call_count, 1)
+            mock_create.assert_called_with(**data)
+
+        # --------------------------------------- #
+        # Ensure Random Fixed graph creation call #
+        # --------------------------------------- #
+        data = {'number_of_vertices': 10, 'graph_degree': 10, 'seed': 0}
+        with patch('cli.utils.RandomFixed.create_random_fixed_graph') as mock_create:
+            handle_graph_creation(self.MockArgs(model=GraphType.RANDOM_FIXED.value, **data))
+            self.assertEqual(mock_create.call_count, 1)
+            mock_create.assert_called_with(**data)
+
+        # ------------------------------------------------------------------ #
+        # Ensure Scale Free with Preferential Attachment graph creation call #
+        # ------------------------------------------------------------------ #
+        data = {'number_of_vertices': 10, 'seed': 0}
+        with patch('cli.utils.ScaleFreePA.create_scale_free_graph') as mock_create:
+            handle_graph_creation(self.MockArgs(model=GraphType.SCALE_FREE.value, **data))
+            self.assertEqual(mock_create.call_count, 1)
+            mock_create.assert_called_with(**data)
+
+        # ---------------------------------------------------------------------------------------------- #
+        # Ensure Full Scale Free with Preferential Attachment and Incremental Growth graph creation call #
+        # ---------------------------------------------------------------------------------------------- #
+        data = {'number_of_vertices': 10, 'number_of_initial_nodes': 3, 'seed': 0}
+        with patch('cli.utils.FullScaleFree.create_full_scale_free_graph') as mock_create:
+            handle_graph_creation(self.MockArgs(model=GraphType.SCALE_FREE.value, **data))
+            self.assertEqual(mock_create.call_count, 1)
+            mock_create.assert_called_with(**data)
+
+        # ------------------------------------------------------------------------- #
+        # Ensure Custom Scale Free with Preferential Attachment graph creation call #
+        # ------------------------------------------------------------------------- #
+        data = {'number_of_vertices': 10, 'number_of_edges': 10, 'seed': 0}
+        with patch('cli.utils.ScaleFreePA.create_custom_scale_free_graph') as mock_create:
+            handle_graph_creation(self.MockArgs(model=GraphType.CUSTOM_SCALE_FREE.value, **data))
+            self.assertEqual(mock_create.call_count, 1)
+            mock_create.assert_called_with(**data)
+
+        # ----------------------------------------------------------------------------------------------------- #
+        # Ensure Custom Full Scale Free with Preferential Attachment and Incremental Growth graph creation call #
+        # ----------------------------------------------------------------------------------------------------- #
+        data = {'number_of_vertices': 10, 'number_of_initial_nodes': 3, 'initial_connections_per_node': 2, 'seed': 0}
+        with patch('cli.utils.FullScaleFree.create_full_scale_free_graph') as mock_create:
+            handle_graph_creation(self.MockArgs(model=GraphType.CUSTOM_SCALE_FREE.value, **data))
+            self.assertEqual(mock_create.call_count, 1)
+            mock_create.assert_called_with(**data)
+
+        # ------------------------------------ #
+        # Ensure error for invalid graph model #
+        # ------------------------------------ #
+        with patch('cli.utils.communicate_cli_message') as mock_communicate_cli_message:
+            handle_graph_creation(self.MockArgs(model='Unknown'))
+            self.assertEqual(mock_communicate_cli_message.call_count, 1)

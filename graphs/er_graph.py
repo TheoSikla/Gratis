@@ -106,7 +106,7 @@ class ErdosRenyi:
         analyzer.analyze_generated_graph(self.graph.edges, self.graph.graph_representation_type, self.graph.graph_type,
                                          number_of_vertices, None, None, None, None, probability, seed)
 
-    def create_custom_er_graph(self, number_of_vertices, total_number_of_edges, probability,
+    def create_custom_er_graph(self, number_of_vertices, number_of_edges, probability,
                                seed, thread=None, **kwargs):
         """ Commented lines of code serve debugging purposes. """
 
@@ -118,7 +118,7 @@ class ErdosRenyi:
 
         random.seed(seed)
 
-        number_of_edges = [0] * number_of_vertices
+        node_edges = [0] * number_of_vertices
         number_of_connected_edges = 0
 
         for i in range(number_of_vertices):
@@ -129,7 +129,7 @@ class ErdosRenyi:
 
         graph_vector = self.graph.edge_indices.copy()
 
-        while number_of_connected_edges < total_number_of_edges:
+        while number_of_connected_edges < number_of_edges:
 
             new_node = int(random.choice(list(graph_vector.keys())))
 
@@ -159,18 +159,18 @@ class ErdosRenyi:
                     sys.exit(0)
 
                 self.graph.add_edge_undirected(new_node, adjacency_vertex)
-                number_of_edges[new_node] += 1
-                number_of_edges[adjacency_vertex] += 1
+                node_edges[new_node] += 1
+                node_edges[adjacency_vertex] += 1
 
                 number_of_connected_edges += 1
 
-                # print(f"""Connected node {new_node} ({number_of_edges[new_node]}) edges with """
-                #       f"""node {adjacency_vertex} ({number_of_edges[adjacency_vertex]}) edges with probability
+                # print(f"""Connected node {new_node} ({node_edges[new_node]}) edges with """
+                #       f"""node {adjacency_vertex} ({node_edges[adjacency_vertex]}) edges with probability
                 #       {probability} > {per}""")
                 
                 # print(f"Number of connected edges {number_of_connected_edges}")
 
-            if number_of_edges[new_node] >= number_of_vertices - 1:
+            if node_edges[new_node] >= number_of_vertices - 1:
                 try:
                     del graph_vector[str(new_node)]
                     # print(f"Removed node {new_node} from play.")
@@ -179,7 +179,7 @@ class ErdosRenyi:
                 except KeyError:
                     pass
 
-            elif number_of_edges[adjacency_vertex] >= number_of_vertices - 1:
+            elif node_edges[adjacency_vertex] >= number_of_vertices - 1:
                 try:
                     del graph_vector[str(adjacency_vertex)]
                     # print(f"Removed node {adjacency_vertex} from play.")
@@ -202,4 +202,4 @@ class ErdosRenyi:
 
         generator.generate(self.graph.graph_representation_type, self.graph, thread)
         analyzer.analyze_generated_graph(self.graph.edges, self.graph.graph_representation_type, self.graph.graph_type,
-                                         number_of_vertices, None, total_number_of_edges, None, None, probability, seed)
+                                         number_of_vertices, None, number_of_edges, None, None, probability, seed)

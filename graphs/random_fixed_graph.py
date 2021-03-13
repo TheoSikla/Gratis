@@ -47,7 +47,7 @@ class RandomFixed:
         else:
             self.graph = AdjacencyListGraph(GraphRepresentationType.LIST, GraphType.RANDOM_FIXED)
 
-    def create_random_fixed_graph(self, number_of_vertices, connectivity, seed, thread=None, **kwargs):
+    def create_random_fixed_graph(self, number_of_vertices, graph_degree, seed, thread=None, **kwargs):
         """ Commented lines of code serve debugging purposes. """
 
         self.graph.reset_graph()
@@ -74,7 +74,7 @@ class RandomFixed:
 
                 # print(f"Connecting node {int(v)} with others...")
 
-                while number_of_edges[int(v)] < connectivity and len(graph_vector) != 0:
+                while number_of_edges[int(v)] < graph_degree and len(graph_vector) != 0:
 
                     if thread and thread.isStopped():
                         sys.exit(0)
@@ -85,12 +85,12 @@ class RandomFixed:
                         while random_node == v:
                             random_node = random.choice(list(graph_vector.keys()))
 
-                    if number_of_edges[int(random_node)] >= connectivity:
+                    if number_of_edges[int(random_node)] >= graph_degree:
                         del graph_vector[random_node]
                         # print(f"Removed node {int(random_node)} from play.")
                         # print(graph_vector)
 
-                    if number_of_edges[int(v)] >= connectivity:
+                    if number_of_edges[int(v)] >= graph_degree:
                         try:
                             del graph_vector[v]
                             # print(f"Removed node {int(v) + 1} from play.")
@@ -99,7 +99,7 @@ class RandomFixed:
                         except KeyError:
                             pass
 
-                    if number_of_edges[int(random_node)] < connectivity and v != random_node \
+                    if number_of_edges[int(random_node)] < graph_degree and v != random_node \
                             and not self.graph.isAdjacent(v, random_node):
 
                         self.graph.add_edge_undirected(v, random_node)
@@ -109,7 +109,7 @@ class RandomFixed:
                         # print(f"""Connected node {int(v)} ({number_of_edges[int(v)]}) """
                         #       f"""edges with node {int(random_node)} ({number_of_edges[int(random_node)]}) edges.""")
 
-                        if number_of_edges[int(v)] >= connectivity:
+                        if number_of_edges[int(v)] >= graph_degree:
                             try:
                                 del graph_vector[v]
                                 # print(f"Removed node {int(v)} from play.")
@@ -118,7 +118,7 @@ class RandomFixed:
                             except KeyError:
                                 pass
 
-                        if number_of_edges[int(random_node)] >= connectivity:
+                        if number_of_edges[int(random_node)] >= graph_degree:
                             del graph_vector[random_node]
                             # print(f"Removed node {int(random_node)} from play.")
                             # print(graph_vector)
@@ -151,4 +151,4 @@ class RandomFixed:
         generator.generate(self.graph.graph_representation_type, self.graph, thread)
         analyzer.analyze_generated_graph(self.graph.edges, self.graph.graph_representation_type,
                                          self.graph.graph_type,
-                                         number_of_vertices, connectivity, None, None, None, None, seed)
+                                         number_of_vertices, graph_degree, None, None, None, None, seed)
