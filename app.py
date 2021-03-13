@@ -18,6 +18,7 @@
 """
 
 import argparse
+from argparse import RawTextHelpFormatter
 from tkinter import *
 from tkinter import ttk
 
@@ -103,19 +104,27 @@ class App(Tk):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(formatter_class=RawTextHelpFormatter)
 
-    parser.add_argument('-g', '--generate', action='store_true', help='')
-    parser.add_argument('-m', '--model', type=int, choices=range(1, len(AVAILABLE_GRAPH_TYPES) + 1), help='')
-    parser.add_argument('-at', '--adjacency-type', type=int, help='', default=1,
+    integer_metavar = '{1,2...}'
+    parser.add_argument('-g', '--generate', action='store_true', help=ARGPARSE_HELP_STRINGS['generate'])
+    parser.add_argument('-m', '--model', type=int, metavar=integer_metavar,
+                        help=ARGPARSE_HELP_STRINGS['model'],
+                        choices=range(1, len(AVAILABLE_GRAPH_TYPES) + 1))
+    parser.add_argument('-gr', '--graph-representation', type=int, metavar=integer_metavar, default=1,
+                        help=ARGPARSE_HELP_STRINGS['graph_representation'],
                         choices=range(1, len(AVAILABLE_GRAPH_REPRESENTATION_TYPES) + 1))
-    parser.add_argument('-nov', '--number-of-vertices', type=int, help='')
-    parser.add_argument('-noe', '--number-of-edges', type=int, help='')
-    parser.add_argument('-noin', '--number-of-initial-nodes', type=int, help='')
-    parser.add_argument('-gd', '--graph-degree', type=int, help='')
-    parser.add_argument('-icpn', '--initial-connections-per-node', type=int, help='')
-    parser.add_argument('-p', '--probability', type=float, help='')
-    parser.add_argument('-s', '--seed', type=int, help='')
+    parser.add_argument('-nov', '--number-of-vertices', type=int, metavar='',
+                        help=ARGPARSE_HELP_STRINGS['number_of_vertices'])
+    parser.add_argument('-noe', '--number-of-edges', type=int, metavar='',
+                        help=ARGPARSE_HELP_STRINGS['number_of_edges'])
+    parser.add_argument('-noin', '--number-of-initial-nodes', type=int, metavar='',
+                        help=ARGPARSE_HELP_STRINGS['number_of_initial_nodes'])
+    parser.add_argument('-gd', '--graph-degree', type=int, metavar='', help=ARGPARSE_HELP_STRINGS['graph_degree'])
+    parser.add_argument('-icpn', '--initial-connections-per-node', type=int, metavar='',
+                        help=ARGPARSE_HELP_STRINGS['initial_connections_per_node'])
+    parser.add_argument('-p', '--probability', type=float, metavar='', help=ARGPARSE_HELP_STRINGS['probability'])
+    parser.add_argument('-s', '--seed', type=int, metavar='', help=ARGPARSE_HELP_STRINGS['seed'])
 
     args = parser.parse_args()
 
@@ -126,7 +135,7 @@ if __name__ == "__main__":
     else:
         if args.generate and args.model:
             args.model = AVAILABLE_GRAPH_TYPES_NUMBERED[args.model]
-            args.adjacency_type = AVAILABLE_GRAPH_REPRESENTATION_TYPES_NUMBERED[args.adjacency_type]
+            args.graph_representation = AVAILABLE_GRAPH_REPRESENTATION_TYPES_NUMBERED[args.graph_representation]
             if not validate_model_cli_args(args):
                 communicate_cli_message(message=f'Invalid arguments supplied for the creation of {args.model} graph',
                                         _type=MessageType.ERROR.value)

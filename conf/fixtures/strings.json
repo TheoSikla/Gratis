@@ -146,5 +146,18 @@
       }
     }
   },
-  "cli": {}
+  "cli": {
+    "help": {
+      "generate": "Indicates that the cli is used for graph creation",
+      "model": "The graph model.\nAvailable models:\n  1. Homogeneous\n  2. Erdos Renyi\n  3. Custom Erdos Renyi\n  4. Random Fixed\n  5. Scale Free\n  6. Custom Scale Free",
+      "graph_representation": "The graph representation.\nAvailable representations:\n  1. Adjacency Matrix\n  2. Adjacency List",
+      "number_of_vertices": "The number of vertices that the graph will have",
+      "number_of_edges": "Total number of edges that the graph will have",
+      "number_of_initial_nodes": "The number of initial nodes that the graph will have",
+      "graph_degree": "The maximum number of edges that a node can have",
+      "initial_connections_per_node": "The number of initial connections that each initial node will have",
+      "probability": "The probability of creating an edge between two nodes",
+      "seed": "The number of pseudo-randomness"
+    }
+  }
 }
