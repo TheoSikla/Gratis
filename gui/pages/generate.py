@@ -17,7 +17,10 @@
     along with GRATIS. If not, see <https://www.gnu.org/licenses/>.
 """
 
+import sys
 from time import time
+from tkinter import ttk, BooleanVar, Label, Scrollbar, Text, FLAT, StringVar, IntVar, Entry, DISABLED, NORMAL, END, \
+    TclError, messagebox
 
 from conf.base import MAIN_FRAME_BACKGROUND, BUTTON_FONT, LABEL_BACKGROUND, LABEL_FONT_LARGE, \
     GENERATE_PAGE_MAIN_LABEL_TEXT, \
@@ -48,8 +51,10 @@ from conf.base import MAIN_FRAME_BACKGROUND, BUTTON_FONT, LABEL_BACKGROUND, LABE
     GENERATE_PAGE_CUSTOM_SCALE_FREE_INITIAL_CONNECTIONS_PER_NODE_NON_ZERO_ERROR, \
     GENERATE_PAGE_CUSTOM_SCALE_FREE_VERTICES_INITIAL_NODES_NUMBER_EQUAL_ONE_ERROR, \
     GENERATE_PAGE_CUSTOM_SCALE_FREE_VERTICES_LESS_THAN_INITIAL_NODES_ERROR
-from gui.pages.page import *
 from graphs.graph import GraphRepresentationType, AVAILABLE_GRAPH_TYPES, GraphType
+from gui.pages.page import Page
+from os_recon.define_os import platform_type, transform
+from support_folders.multithreading import StoppableThread
 
 
 class GraphGeneratePage(Page):
@@ -155,26 +160,28 @@ class GraphGeneratePage(Page):
                                               text=GENERATE_PAGE_NUMBER_OF_VERTICES_LABEL_TEXT, font=self.button_font)
         self.number_of_vertices_label.grid(row=2, column=0, pady=10, sticky="e", padx=10)
 
-        self.graph_degree_label = Label(self.parameters_frame, bg=LABEL_BACKGROUND, text=GENERATE_PAGE_GRAPH_DEGREE_LABEL_TEXT,
-                                        font=self.button_font)
+        self.graph_degree_label = Label(self.parameters_frame, bg=LABEL_BACKGROUND,
+                                        text=GENERATE_PAGE_GRAPH_DEGREE_LABEL_TEXT, font=self.button_font)
 
-        self.number_of_edges_label = Label(self.parameters_frame, bg=LABEL_BACKGROUND, text=GENERATE_PAGE_NUMBER_OF_EDGES_LABEL_TEXT,
-                                           font=self.button_font)
+        self.number_of_edges_label = Label(self.parameters_frame, bg=LABEL_BACKGROUND,
+                                           text=GENERATE_PAGE_NUMBER_OF_EDGES_LABEL_TEXT, font=self.button_font)
 
         self.number_of_initial_nodes_label = Label(self.parameters_frame, bg=LABEL_BACKGROUND,
-                                                   text=GENERATE_PAGE_NUMBER_OF_INITIAL_NODES_LABEL_TEXT, font=self.button_font)
+                                                   text=GENERATE_PAGE_NUMBER_OF_INITIAL_NODES_LABEL_TEXT,
+                                                   font=self.button_font)
 
         self.initial_connections_per_node_label = Label(self.parameters_frame, bg=LABEL_BACKGROUND,
                                                         text=GENERATE_PAGE_INITIAL_CONNECTIONS_PER_NODE_LABEL_TEXT,
                                                         font=self.button_font)
 
-        self.probability_label = Label(self.parameters_frame, bg=LABEL_BACKGROUND, text=GENERATE_PAGE_PROBABILITY_LABEL_TEXT,
-                                       font=self.button_font)
+        self.probability_label = Label(self.parameters_frame, bg=LABEL_BACKGROUND,
+                                       text=GENERATE_PAGE_PROBABILITY_LABEL_TEXT, font=self.button_font)
 
-        self.seed_label = Label(self.parameters_frame, bg=LABEL_BACKGROUND, text=GENERATE_PAGE_SEED_LABEL_TEXT, font=self.button_font)
+        self.seed_label = Label(self.parameters_frame, bg=LABEL_BACKGROUND, text=GENERATE_PAGE_SEED_LABEL_TEXT,
+                                font=self.button_font)
 
-        self.classpath_label = Label(self.parameters_frame, bg=LABEL_BACKGROUND, text=GENERATE_PAGE_CLASSPATH_LABEL_TEXT,
-                                     font=self.button_font)
+        self.classpath_label = Label(self.parameters_frame, bg=LABEL_BACKGROUND,
+                                     text=GENERATE_PAGE_CLASSPATH_LABEL_TEXT, font=self.button_font)
 
         # ==============================================================================================================
 

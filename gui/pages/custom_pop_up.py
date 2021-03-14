@@ -17,10 +17,12 @@
     along with GRATIS. If not, see <https://www.gnu.org/licenses/>.
 """
 
-from os.path import join
 import webbrowser
-from gui.pages.page import *
+from os.path import join
+from tkinter import ttk, Label, messagebox
+
 from conf.base import OUTPUT_FILES_DIRECTORY
+from os_recon.define_os import platform_type
 
 
 class CustomPopUp:

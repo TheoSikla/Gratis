@@ -18,7 +18,10 @@
 """
 
 import webbrowser
-from gui.pages.page import *
+from tkinter import BooleanVar, Entry, Label, messagebox, END
+from tkinter import ttk
+
+from sqlite3_db.database import User
 
 
 class LoginCreds:

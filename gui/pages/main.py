@@ -16,9 +16,14 @@
     You should have received a copy of the GNU General Public License
     along with GRATIS. If not, see <https://www.gnu.org/licenses/>.
 """
+
+import sys
+from tkinter import ttk, Label
+
 from conf.base import MAIN_FRAME_BACKGROUND, GENERATE_AREA_BUTTON_TEXT, ANALYZE_AREA_BUTTON_TEXT, \
     VISUALIZE_AREA_BUTTON_TEXT, HISTORY_AREA_BUTTON_TEXT, EXIT_BUTTON_TEXT
-from gui.pages.page import *
+from gui.pages.page import Page
+from os_recon.define_os import transform
 
 
 class MainPage(Page):

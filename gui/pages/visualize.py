@@ -17,7 +17,9 @@
     along with GRATIS. If not, see <https://www.gnu.org/licenses/>.
 """
 
+import sys
 from time import time
+from tkinter import ttk, Label, Scrollbar, Text, FLAT, Frame, StringVar, END, messagebox, Toplevel
 
 from conf.base import MAIN_FRAME_BACKGROUND, BUTTON_FONT, LABEL_BACKGROUND, LABEL_FONT_LARGE, \
     SCROLLABLE_FRAME_BACKGROUND, SCROLLABLE_FRAME_FONT, FRAME_BACKGROUND, VISUALIZE_PAGE_MAIN_LABEL_TEXT, \
@@ -27,9 +29,10 @@ from conf.base import MAIN_FRAME_BACKGROUND, BUTTON_FONT, LABEL_BACKGROUND, LABE
     VISUALIZE_PAGE_VISUALIZATION_FAILED_ERROR, VISUALIZE_PAGE_3D_VISUALIZATION_VIA_MATRIX_LIST_ERROR, \
     VISUALIZE_PAGE_PLOTLY_FAILED_ERROR, VISUALIZE_PAGE_PLOTLY_WAIT_INFO, VISUALIZE_PAGE_PLOTLY_GRAPH_CREATE_SUCCESS, \
     VISUALIZE_PAGE_PLOTLY_FAILED_NO_GRAPH_GENERATED_ERROR
-from gui.pages.page import *
-from gui.pages.login_creads import LoginCreds
 from gui.pages.custom_pop_up import CustomPopUp
+from gui.pages.login_creads import LoginCreds
+from gui.pages.page import Page
+from os_recon.define_os import transform
 
 
 class GraphVisualizePage(Page):

@@ -35,11 +35,11 @@ class MessagePrefix(Enum):
 
 
 class MessageColor(Enum):
-    ERROR = '\u001b[38;5;197m'
-    WARNING = '\u001b[38;5;220m'
-    INFO = '\u001b[38;5;81m'
-    SUCCESS = '\u001b[38;5;48m'
-    END = '\u001b[0m'
+    ERROR = '\033[38;5;197m'
+    WARNING = '\033[38;5;220m'
+    INFO = '\033[38;5;81m'
+    SUCCESS = '\033[38;5;48m'
+    END = '\033[0m'
 
 
 AVAILABLE_MESSAGE_PREFIXES = {k.value: v.value for k, v in zip(MessageType, MessagePrefix)}

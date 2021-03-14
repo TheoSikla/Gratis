@@ -18,16 +18,23 @@
 """
 
 import argparse
+import sys
 from argparse import RawTextHelpFormatter
-from tkinter import *
-from tkinter import ttk
+from platform import system
+from tkinter import Tk, ttk
+
+from colorama import init
 
 from cli.common import MessageType
 from cli.utils import validate_model_cli_args, handle_graph_creation, communicate_cli_message
 from conf.base import *
 from graphs.graph import AVAILABLE_GRAPH_TYPES, AVAILABLE_GRAPH_TYPES_NUMBERED, AVAILABLE_GRAPH_REPRESENTATION_TYPES, \
     AVAILABLE_GRAPH_REPRESENTATION_TYPES_NUMBERED
-from gui.pages import *
+from gui.pages.analyze import GraphAnalyzePage
+from gui.pages.generate import GraphGeneratePage
+from gui.pages.history import GraphHistoryPage
+from gui.pages.main import MainPage
+from gui.pages.visualize import GraphVisualizePage
 from os_recon.define_os import transform
 
 
@@ -133,12 +140,14 @@ if __name__ == "__main__":
         GUI.center()
         GUI.mainloop()
     else:
+        if system() == 'Windows':
+            init(convert=True)
+        App.create_directories()
         if args.generate and args.model:
             args.model = AVAILABLE_GRAPH_TYPES_NUMBERED[args.model]
             args.graph_representation = AVAILABLE_GRAPH_REPRESENTATION_TYPES_NUMBERED[args.graph_representation]
             if not validate_model_cli_args(args):
                 communicate_cli_message(message=f'Invalid arguments supplied for the creation of {args.model} graph',
                                         _type=MessageType.ERROR.value)
-                sys.exit(1)
             else:
                 handle_graph_creation(args)

@@ -18,12 +18,16 @@
 """
 
 import json
+from tkinter import ttk, Canvas, Frame, Scrollbar, PhotoImage, Button, Label, TclError
 
 from conf.base import MAIN_FRAME_BACKGROUND, SCROLLABLE_FRAME_SCROLLBAR_BACKGROUND, FRAME_BACKGROUND, \
     LABEL_BACKGROUND, DELETE_IMAGE_PATH, BUTTON_IMAGE_BACKGROUND, DOWN_IMAGE_PATH, UP_IMAGE_PATH, \
     HISTORY_PAGE_DELETE_BUTTON_FALLBACK_TEXT, HISTORY_PAGE_MORE_BUTTON_FALLBACK_TEXT, \
     HISTORY_PAGE_LESS_BUTTON_FALLBACK_TEXT, HISTORY_PAGE_BACK_BUTTON_TEXT
-from gui.pages.page import *
+from gui.pages.mousewheel import MousewheelSupport
+from gui.pages.page import Page
+from os_recon.define_os import platform_type, transform
+from sqlite3_db.database import Graph
 
 
 class GraphHistoryPage(Page):

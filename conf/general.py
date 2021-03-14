@@ -20,5 +20,7 @@
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-STRINGS_PATH = os.path.join(BASE_DIR, 'conf', 'fixtures', 'strings.json')
-STYLES_PATH = os.path.join(BASE_DIR, 'conf', 'fixtures', 'styles.json')
+STRINGS_PATH = os.path.join('conf', 'fixtures', 'strings.json') if not os.environ.get('DEV', None) else \
+    os.path.join(BASE_DIR, 'conf', 'fixtures', 'strings.json')
+STYLES_PATH = os.path.join('conf', 'fixtures', 'styles.json') if not os.environ.get('DEV', None) else \
+    os.path.join(BASE_DIR, 'conf', 'fixtures', 'styles.json')

@@ -27,10 +27,11 @@ APP_NAME = 'Gratis'
 
 # Directories
 OUTPUT_FILES_DIRECTORY_NAME = 'output_files'
-OUTPUT_FILES_DIRECTORY = os.path.join(BASE_DIR, OUTPUT_FILES_DIRECTORY_NAME)
+OUTPUT_FILES_DIRECTORY = os.path.join(OUTPUT_FILES_DIRECTORY_NAME) if not os.environ.get('DEV', None) else \
+    os.path.join(BASE_DIR, OUTPUT_FILES_DIRECTORY_NAME)
 
 # Images
-IMAGES_FOLDER = os.path.join(BASE_DIR, 'images')
+IMAGES_FOLDER = os.path.join('images') if not os.environ.get('DEV', None) else os.path.join(BASE_DIR, 'images')
 BROWSE_IMAGE_FILENAME = 'folder.png'
 DELETE_IMAGE_FILENAME = 'delete.png'
 DOWN_IMAGE_FILENAME = 'down.png'

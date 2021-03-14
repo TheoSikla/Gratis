@@ -16,7 +16,12 @@
     You should have received a copy of the GNU General Public License
     along with GRATIS. If not, see <https://www.gnu.org/licenses/>.
 """
-from tkinter import filedialog
+
+import sys
+from tkinter import filedialog, Label, StringVar, BooleanVar, PhotoImage, Button, TclError, Scrollbar, Text, FLAT, \
+    NORMAL, DISABLED, Frame
+
+from tkinter import ttk
 
 from analyze.analyze import *
 from analyze.betweenness_centrality import betweenness_centrality
@@ -38,7 +43,11 @@ from conf.base import MAIN_FRAME_BACKGROUND, BUTTON_FONT, FRAME_BACKGROUND, LABE
     ANALYZE_PAGE_GRAPH_ANALYSIS_CANCEL_COMPLETED_INFO, ANALYZE_PAGE_NO_AVAILABLE_OUTPUT_ERROR, \
     ANALYZE_PAGE_LAST_GENERATED_GRAPH_ANALYSIS_SUCCESS, ANALYZE_PAGE_EITHER_ADJACENCY_MATRIX_OR_LIST_ERROR
 from graphs.graph import GraphRepresentationType
-from gui.pages.page import *
+from gui.pages.mousewheel import MousewheelSupport
+from gui.pages.page import Page
+from os_recon.define_os import transform
+from support_folders.multithreading import StoppableThread
+from support_folders.run_length_encoder import RunLengthEncoder
 from utils.file import locate_latest_file
 
 
