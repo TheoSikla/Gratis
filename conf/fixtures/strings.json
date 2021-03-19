@@ -1,5 +1,10 @@
 {
   "gui": {
+    "menu": {
+        "file_label_text": "File",
+        "file_settings_label_text": "Settings",
+        "file_exit_label_text": "Exit"
+      },
     "pages": {
       "main": {
         "widgets": {
@@ -142,6 +147,13 @@
           "info": {},
           "success": {},
           "warning": {}
+        }
+      },
+      "settings": {
+        "widgets": {
+          "themes_tab_text": "Themes",
+          "light_theme_button_text": "Light",
+          "dark_theme_button_text": "Dark"
         }
       }
     }

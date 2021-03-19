@@ -23,10 +23,10 @@ from tkinter import ttk, Canvas, Frame, Scrollbar, PhotoImage, Button, Label, Tc
 from conf.base import MAIN_FRAME_BACKGROUND, SCROLLABLE_FRAME_SCROLLBAR_BACKGROUND, FRAME_BACKGROUND, \
     LABEL_BACKGROUND, DELETE_IMAGE_PATH, BUTTON_IMAGE_BACKGROUND, DOWN_IMAGE_PATH, UP_IMAGE_PATH, \
     HISTORY_PAGE_DELETE_BUTTON_FALLBACK_TEXT, HISTORY_PAGE_MORE_BUTTON_FALLBACK_TEXT, \
-    HISTORY_PAGE_LESS_BUTTON_FALLBACK_TEXT, HISTORY_PAGE_BACK_BUTTON_TEXT
+    HISTORY_PAGE_LESS_BUTTON_FALLBACK_TEXT, HISTORY_PAGE_BACK_BUTTON_TEXT, MAIN_WINDOW_DIMENSIONS_STR
 from gui.pages.mousewheel import MousewheelSupport
 from gui.pages.page import Page
-from os_recon.define_os import platform_type, transform
+from os_recon.define_os import platform_type
 from sqlite3_db.database import Graph
 
 
@@ -190,7 +190,7 @@ class GraphHistoryPage(Page):
 
     def back(self, controller):
         # self.canvas.yview_moveto(1)
-        controller.show_frame(self.retrieve_frame(controller, 'MainPage'), transform)
+        controller.show_frame(self.retrieve_frame(controller, 'MainPage'), MAIN_WINDOW_DIMENSIONS_STR)
 
     def clean_old_data(self):
         for frame in self.graph_mini_frames:

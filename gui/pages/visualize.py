@@ -28,7 +28,7 @@ from conf.base import MAIN_FRAME_BACKGROUND, BUTTON_FONT, LABEL_BACKGROUND, LABE
     VISUALIZE_PAGE_VISUALIZATION_VIA_MATRIX_LIST_ERROR, VISUALIZE_PAGE_VISUALIZATION_COMPLETED_SUCCESS, \
     VISUALIZE_PAGE_VISUALIZATION_FAILED_ERROR, VISUALIZE_PAGE_3D_VISUALIZATION_VIA_MATRIX_LIST_ERROR, \
     VISUALIZE_PAGE_PLOTLY_FAILED_ERROR, VISUALIZE_PAGE_PLOTLY_WAIT_INFO, VISUALIZE_PAGE_PLOTLY_GRAPH_CREATE_SUCCESS, \
-    VISUALIZE_PAGE_PLOTLY_FAILED_NO_GRAPH_GENERATED_ERROR
+    VISUALIZE_PAGE_PLOTLY_FAILED_NO_GRAPH_GENERATED_ERROR, MAIN_WINDOW_DIMENSIONS_STR
 from gui.pages.custom_pop_up import CustomPopUp
 from gui.pages.login_creads import LoginCreds
 from gui.pages.page import Page
@@ -116,7 +116,7 @@ class GraphVisualizePage(Page):
         self.text_area.delete('1.0', END)
         self.text_area.update()
 
-        controller.show_frame(self.retrieve_frame(controller, 'MainPage'), transform)
+        controller.show_frame(self.retrieve_frame(controller, 'MainPage'), MAIN_WINDOW_DIMENSIONS_STR)
 
     def pajek_visualize(self):
         """ Visualizes the generated graph with the appropriate file format that pajek needs. """

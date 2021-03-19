@@ -31,6 +31,12 @@ with open(STRINGS_PATH) as f:
 GRAPH_TYPE_MATRIX_TEXT = 'Adjacency Matrix'
 GRAPH_TYPE_LIST_TEXT = 'Adjacency List'
 
+# Menu
+MENU_STRINGS = STRINGS['gui']['menu']
+FILE_LABEL_TEXT = MENU_STRINGS['file_label_text']
+FILE_SETTINGS_LABEL_TEXT = MENU_STRINGS['file_settings_label_text']
+FILE_EXIT_LABEL_TEXT = MENU_STRINGS['file_exit_label_text']
+
 # Main page
 MAIN_PAGE_WIDGETS = STRINGS['gui']['pages']['main']['widgets']
 GENERATE_AREA_BUTTON_TEXT = MAIN_PAGE_WIDGETS['generate_area_button_text']
@@ -193,6 +199,14 @@ HISTORY_PAGE_BACK_BUTTON_TEXT = HISTORY_PAGE_WIDGETS['back_button_text']
 HISTORY_PAGE_DELETE_BUTTON_FALLBACK_TEXT = HISTORY_PAGE_WIDGETS['delete_button_fallback_text']
 HISTORY_PAGE_MORE_BUTTON_FALLBACK_TEXT = HISTORY_PAGE_WIDGETS['more_button_fallback_text']
 HISTORY_PAGE_LESS_BUTTON_FALLBACK_TEXT = HISTORY_PAGE_WIDGETS['less_button_fallback_text']
+
+# Settings page
+SETTINGS_PAGE_STRINGS = STRINGS['gui']['pages']['settings']
+SETTINGS_PAGE_WIDGETS = SETTINGS_PAGE_STRINGS['widgets']
+# Settings page widgets
+SETTINGS_PAGE_THEMES_TAB_TEXT = SETTINGS_PAGE_WIDGETS['themes_tab_text']
+SETTINGS_PAGE_LIGHT_THEME_BUTTON_TEXT = SETTINGS_PAGE_WIDGETS['light_theme_button_text']
+SETTINGS_PAGE_DARK_THEME_BUTTON_TEXT = SETTINGS_PAGE_WIDGETS['dark_theme_button_text']
 
 # CLI
 ARGPARSE_HELP_STRINGS = STRINGS['cli']['help']

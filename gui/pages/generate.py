@@ -50,10 +50,10 @@ from conf.base import MAIN_FRAME_BACKGROUND, BUTTON_FONT, LABEL_BACKGROUND, LABE
     GENERATE_PAGE_CUSTOM_SCALE_FREE_INITIAL_NODES_NON_ZERO_ERROR, \
     GENERATE_PAGE_CUSTOM_SCALE_FREE_INITIAL_CONNECTIONS_PER_NODE_NON_ZERO_ERROR, \
     GENERATE_PAGE_CUSTOM_SCALE_FREE_VERTICES_INITIAL_NODES_NUMBER_EQUAL_ONE_ERROR, \
-    GENERATE_PAGE_CUSTOM_SCALE_FREE_VERTICES_LESS_THAN_INITIAL_NODES_ERROR
+    GENERATE_PAGE_CUSTOM_SCALE_FREE_VERTICES_LESS_THAN_INITIAL_NODES_ERROR, MAIN_WINDOW_DIMENSIONS_STR
 from graphs.graph import GraphRepresentationType, AVAILABLE_GRAPH_TYPES, GraphType
 from gui.pages.page import Page
-from os_recon.define_os import platform_type, transform
+from os_recon.define_os import platform_type
 from support_folders.multithreading import StoppableThread
 
 
@@ -92,7 +92,7 @@ class GraphGeneratePage(Page):
         # self.rle.grid(row=1, column=2, sticky="w")
 
         # Main Label
-        self.main_label = Label(self, bg=LABEL_BACKGROUND, text=GENERATE_PAGE_MAIN_LABEL_TEXT, font=LABEL_FONT_LARGE)
+        self.main_label = ttk.Label(self, text=GENERATE_PAGE_MAIN_LABEL_TEXT, font=LABEL_FONT_LARGE)
         self.main_label.grid(row=2, column=1)
 
         # Text Area Frame
@@ -539,7 +539,7 @@ class GraphGeneratePage(Page):
                 self.initial_connections_per_node_entry_box.grid_forget()
 
     def back(self, controller):
-        controller.show_frame(self.retrieve_frame(controller, 'MainPage'), transform)
+        controller.show_frame(self.retrieve_frame(controller, 'MainPage'), MAIN_WINDOW_DIMENSIONS_STR)
 
     @staticmethod
     def exit():

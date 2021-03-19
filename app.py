@@ -20,8 +20,7 @@
 import argparse
 import sys
 from argparse import RawTextHelpFormatter
-from platform import system
-from tkinter import Tk, ttk
+from tkinter import Tk, ttk, Menu
 
 from colorama import init
 
@@ -34,8 +33,9 @@ from gui.pages.analyze import GraphAnalyzePage
 from gui.pages.generate import GraphGeneratePage
 from gui.pages.history import GraphHistoryPage
 from gui.pages.main import MainPage
+from gui.pages.settings import SettingsPage
+from gui.pages.utils import spawn_top_level
 from gui.pages.visualize import GraphVisualizePage
-from os_recon.define_os import transform
 
 
 class App(Tk):
@@ -64,7 +64,27 @@ class App(Tk):
                              relief=RADIOBUTTON_RELIEF, font=self.button_font)
         self.style.configure('TCheckbutton', background=CHECKBUTTON_BACKGROUND, foreground=CHECKBUTTON_FOREGROUND,
                              relief=CHECKBUTTON_RELIEF, font=self.button_font)
-        self.style.configure('TLabel', background=CHECKBUTTON_BACKGROUND)
+        self.style.configure('TLabel', background=LABEL_BACKGROUND, foreground=LABEL_FOREGROUND)
+
+        # Build main menu
+        # File menu
+        file_menu = Menu(bg=MENU_ITEMS_BACKGROUND, tearoff=False)
+        file_menu.add_command(label=FILE_SETTINGS_LABEL_TEXT, font=MENU_ITEMS_FONT,
+                              command=lambda: spawn_top_level([SettingsPage], kwargs={
+                                'title': FILE_SETTINGS_LABEL_TEXT,
+                                'width': SETTINGS_WINDOW_WIDTH,
+                                'height': SETTINGS_WINDOW_HEIGHT,
+                                'bg': MAIN_FRAME_BACKGROUND
+                              }))
+        file_menu.add_command(label=FILE_EXIT_LABEL_TEXT, font=MENU_ITEMS_FONT, command=self.destroy)
+
+        # Main menu
+        menu = Menu(master=self, bg=MENU_BACKGROUND, fg=MENU_FOREGROUND, relief=MENU_RELIEF, font=MENU_FONT,
+                    activebackground=MENU_BACKGROUND)
+        file_menu.master = menu
+        self.config(menu=menu)
+        menu.add_cascade(label=FILE_LABEL_TEXT, menu=file_menu)
+        menu.add_command(label='')
 
         # Main container for Frames
         container = ttk.Frame(self)
@@ -82,7 +102,7 @@ class App(Tk):
             frame.grid(row=0, column=0, sticky='nsew')
 
         # Initiate the MainFrame
-        self.show_frame(MainPage, transform)
+        self.show_frame(MainPage, MAIN_WINDOW_DIMENSIONS_STR)
 
     def show_frame(self, cont, size):
         self.geometry(size)

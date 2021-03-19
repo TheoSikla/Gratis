@@ -1,62 +1,220 @@
 {
-  "default":{
-    "main_frame_bg":"azure3",
-    "button":{
-      "font":{
-        "family":"Dialog",
-        "size":9,
-        "style":"bold italic"
+  "dimensions": {
+    "main": {
+      "default": {
+        "width": 1000,
+        "height": 600
       },
-      "bg":"seashell3",
-      "image_bg": "azure3",
-      "fg":"black",
-      "relief":"flat",
-      "width":15
-    },
-    "frame":{
-      "bg":"azure3"
-    },
-    "radiobutton":{
-      "font":{
-        "family":"Dialog",
-        "size":9,
-        "style":"bold italic"
+      "linux": {
+        "width": 1100,
+        "height": 600
       },
-      "bg":"azure3",
-      "fg":"black",
-      "relief":"flat"
+      "windows": {
+        "width": 1000,
+        "height": 600
+      }
     },
-    "checkbutton":{
-      "font":{
-        "family":"Dialog",
-        "size":9,
-        "style":"bold italic"
+    "settings": {
+      "default": {
+        "width": 1000,
+        "height": 600
       },
-      "bg":"azure3",
-      "fg":"black",
-      "relief":"flat"
-    },
-    "label":{
-      "font":{
-        "family":"Arial",
-        "size":{
-          "large":20,
-          "medium":10
+      "linux": {
+        "width": 1100,
+        "height": 600
+      },
+      "windows": {
+        "width": 1000,
+        "height": 600
+      }
+    }
+  },
+  "styles": {
+    "light": {
+      "menu": {
+        "bg": "#f0f0f0",
+        "fg": "#000000",
+        "relief": "flat",
+        "font": {
+          "family": "Dialog",
+          "size": 9,
+          "style": ""
         },
-        "style":"bold"
+        "items": {
+          "bg": "#ffffff",
+          "fg": "#000000",
+          "relief": "flat",
+          "font": {
+            "family": "Dialog",
+            "size": 9,
+            "style": ""
+          }
+        }
       },
-      "bg":"azure3",
-      "fg":"black",
-      "relief":"flat"
+      "main_frame_bg": "#ffffff",
+      "button": {
+        "font": {
+          "family": "Dialog",
+          "size": 9,
+          "style": "bold italic"
+        },
+        "bg": "#ebebeb",
+        "image_bg": "#ffffff",
+        "fg": "#000000",
+        "relief": "flat",
+        "width": 15,
+        "internal_pad_y": 10
+      },
+      "frame": {
+        "bg": "#ffffff"
+      },
+      "radiobutton": {
+        "font": {
+          "family": "Dialog",
+          "size": 9,
+          "style": "bold italic"
+        },
+        "bg": "#ffffff",
+        "fg": "#000000",
+        "relief": "flat"
+      },
+      "checkbutton": {
+        "font": {
+          "family": "Dialog",
+          "size": 9,
+          "style": "bold italic"
+        },
+        "bg": "#ffffff",
+        "fg": "#000000",
+        "relief": "flat"
+      },
+      "label": {
+        "font": {
+          "family": "Arial",
+          "size": {
+            "large": 20,
+            "medium": 10
+          },
+          "style": "bold"
+        },
+        "bg": "#ffffff",
+        "fg": "#000000",
+        "relief": "flat"
+      },
+      "scrollable_frame": {
+        "font": {
+          "family": "consolas",
+          "size": 11,
+          "style": ""
+        },
+        "bg": "#ffffff",
+        "scrollbar_bg": null
+      },
+      "notebook": {
+        "tab": {
+          "background": "#ffffff",
+          "background_selected": "#ffffff",
+          "foreground": "#000000",
+          "font": {
+            "family": "consolas",
+            "size": 11,
+            "style": ""
+          }
+        }
+      }
     },
-    "scrollable_frame":{
-      "font":{
-        "family":"consolas",
-        "size":11,
-        "style":""
+    "dark": {
+      "menu": {
+        "bg": "#f0f0f0",
+        "fg": "#000000",
+        "relief": "flat",
+        "font": {
+          "family": "Dialog",
+          "size": 9,
+          "style": ""
+        },
+        "items": {
+          "bg": "#ffffff",
+          "fg": "#000000",
+          "relief": "flat",
+          "font": {
+            "family": "Dialog",
+            "size": 9,
+            "style": ""
+          }
+        }
       },
-      "bg":"lavender blush",
-      "scrollbar_bg": null
+      "main_frame_bg": "#2e2e2e",
+      "button": {
+        "font": {
+          "family": "Dialog",
+          "size": 9,
+          "style": "bold italic"
+        },
+        "bg": "#ebebeb",
+        "image_bg": "#2e2e2e",
+        "fg": "#000000",
+        "relief": "flat",
+        "width": 15,
+        "internal_pad_y": 10
+      },
+      "frame": {
+        "bg": "#2e2e2e"
+      },
+      "radiobutton": {
+        "font": {
+          "family": "Dialog",
+          "size": 9,
+          "style": "bold italic"
+        },
+        "bg": "#2e2e2e",
+        "fg": "#f0f0f0",
+        "relief": "flat"
+      },
+      "checkbutton": {
+        "font": {
+          "family": "Dialog",
+          "size": 9,
+          "style": "bold italic"
+        },
+        "bg": "#2e2e2e",
+        "fg": "#f0f0f0",
+        "relief": "flat"
+      },
+      "label": {
+        "font": {
+          "family": "Arial",
+          "size": {
+            "large": 20,
+            "medium": 10
+          },
+          "style": "bold"
+        },
+        "bg": "#2e2e2e",
+        "fg": "#f0f0f0",
+        "relief": "flat"
+      },
+      "scrollable_frame": {
+        "font": {
+          "family": "consolas",
+          "size": 11,
+          "style": ""
+        },
+        "bg": "#2e2e2e",
+        "scrollbar_bg": null
+      },
+      "notebook": {
+        "tab": {
+          "background": "#2e2e2e",
+          "background_selected": "#2e2e2e",
+          "foreground": "#f0f0f0",
+          "font": {
+            "family": "consolas",
+            "size": 11,
+            "style": ""
+          }
+        }
+      }
     }
   }
 }

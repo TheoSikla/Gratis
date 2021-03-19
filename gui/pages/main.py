@@ -21,9 +21,8 @@ import sys
 from tkinter import ttk, Label
 
 from conf.base import MAIN_FRAME_BACKGROUND, GENERATE_AREA_BUTTON_TEXT, ANALYZE_AREA_BUTTON_TEXT, \
-    VISUALIZE_AREA_BUTTON_TEXT, HISTORY_AREA_BUTTON_TEXT, EXIT_BUTTON_TEXT
+    VISUALIZE_AREA_BUTTON_TEXT, HISTORY_AREA_BUTTON_TEXT, EXIT_BUTTON_TEXT, MAIN_WINDOW_DIMENSIONS_STR
 from gui.pages.page import Page
-from os_recon.define_os import transform
 
 
 class MainPage(Page):
@@ -49,27 +48,31 @@ class MainPage(Page):
         # Generate area button
         self.generate_area = ttk.Button(self, text=GENERATE_AREA_BUTTON_TEXT,
                                         command=lambda: controller.show_frame(
-                                            self.retrieve_frame(controller, 'GraphGeneratePage'), transform))
+                                            self.retrieve_frame(controller, 'GraphGeneratePage'),
+                                            MAIN_WINDOW_DIMENSIONS_STR))
         self.generate_area.grid(row=2, column=1, ipady=self.ipady, padx=30)
 
         # Analyze area button
         self.analyze_area = ttk.Button(self, text=ANALYZE_AREA_BUTTON_TEXT,
                                        command=lambda: controller.show_frame(
-                                           self.retrieve_frame(controller, 'GraphAnalyzePage'), transform)
+                                           self.retrieve_frame(controller, 'GraphAnalyzePage'),
+                                           MAIN_WINDOW_DIMENSIONS_STR)
                                        )
         self.analyze_area.grid(row=2, column=2, ipady=self.ipady, padx=30)
 
         # Visualize area button
         self.visualise_area = ttk.Button(self, text=VISUALIZE_AREA_BUTTON_TEXT,
                                          command=lambda: controller.show_frame(
-                                             self.retrieve_frame(controller, 'GraphVisualizePage'), transform)
+                                             self.retrieve_frame(controller, 'GraphVisualizePage'),
+                                             MAIN_WINDOW_DIMENSIONS_STR)
                                          )
         self.visualise_area.grid(row=2, column=3, ipady=self.ipady, padx=30)
 
         # Graph History area button
         self.graph_history_area = ttk.Button(self, text=HISTORY_AREA_BUTTON_TEXT,
                                              command=lambda: [controller.show_frame(
-                                                 self.retrieve_frame(controller, 'GraphHistoryPage'), transform
+                                                 self.retrieve_frame(controller, 'GraphHistoryPage'),
+                                                 MAIN_WINDOW_DIMENSIONS_STR
                                              ),
                                                  controller.frames[
                                                      self.retrieve_frame(controller, 'GraphHistoryPage')

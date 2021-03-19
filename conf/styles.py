@@ -19,6 +19,7 @@
 
 import json
 from conf.general import STYLES_PATH
+from platform import system
 
 with open(STYLES_PATH) as f:
     try:
@@ -26,9 +27,35 @@ with open(STYLES_PATH) as f:
     except Exception:
         exit(1)
 
+
+# Define dimensions
+MAIN_WINDOW_DIMENSIONS = STYLES['dimensions']['main'][system().lower()]
+MAIN_WINDOW_DIMENSIONS_STR = 'x'.join([str(MAIN_WINDOW_DIMENSIONS['width']), str(MAIN_WINDOW_DIMENSIONS['height'])])
+SETTINGS_WINDOW_DIMENSIONS = STYLES['dimensions']['settings'][system().lower()]
+SETTINGS_WINDOW_WIDTH = MAIN_WINDOW_DIMENSIONS['width']
+SETTINGS_WINDOW_HEIGHT = MAIN_WINDOW_DIMENSIONS['height']
+SETTINGS_WINDOW_DIMENSIONS_STR = 'x'.join([str(MAIN_WINDOW_DIMENSIONS['width']), str(MAIN_WINDOW_DIMENSIONS['height'])])
+
 # Define Style
-ACTIVE_STYLE = 'default'
-STYLE = STYLES[ACTIVE_STYLE]
+ACTIVE_STYLE = 'light'
+STYLE = STYLES['styles'][ACTIVE_STYLE]
+
+# Menu
+MENU_BACKGROUND = STYLE['menu']['bg']
+MENU_FOREGROUND = STYLE['menu']['fg']
+MENU_RELIEF = STYLE['menu']['relief']
+MENU_FONT = (
+    STYLE['menu']['font']['family'], STYLE['menu']['font']['size'], STYLE['menu']['font']['style']
+)
+
+# Menu Items
+MENU_ITEMS_BACKGROUND = STYLE['menu']['items']['bg']
+MENU_ITEMS_FOREGROUND = STYLE['menu']['items']['fg']
+MENU_ITEMS_RELIEF = STYLE['menu']['items']['relief']
+MENU_ITEMS_FONT = (
+    STYLE['menu']['items']['font']['family'], STYLE['menu']['items']['font']['size'],
+    STYLE['menu']['items']['font']['style']
+)
 
 # Main Frame
 MAIN_FRAME_BACKGROUND = STYLE['main_frame_bg']
@@ -44,6 +71,7 @@ BUTTON_IMAGE_BACKGROUND = STYLE['button']['image_bg']
 BUTTON_FOREGROUND = STYLE['button']['fg']
 BUTTON_RELIEF = STYLE['button']['relief']
 BUTTON_WIDTH = STYLE['button']['width']
+BUTTON_INTERNAL_PAD_Y = STYLE['button']['internal_pad_y']
 
 # Frame
 FRAME_BACKGROUND = STYLE['frame']['bg']
@@ -83,3 +111,13 @@ SCROLLABLE_FRAME_FONT = (
 )
 SCROLLABLE_FRAME_BACKGROUND = STYLE['scrollable_frame']['bg']
 SCROLLABLE_FRAME_SCROLLBAR_BACKGROUND = STYLE['scrollable_frame']['scrollbar_bg']
+
+NOTEBOOK_TAB_STYLE = STYLE['notebook']['tab']
+NOTEBOOK_TAB_BACKGROUND = NOTEBOOK_TAB_STYLE['background']
+NOTEBOOK_TAB_BACKGROUND_SELECTED = NOTEBOOK_TAB_STYLE['background_selected']
+NOTEBOOK_TAB_FOREGROUND = NOTEBOOK_TAB_STYLE['foreground']
+NOTEBOOK_TAB_FONT = (
+    NOTEBOOK_TAB_STYLE['font']['family'],
+    NOTEBOOK_TAB_STYLE['font']['size'],
+    NOTEBOOK_TAB_STYLE['font']['style']
+)
