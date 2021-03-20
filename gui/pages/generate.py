@@ -19,10 +19,10 @@
 
 import sys
 from time import time
-from tkinter import ttk, BooleanVar, Label, Scrollbar, Text, FLAT, StringVar, IntVar, Entry, DISABLED, NORMAL, END, \
+from tkinter import ttk, BooleanVar, Text, FLAT, StringVar, IntVar, DISABLED, NORMAL, END, \
     TclError, messagebox
 
-from conf.base import MAIN_FRAME_BACKGROUND, BUTTON_FONT, LABEL_BACKGROUND, LABEL_FONT_LARGE, \
+from conf.base import BUTTON_FONT, LABEL_FONT_LARGE, \
     GENERATE_PAGE_MAIN_LABEL_TEXT, \
     SCROLLABLE_FRAME_FONT, SCROLLABLE_FRAME_BACKGROUND, GENERATE_PAGE_SELECT_GRAPH_LABEL_TEXT, LABEL_FONT_MEDIUM, \
     GRAPH_TYPE_MATRIX_TEXT, GRAPH_TYPE_LIST_TEXT, GENERATE_PAGE_INCREMENTAL_GROWTH_TEXT, \
@@ -66,7 +66,6 @@ class GraphGeneratePage(Page):
         self.controller = controller
 
         # MainPage Frame configuration
-        self.configure(bg=MAIN_FRAME_BACKGROUND)
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(20, weight=1)
@@ -79,10 +78,8 @@ class GraphGeneratePage(Page):
         self.button_font = BUTTON_FONT
 
         # Validators
-        self.vcmd_int = (self.master.register(self.validate_int),
-                         '%P', '%d')
-        self.vcmd_float = (self.master.register(self.validate_float),
-                           '%P', '%S', '%d')
+        self.vcmd_int = (self.master.register(self.validate_int), '%P', '%d')
+        self.vcmd_float = (self.master.register(self.validate_float), '%P', '%S', '%d')
 
         # Type of graph being generated
         self.graph_types = [''] + AVAILABLE_GRAPH_TYPES
@@ -99,11 +96,11 @@ class GraphGeneratePage(Page):
         # create a Frame for the Text and Scrollbar
         self.my_frame_inner = ttk.Frame(self)
         # create a Scrollbar and associate it with txt
-        self.my_scroll = Scrollbar(self.my_frame_inner, orient='vertical')
+        self.my_scroll = ttk.Scrollbar(self.my_frame_inner, orient='vertical')
         # create a Text widget
-        self.text_area = Text(self.my_frame_inner, background=SCROLLABLE_FRAME_BACKGROUND, yscrollcommand=self.my_scroll.set,
-                              width=35,
-                              height=23, relief=FLAT, borderwidth=5)
+        self.text_area = Text(self.my_frame_inner, width=35, height=23, relief=FLAT, borderwidth=5,
+                              background=SCROLLABLE_FRAME_BACKGROUND,
+                              yscrollcommand=self.my_scroll.set)
         self.text_area.bind("<FocusIn>", self.defocus)
         self.text_area.config(font=SCROLLABLE_FRAME_FONT, undo=True, wrap='word')
         self.my_scroll.config(command=self.text_area.yview)
@@ -113,8 +110,7 @@ class GraphGeneratePage(Page):
         self.my_scroll.grid(row=2, column=3, rowspan=13, columnspan=2, sticky='nesw')
 
         # Type Label
-        self.main_label = Label(self, bg=LABEL_BACKGROUND, text=GENERATE_PAGE_SELECT_GRAPH_LABEL_TEXT,
-                                font=LABEL_FONT_MEDIUM)
+        self.main_label = ttk.Label(self, text=GENERATE_PAGE_SELECT_GRAPH_LABEL_TEXT, font=LABEL_FONT_MEDIUM)
         self.main_label.grid(row=3, column=1)
 
         self.chosen_graph = StringVar()
@@ -156,32 +152,29 @@ class GraphGeneratePage(Page):
         # ==============================================================================================================
 
         # Parameter's Labels
-        self.number_of_vertices_label = Label(self.parameters_frame, bg=LABEL_BACKGROUND,
-                                              text=GENERATE_PAGE_NUMBER_OF_VERTICES_LABEL_TEXT, font=self.button_font)
+        self.number_of_vertices_label = ttk.Label(self.parameters_frame, font=self.button_font,
+                                                  text=GENERATE_PAGE_NUMBER_OF_VERTICES_LABEL_TEXT)
         self.number_of_vertices_label.grid(row=2, column=0, pady=10, sticky="e", padx=10)
 
-        self.graph_degree_label = Label(self.parameters_frame, bg=LABEL_BACKGROUND,
-                                        text=GENERATE_PAGE_GRAPH_DEGREE_LABEL_TEXT, font=self.button_font)
+        self.graph_degree_label = ttk.Label(self.parameters_frame, font=self.button_font,
+                                            text=GENERATE_PAGE_GRAPH_DEGREE_LABEL_TEXT)
 
-        self.number_of_edges_label = Label(self.parameters_frame, bg=LABEL_BACKGROUND,
-                                           text=GENERATE_PAGE_NUMBER_OF_EDGES_LABEL_TEXT, font=self.button_font)
+        self.number_of_edges_label = ttk.Label(self.parameters_frame, font=self.button_font,
+                                               text=GENERATE_PAGE_NUMBER_OF_EDGES_LABEL_TEXT)
 
-        self.number_of_initial_nodes_label = Label(self.parameters_frame, bg=LABEL_BACKGROUND,
-                                                   text=GENERATE_PAGE_NUMBER_OF_INITIAL_NODES_LABEL_TEXT,
-                                                   font=self.button_font)
+        self.number_of_initial_nodes_label = ttk.Label(self.parameters_frame, font=self.button_font,
+                                                       text=GENERATE_PAGE_NUMBER_OF_INITIAL_NODES_LABEL_TEXT)
 
-        self.initial_connections_per_node_label = Label(self.parameters_frame, bg=LABEL_BACKGROUND,
-                                                        text=GENERATE_PAGE_INITIAL_CONNECTIONS_PER_NODE_LABEL_TEXT,
-                                                        font=self.button_font)
+        self.initial_connections_per_node_label = ttk.Label(self.parameters_frame, font=self.button_font,
+                                                            text=GENERATE_PAGE_INITIAL_CONNECTIONS_PER_NODE_LABEL_TEXT)
 
-        self.probability_label = Label(self.parameters_frame, bg=LABEL_BACKGROUND,
-                                       text=GENERATE_PAGE_PROBABILITY_LABEL_TEXT, font=self.button_font)
+        self.probability_label = ttk.Label(self.parameters_frame, font=self.button_font,
+                                           text=GENERATE_PAGE_PROBABILITY_LABEL_TEXT)
 
-        self.seed_label = Label(self.parameters_frame, bg=LABEL_BACKGROUND, text=GENERATE_PAGE_SEED_LABEL_TEXT,
-                                font=self.button_font)
+        self.seed_label = ttk.Label(self.parameters_frame, font=self.button_font, text=GENERATE_PAGE_SEED_LABEL_TEXT)
 
-        self.classpath_label = Label(self.parameters_frame, bg=LABEL_BACKGROUND,
-                                     text=GENERATE_PAGE_CLASSPATH_LABEL_TEXT, font=self.button_font)
+        self.classpath_label = ttk.Label(self.parameters_frame, font=self.button_font,
+                                         text=GENERATE_PAGE_CLASSPATH_LABEL_TEXT)
 
         # ==============================================================================================================
 
@@ -189,52 +182,46 @@ class GraphGeneratePage(Page):
             "Initial Connections per Node", "Probability", "Seed", "Classpath". '''
 
         self.number_of_vertices_entry_result = IntVar()
-        self.number_of_vertices_entry_box = Entry(self.parameters_frame,
-                                                  textvariable=self.number_of_vertices_entry_result,
-                                                  width=12, validate='key', validatecommand=self.vcmd_int)
+        self.number_of_vertices_entry_box = ttk.Entry(self.parameters_frame,
+                                                      textvariable=self.number_of_vertices_entry_result,
+                                                      width=12, validate='key', validatecommand=self.vcmd_int)
         self.number_of_vertices_entry_box.grid(row=2, column=1, sticky="w")
 
         self.graph_degree_result = IntVar()
-        self.graph_degree_entry_box = Entry(self.parameters_frame, disabledbackground="grey50",
-                                            disabledforeground="grey50",
-                                            textvariable=self.graph_degree_result, width=12, validate='key',
-                                            validatecommand=self.vcmd_int)
+        self.graph_degree_entry_box = ttk.Entry(self.parameters_frame,
+                                                textvariable=self.graph_degree_result, width=12, validate='key',
+                                                validatecommand=self.vcmd_int)
 
         self.number_of_edges_result = IntVar()
-        self.number_of_edges_entry_box = Entry(self.parameters_frame, disabledbackground="grey50",
-                                               disabledforeground="grey50",
-                                               textvariable=self.number_of_edges_result, width=12, validate='key',
-                                               validatecommand=self.vcmd_int)
+        self.number_of_edges_entry_box = ttk.Entry(self.parameters_frame,
+                                                   textvariable=self.number_of_edges_result, width=12, validate='key',
+                                                   validatecommand=self.vcmd_int)
 
         self.number_of_initial_nodes_result = IntVar()
-        self.number_of_initial_nodes_entry_box = Entry(self.parameters_frame, disabledbackground="grey50",
-                                                       disabledforeground="grey50",
-                                                       textvariable=self.number_of_initial_nodes_result, width=12,
-                                                       validate='key', validatecommand=self.vcmd_int)
+        self.number_of_initial_nodes_entry_box = ttk.Entry(self.parameters_frame,
+                                                           textvariable=self.number_of_initial_nodes_result, width=12,
+                                                           validate='key', validatecommand=self.vcmd_int)
 
         self.initial_connections_per_node_result = IntVar()
-        self.initial_connections_per_node_entry_box = Entry(self.parameters_frame, disabledbackground="grey50",
-                                                            disabledforeground="grey50",
-                                                            textvariable=self.initial_connections_per_node_result,
-                                                            width=12, validate='key',
-                                                            validatecommand=self.vcmd_int)
+        self.initial_connections_per_node_entry_box = ttk.Entry(self.parameters_frame,
+                                                                textvariable=self.initial_connections_per_node_result,
+                                                                width=12, validate='key',
+                                                                validatecommand=self.vcmd_int)
 
         self.probability_result = StringVar()
         self.probability_result.set("0.0")
-        self.probability_entry_box = Entry(self.parameters_frame, disabledbackground="grey50",
-                                           disabledforeground="grey50",
-                                           textvariable=self.probability_result, width=12, validate='key',
-                                           validatecommand=self.vcmd_float)
+        self.probability_entry_box = ttk.Entry(self.parameters_frame,
+                                               textvariable=self.probability_result, width=12, validate='key',
+                                               validatecommand=self.vcmd_float)
 
         self.seed_result = IntVar()
-        self.seed_entry_box = Entry(self.parameters_frame, disabledbackground="grey50", disabledforeground="grey50",
-                                    textvariable=self.seed_result, width=12, validate='key',
-                                    validatecommand=self.vcmd_int)
+        self.seed_entry_box = ttk.Entry(self.parameters_frame,
+                                        textvariable=self.seed_result, width=12, validate='key',
+                                        validatecommand=self.vcmd_int)
 
         self.classpath_result = StringVar()
-        self.classpath_entry_box = Entry(self.parameters_frame, disabledbackground="grey50",
-                                         disabledforeground="grey50",
-                                         textvariable=self.classpath_result, width=30)
+        self.classpath_entry_box = ttk.Entry(self.parameters_frame,
+                                             textvariable=self.classpath_result, width=30)
         # ==============================================================================================================
 
         # Buttons Frame
@@ -983,3 +970,11 @@ class GraphGeneratePage(Page):
 
             except NameError:
                 pass
+
+    def refresh_widget_style(self, style):
+        super(GraphGeneratePage, self).refresh_widget_style(style=style)
+        self.text_area.configure(bg=style['scrollable_frame']['bg'], font=(
+            style['scrollable_frame']['font']['family'],
+            style['scrollable_frame']['font']['size'],
+            style['scrollable_frame']['font']['style']
+        ))

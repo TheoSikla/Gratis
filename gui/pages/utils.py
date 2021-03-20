@@ -30,11 +30,12 @@ def center_tk_window(window, height, width):
 
 
 def get_top_level(frames, kwargs=None):
+    master = kwargs.pop('master')
     title = kwargs.pop('title')
     width = kwargs.get('width')
     height = kwargs.get('height')
 
-    top_level = Toplevel(**kwargs)
+    top_level = Toplevel(master=master, **kwargs)
     # Hide the toplevel
     top_level.withdraw()
     top_level.geometry(center_tk_window(window=top_level, height=width, width=height))
@@ -69,9 +70,12 @@ def get_top_level(frames, kwargs=None):
     return top_level
 
 
-def spawn_top_level(frames, kwargs=None):
+def spawn_top_level(frames, kwargs=None, topmost=None, return_top_level=None):
     top_level = get_top_level(frames, kwargs=kwargs)
     # Get the focus and wait for the toplevel
     top_level.grab_set()
-    top_level.attributes('-topmost', True)
-    top_level.wait_window(top_level)
+    if topmost:
+        top_level.attributes('-topmost', True)
+    top_level.master.wait_window(top_level)
+    if return_top_level:
+        return top_level

@@ -17,15 +17,30 @@
     along with GRATIS. If not, see <https://www.gnu.org/licenses/>.
 """
 
-from tkinter import ttk
+import json
+from enum import Enum
+
+from conf.general import SETTINGS_PATH
 
 
-class Page(ttk.Frame):
-    def __init__(self, *args, **kwargs):
-        super(Page, self).__init__(*args, **kwargs)
+class Themes(Enum):
+    LIGHT = 'light'
+    DARK = 'dark'
 
-    def retrieve_frame(self, controller, frame_name: str):
-        return next(val for val in controller.frames.keys() if val.__name__ == frame_name)
 
-    def refresh_widget_style(self, style):
-        pass
+def load_settings():
+    with open(SETTINGS_PATH) as f:
+        try:
+            SETTINGS = json.load(f)
+            return SETTINGS
+        except Exception:
+            exit(1)
+
+
+def get_theme() -> str:
+    return load_settings()['theme']
+
+
+def commit_settings(settings: dict):
+    with open(SETTINGS_PATH, 'w') as _:
+        json.dump(settings, _, indent=2)

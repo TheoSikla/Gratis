@@ -19,27 +19,29 @@
 
 import sys
 from time import time
-from tkinter import ttk, Label, Scrollbar, Text, FLAT, Frame, StringVar, END, messagebox, Toplevel
+from tkinter import ttk, Text, FLAT, StringVar, END, messagebox, Toplevel
 
-from conf.base import MAIN_FRAME_BACKGROUND, BUTTON_FONT, LABEL_BACKGROUND, LABEL_FONT_LARGE, \
-    SCROLLABLE_FRAME_BACKGROUND, SCROLLABLE_FRAME_FONT, FRAME_BACKGROUND, VISUALIZE_PAGE_MAIN_LABEL_TEXT, \
+from conf.base import MAIN_FRAME_BACKGROUND, BUTTON_FONT, LABEL_FONT_LARGE, \
+    SCROLLABLE_FRAME_BACKGROUND, SCROLLABLE_FRAME_FONT, VISUALIZE_PAGE_MAIN_LABEL_TEXT, \
     GRAPH_TYPE_MATRIX_TEXT, GRAPH_TYPE_LIST_TEXT, VISUALIZE_PAGE_PAJEK_BUTTON_TEXT, VISUALIZE_PAGE_PLOTLY_BUTTON_TEXT, \
     VISUALIZE_PAGE_MATPLOTLIB_BUTTON_TEXT, VISUALIZE_PAGE_BACK_BUTTON_TEXT, VISUALIZE_PAGE_EXIT_BUTTON_TEXT, \
     VISUALIZE_PAGE_VISUALIZATION_VIA_MATRIX_LIST_ERROR, VISUALIZE_PAGE_VISUALIZATION_COMPLETED_SUCCESS, \
     VISUALIZE_PAGE_VISUALIZATION_FAILED_ERROR, VISUALIZE_PAGE_3D_VISUALIZATION_VIA_MATRIX_LIST_ERROR, \
     VISUALIZE_PAGE_PLOTLY_FAILED_ERROR, VISUALIZE_PAGE_PLOTLY_WAIT_INFO, VISUALIZE_PAGE_PLOTLY_GRAPH_CREATE_SUCCESS, \
-    VISUALIZE_PAGE_PLOTLY_FAILED_NO_GRAPH_GENERATED_ERROR, MAIN_WINDOW_DIMENSIONS_STR
+    VISUALIZE_PAGE_PLOTLY_FAILED_NO_GRAPH_GENERATED_ERROR, MAIN_WINDOW_DIMENSIONS_STR, LOGIN_WINDOW_WIDTH, \
+    LOGIN_WINDOW_HEIGHT
 from gui.pages.custom_pop_up import CustomPopUp
 from gui.pages.login_creads import LoginCreds
 from gui.pages.page import Page
-from os_recon.define_os import transform
+from gui.pages.utils import spawn_top_level
 
 
 class GraphVisualizePage(Page):
     def __init__(self, parent, controller):
         super(GraphVisualizePage, self).__init__(parent)
 
-        self.configure(bg=MAIN_FRAME_BACKGROUND)
+        self.controller = controller
+
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(20, weight=1)
@@ -49,14 +51,14 @@ class GraphVisualizePage(Page):
         self.button_font = BUTTON_FONT
 
         # Main Label
-        self.main_label = Label(self, bg=LABEL_BACKGROUND, text=VISUALIZE_PAGE_MAIN_LABEL_TEXT, font=LABEL_FONT_LARGE)
+        self.main_label = ttk.Label(self, text=VISUALIZE_PAGE_MAIN_LABEL_TEXT, font=LABEL_FONT_LARGE)
         self.main_label.grid(row=1, column=1, padx=20)
 
         # Text Area Frame
         # create a Frame for the Text and Scrollbar
         self.my_frame_inner = ttk.Frame(self)
         # create a Scrollbar and associate it with txt
-        self.my_scroll = Scrollbar(self.my_frame_inner, orient='vertical')
+        self.my_scroll = ttk.Scrollbar(self.my_frame_inner, orient='vertical')
         # create a Text widget
         self.text_area = Text(self.my_frame_inner, background=SCROLLABLE_FRAME_BACKGROUND,
                               yscrollcommand=self.my_scroll.set, width=35, height=23, relief=FLAT, borderwidth=5)
@@ -69,7 +71,7 @@ class GraphVisualizePage(Page):
         self.my_scroll.grid(row=1, column=3, rowspan=13, columnspan=2, sticky='nesw')
 
         # Buttons Frame
-        self.buttons_frames = Frame(self, bg=FRAME_BACKGROUND)
+        self.buttons_frames = ttk.Frame(self)
         self.buttons_frames.grid_propagate(0)
         self.buttons_frames.configure(height=250, width=400)
         self.buttons_frames.grid(row=2, column=1, padx=10)
@@ -90,7 +92,7 @@ class GraphVisualizePage(Page):
 
         # Plotly Visualize Button
         self.plotly_visualize_button = ttk.Button(self.buttons_frames, text=VISUALIZE_PAGE_PLOTLY_BUTTON_TEXT,
-                                                  command=self.Spawn_Login_Creds)
+                                                  command=self.spawn_login_creds)
         self.plotly_visualize_button.grid(row=1, column=1, ipady=10, ipadx=15)
 
         # 2D Matplotlib Visualize Button
@@ -135,22 +137,26 @@ class GraphVisualizePage(Page):
             else:
                 messagebox.showerror("Error", VISUALIZE_PAGE_VISUALIZATION_FAILED_ERROR)
 
-    def Spawn_Login_Creds(self):
+    def spawn_login_creds(self):
         if self.adjacency_type_selected.get() == "":
             messagebox.showerror("Error", VISUALIZE_PAGE_3D_VISUALIZATION_VIA_MATRIX_LIST_ERROR)
         else:
-            root2 = Toplevel()
-            creds_GUI = LoginCreds(root2)
-            self.master.wait_window(root2)
+            root2 = spawn_top_level([LoginCreds], kwargs={
+                'master': self,
+                'title': "Login",
+                'width': LOGIN_WINDOW_WIDTH,
+                'height': LOGIN_WINDOW_HEIGHT,
+                'bg': MAIN_FRAME_BACKGROUND
+            }, return_top_level=True).frames[LoginCreds]
 
-            if creds_GUI.username_entry_result == "" or creds_GUI.api_key_entry_result == "":
+            if root2.username_entry_result == "" or root2.api_key_entry_result == "":
                 self.text_area.delete('1.0', END)
                 self.text_area.update()
                 self.text_area.insert(END, VISUALIZE_PAGE_PLOTLY_FAILED_ERROR)
                 self.text_area.update()
             else:
-                self.plotly_visualize(creds_GUI.username_entry_result, creds_GUI.api_key_entry_result,
-                                      creds_GUI.filename_entry_result)
+                self.plotly_visualize(root2.username_entry_result, root2.api_key_entry_result,
+                                      root2.filename_entry_result)
 
     def plotly_visualize(self, username, api_key, output_filename):
         """ Visualizes the generated graph in 3D form with the appropriate file format that plotly needs. """
@@ -186,7 +192,7 @@ class GraphVisualizePage(Page):
                 self.text_area.update()
                 self.text_area.insert(END, VISUALIZE_PAGE_PLOTLY_FAILED_ERROR)
                 self.text_area.update()
-                self.Spawn_Login_Creds()
+                self.spawn_login_creds()
         except TypeError:
             self.text_area.delete('1.0', END)
             self.text_area.update()
@@ -218,3 +224,11 @@ class GraphVisualizePage(Page):
         custom_popup = CustomPopUp(root3)
         custom_popup.plotly_popup(url)
         self.master.wait_window(root3)
+
+    def refresh_widget_style(self, style):
+        super(GraphVisualizePage, self).refresh_widget_style(style=style)
+        self.text_area.configure(bg=style['scrollable_frame']['bg'], font=(
+            style['scrollable_frame']['font']['family'],
+            style['scrollable_frame']['font']['size'],
+            style['scrollable_frame']['font']['style']
+        ))

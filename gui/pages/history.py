@@ -18,10 +18,9 @@
 """
 
 import json
-from tkinter import ttk, Canvas, Frame, Scrollbar, PhotoImage, Button, Label, TclError
+from tkinter import ttk, Canvas, PhotoImage, TclError
 
-from conf.base import MAIN_FRAME_BACKGROUND, SCROLLABLE_FRAME_SCROLLBAR_BACKGROUND, FRAME_BACKGROUND, \
-    LABEL_BACKGROUND, DELETE_IMAGE_PATH, BUTTON_IMAGE_BACKGROUND, DOWN_IMAGE_PATH, UP_IMAGE_PATH, \
+from conf.base import MAIN_FRAME_BACKGROUND, DELETE_IMAGE_PATH, DOWN_IMAGE_PATH, UP_IMAGE_PATH, \
     HISTORY_PAGE_DELETE_BUTTON_FALLBACK_TEXT, HISTORY_PAGE_MORE_BUTTON_FALLBACK_TEXT, \
     HISTORY_PAGE_LESS_BUTTON_FALLBACK_TEXT, HISTORY_PAGE_BACK_BUTTON_TEXT, MAIN_WINDOW_DIMENSIONS_STR
 from gui.pages.mousewheel import MousewheelSupport
@@ -37,7 +36,6 @@ class GraphHistoryPage(Page):
         self.parent = parent
         self.controller = controller
 
-        self.configure(bg=MAIN_FRAME_BACKGROUND)
         self.rowconfigure(0, weight=1)
         self.columnconfigure(0, weight=1)
 
@@ -54,9 +52,8 @@ class GraphHistoryPage(Page):
 
         self.canvas = Canvas(self, borderwidth=0, background=MAIN_FRAME_BACKGROUND, highlightthickness=1,
                              highlightbackground=MAIN_FRAME_BACKGROUND)
-        self.graphs_frame = Frame(self.canvas, background=MAIN_FRAME_BACKGROUND)
-        self.vsb = Scrollbar(self, orient="vertical", command=self.canvas.yview,
-                             bg=SCROLLABLE_FRAME_SCROLLBAR_BACKGROUND)
+        self.graphs_frame = ttk.Frame(self.canvas)
+        self.vsb = ttk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
         self.canvas.configure(yscrollcommand=self.vsb.set)
 
         self.vsb.grid(row=0, column=1, sticky="ns")
@@ -84,7 +81,7 @@ class GraphHistoryPage(Page):
     def grid_data(self):
         for i in range(self.load_counter, self.load_counter + 5):
             self.graph_mini_frames[i].grid(pady=10, padx=10, sticky="news")
-            self.graph_label_id[i].grid(row=0, column=0, sticky="news")
+            self.graph_label_id[i].grid(row=0, column=0, sticky="news", padx=10)
             self.graphs[i].grid(row=0, column=1, sticky='nesw')
             self.buttons_frames[i].grid(row=0, column=2, sticky="news")
             self.delete_buttons[i].grid(row=0, column=0, sticky="n")
@@ -101,7 +98,7 @@ class GraphHistoryPage(Page):
             graph_contents = ''
 
             self.graph_mini_frames.append(
-                Frame(self.graphs_frame, bg=FRAME_BACKGROUND, height=77, borderwidth="1", relief="solid"))
+                ttk.Frame(self.graphs_frame, height=77, borderwidth="1", relief="solid"))
             if platform_type == "Windows":
                 self.graph_mini_frames[-1].config(width=900)
             else:
@@ -111,8 +108,8 @@ class GraphHistoryPage(Page):
             self.graph_mini_frames[-1].columnconfigure(1, weight=1)
 
             self.graph_label_id.append(
-                Label(self.graph_mini_frames[-1], text=f"{counter + 1}", bg=LABEL_BACKGROUND, width=5, height=10,
-                      font='Arial 18 bold'))
+                ttk.Label(self.graph_mini_frames[-1], text=f"{counter + 1}", font='Arial 18 bold',
+                          style='HistoryPage.Counter.TLabel'))
             self.graph_label_id[-1].grid_propagate(0)
 
             graph_contents += f"Generated at: {graph[2]}\n"
@@ -121,10 +118,10 @@ class GraphHistoryPage(Page):
                 graph_contents += f"{k.replace('_', ' ')}: {v}\n"
 
             self.graphs.append(
-                Label(self.graph_mini_frames[-1], text=graph_contents, width=10, bg=LABEL_BACKGROUND, justify="left",
-                      anchor="nw", font='Arial 15'))
+                ttk.Label(self.graph_mini_frames[-1], text=graph_contents, style='HistoryPage.Content.TLabel',
+                          font='Arial 15'))
 
-            self.buttons_frames.append(Frame(self.graph_mini_frames[-1], bg=FRAME_BACKGROUND, width=300))
+            self.buttons_frames.append(ttk.Frame(self.graph_mini_frames[-1], width=300))
             self.buttons_frames[-1].grid_propagate(False)
             self.buttons_frames[-1].rowconfigure(0, weight=1)
             self.buttons_frames[-1].columnconfigure(0, weight=1)
@@ -132,40 +129,33 @@ class GraphHistoryPage(Page):
 
             try:
                 delete_graph = PhotoImage(file=DELETE_IMAGE_PATH)
-                self.delete_buttons.append(Button(self.buttons_frames[-1], image=delete_graph, highlightthickness=1,
-                                                  highlightbackground=BUTTON_IMAGE_BACKGROUND,
-                                                  command=lambda x=(int(counter), graph[0]): self.delete_button_func(
-                                                      x[0], x[1])))
+                self.delete_buttons.append(ttk.Button(self.buttons_frames[-1], image=delete_graph,
+                                                      command=lambda x=(int(counter), graph[0]):
+                                                      self.delete_button_func(x[0], x[1])))
                 self.delete_buttons[-1].image = delete_graph
-                self.delete_buttons[-1].config(bg=BUTTON_IMAGE_BACKGROUND, relief='sunken', borderwidth=0)
 
                 more_graph = PhotoImage(file=DOWN_IMAGE_PATH)
                 self.more_buttons.append(
-                    Button(self.buttons_frames[-1], image=more_graph, text=counter, highlightthickness=1,
-                           highlightbackground=BUTTON_IMAGE_BACKGROUND,
-                           command=lambda x=int(counter): self.more_button_func(x)))
+                    ttk.Button(self.buttons_frames[-1], image=more_graph, text=counter,
+                               command=lambda x=int(counter): self.more_button_func(x)))
                 self.more_buttons[-1].image = more_graph
-                self.more_buttons[-1].config(bg=BUTTON_IMAGE_BACKGROUND, relief='sunken', borderwidth=0)
 
                 less_graph = PhotoImage(file=UP_IMAGE_PATH)
                 self.less_buttons.append(
-                    Button(self.buttons_frames[-1], image=less_graph, text=counter, highlightthickness=1,
-                           highlightbackground=BUTTON_IMAGE_BACKGROUND,
-                           command=lambda x=int(counter): self.less_button_func(x)))
+                    ttk.Button(self.buttons_frames[-1], image=less_graph, text=counter,
+                               command=lambda x=int(counter): self.less_button_func(x)))
                 self.less_buttons[-1].image = less_graph
-                self.less_buttons[-1].config(bg=BUTTON_IMAGE_BACKGROUND, relief='sunken', borderwidth=0)
             except TclError:
-                self.delete_buttons.append(Button(self.buttons_frames[-1],
-                                                  text=HISTORY_PAGE_DELETE_BUTTON_FALLBACK_TEXT,
-                                                  command=lambda x=(int(counter), graph[0]): self.delete_button_func(
-                                                      x[0], x[1])))
-                self.delete_buttons[-1].config(bg=BUTTON_IMAGE_BACKGROUND, relief='sunken', borderwidth=1)
-                self.more_buttons.append(Button(self.buttons_frames[-1], text=HISTORY_PAGE_MORE_BUTTON_FALLBACK_TEXT,
-                                                command=lambda x=int(counter): self.more_button_func(x)))
-                self.more_buttons[-1].config(bg=BUTTON_IMAGE_BACKGROUND, relief='sunken', borderwidth=1)
-                self.less_buttons.append(Button(self.buttons_frames[-1], text=HISTORY_PAGE_LESS_BUTTON_FALLBACK_TEXT,
-                                                command=lambda x=int(counter): self.less_button_func(x)))
-                self.less_buttons[-1].config(bg=BUTTON_IMAGE_BACKGROUND, relief='sunken', borderwidth=1)
+                self.delete_buttons.append(ttk.Button(self.buttons_frames[-1],
+                                                      text=HISTORY_PAGE_DELETE_BUTTON_FALLBACK_TEXT,
+                                                      command=lambda x=(int(counter), graph[0]):
+                                                      self.delete_button_func(x[0], x[1])))
+                self.more_buttons.append(ttk.Button(self.buttons_frames[-1],
+                                                    text=HISTORY_PAGE_MORE_BUTTON_FALLBACK_TEXT,
+                                                    command=lambda x=int(counter): self.more_button_func(x)))
+                self.less_buttons.append(ttk.Button(self.buttons_frames[-1],
+                                                    text=HISTORY_PAGE_LESS_BUTTON_FALLBACK_TEXT,
+                                                    command=lambda x=int(counter): self.less_button_func(x)))
 
             graph_contents = ''
             counter += 1
@@ -212,3 +202,7 @@ class GraphHistoryPage(Page):
             self.clean_old_data()
             self.data()
             self.scroll_possition_check()
+
+    def refresh_widget_style(self, style):
+        super(GraphHistoryPage, self).refresh_widget_style(style=style)
+        self.canvas.configure(background=style['main_frame_bg'], highlightbackground=style['main_frame_bg'])

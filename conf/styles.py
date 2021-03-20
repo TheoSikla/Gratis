@@ -21,6 +21,8 @@ import json
 from conf.general import STYLES_PATH
 from platform import system
 
+from conf.settings import get_theme
+
 with open(STYLES_PATH) as f:
     try:
         STYLES = json.load(f)
@@ -31,13 +33,20 @@ with open(STYLES_PATH) as f:
 # Define dimensions
 MAIN_WINDOW_DIMENSIONS = STYLES['dimensions']['main'][system().lower()]
 MAIN_WINDOW_DIMENSIONS_STR = 'x'.join([str(MAIN_WINDOW_DIMENSIONS['width']), str(MAIN_WINDOW_DIMENSIONS['height'])])
+
 SETTINGS_WINDOW_DIMENSIONS = STYLES['dimensions']['settings'][system().lower()]
-SETTINGS_WINDOW_WIDTH = MAIN_WINDOW_DIMENSIONS['width']
-SETTINGS_WINDOW_HEIGHT = MAIN_WINDOW_DIMENSIONS['height']
-SETTINGS_WINDOW_DIMENSIONS_STR = 'x'.join([str(MAIN_WINDOW_DIMENSIONS['width']), str(MAIN_WINDOW_DIMENSIONS['height'])])
+SETTINGS_WINDOW_WIDTH = SETTINGS_WINDOW_DIMENSIONS['width']
+SETTINGS_WINDOW_HEIGHT = SETTINGS_WINDOW_DIMENSIONS['height']
+SETTINGS_WINDOW_DIMENSIONS_STR = 'x'.join([str(SETTINGS_WINDOW_DIMENSIONS['width']),
+                                           str(SETTINGS_WINDOW_DIMENSIONS['height'])])
+
+LOGIN_WINDOW_DIMENSIONS = STYLES['dimensions']['login'][system().lower()]
+LOGIN_WINDOW_WIDTH = LOGIN_WINDOW_DIMENSIONS['width']
+LOGIN_WINDOW_HEIGHT = LOGIN_WINDOW_DIMENSIONS['height']
+LOGIN_WINDOW_DIMENSIONS_STR = 'x'.join([str(LOGIN_WINDOW_DIMENSIONS['width']), str(LOGIN_WINDOW_DIMENSIONS['height'])])
 
 # Define Style
-ACTIVE_STYLE = 'light'
+ACTIVE_STYLE = get_theme()
 STYLE = STYLES['styles'][ACTIVE_STYLE]
 
 # Menu
@@ -121,3 +130,6 @@ NOTEBOOK_TAB_FONT = (
     NOTEBOOK_TAB_STYLE['font']['size'],
     NOTEBOOK_TAB_STYLE['font']['style']
 )
+
+def reload():
+    return STYLES['styles'][get_theme()]

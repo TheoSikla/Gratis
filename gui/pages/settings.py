@@ -19,9 +19,10 @@
 
 from tkinter import ttk
 
+from conf.settings import Themes, commit_settings, load_settings
 from conf.strings import SETTINGS_PAGE_THEMES_TAB_TEXT, SETTINGS_PAGE_LIGHT_THEME_BUTTON_TEXT, \
     SETTINGS_PAGE_DARK_THEME_BUTTON_TEXT
-from conf.styles import MAIN_FRAME_BACKGROUND, BUTTON_BACKGROUND, BUTTON_FOREGROUND, BUTTON_WIDTH, BUTTON_RELIEF, \
+from conf.styles import BUTTON_BACKGROUND, BUTTON_FOREGROUND, BUTTON_WIDTH, BUTTON_RELIEF, \
     NOTEBOOK_TAB_BACKGROUND, NOTEBOOK_TAB_FOREGROUND, NOTEBOOK_TAB_FONT, NOTEBOOK_TAB_BACKGROUND_SELECTED, \
     BUTTON_INTERNAL_PAD_Y, FRAME_BACKGROUND
 from gui.pages.page import Page
@@ -31,6 +32,8 @@ class SettingsPage(Page):
 
     def __init__(self, parent, controller):
         super(SettingsPage, self).__init__(parent)
+
+        self.controller = controller
 
         self.style = ttk.Style()
         self.style.configure('settings.TButton', background=BUTTON_BACKGROUND, foreground=BUTTON_FOREGROUND,
@@ -44,7 +47,6 @@ class SettingsPage(Page):
                        expand=[("selected", [0, 0, 0, 0])])
 
         # Settings Frame configuration
-        self.configure(bg=MAIN_FRAME_BACKGROUND)
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
 
@@ -71,12 +73,29 @@ class SettingsPage(Page):
             dark_theme_frame.grid_columnconfigure(i, weight=1)
 
         light_theme_button = ttk.Button(master=light_theme_frame, text=SETTINGS_PAGE_LIGHT_THEME_BUTTON_TEXT,
-                                        style='settings.TButton')
+                                        style='settings.TButton', command=self.light_theme_button_on_click)
         light_theme_button.grid(row=1, column=1, ipady=BUTTON_INTERNAL_PAD_Y)
 
         dark_theme_button = ttk.Button(master=dark_theme_frame, text=SETTINGS_PAGE_DARK_THEME_BUTTON_TEXT,
-                                       style='settings.TButton')
+                                       style='settings.TButton', command=self.dark_theme_button_on_click)
         dark_theme_button.grid(row=1, column=1, ipady=BUTTON_INTERNAL_PAD_Y)
 
         tab_control.add(themes_tab_frame, text=f'{SETTINGS_PAGE_THEMES_TAB_TEXT: ^{tab_internal_pad}s}')
         tab_control.grid(row=0, column=0, sticky="nsew")
+
+    def light_theme_button_on_click(self):
+        settings = load_settings()
+        settings['theme'] = Themes.LIGHT.value
+        commit_settings(settings)
+        self.refresh_gui()
+
+    def dark_theme_button_on_click(self):
+        settings = load_settings()
+        settings['theme'] = Themes.DARK.value
+        commit_settings(settings)
+        self.refresh_gui()
+
+    def refresh_gui(self):
+        self.controller.master.load_style()
+        # self.controller.master.update()
+        # self.controller.master.update()

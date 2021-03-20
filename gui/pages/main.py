@@ -18,9 +18,9 @@
 """
 
 import sys
-from tkinter import ttk, Label
+from tkinter import ttk
 
-from conf.base import MAIN_FRAME_BACKGROUND, GENERATE_AREA_BUTTON_TEXT, ANALYZE_AREA_BUTTON_TEXT, \
+from conf.base import GENERATE_AREA_BUTTON_TEXT, ANALYZE_AREA_BUTTON_TEXT, \
     VISUALIZE_AREA_BUTTON_TEXT, HISTORY_AREA_BUTTON_TEXT, EXIT_BUTTON_TEXT, MAIN_WINDOW_DIMENSIONS_STR
 from gui.pages.page import Page
 
@@ -31,7 +31,6 @@ class MainPage(Page):
         super(MainPage, self).__init__(parent)
 
         # MainPage Frame configuration
-        self.configure(bg=MAIN_FRAME_BACKGROUND)
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(7, weight=1)
@@ -39,11 +38,6 @@ class MainPage(Page):
 
         # Button configuration variables
         self.ipady = 10
-
-        # Main Label
-        self.main_label = Label(self, bg="azure3", text="Welcome to Graph Sphere\n",
-                                font=("Arial", 20, "bold"))
-        # self.main_label.grid(row=1, column=1, columnspan=3)
 
         # Generate area button
         self.generate_area = ttk.Button(self, text=GENERATE_AREA_BUTTON_TEXT,

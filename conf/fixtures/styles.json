@@ -27,6 +27,20 @@
         "width": 1000,
         "height": 600
       }
+    },
+    "login": {
+      "default": {
+        "width": 525,
+        "height": 300
+      },
+      "linux": {
+        "width": 525,
+        "height": 300
+      },
+      "windows": {
+        "width": 525,
+        "height": 300
+      }
     }
   },
   "styles": {

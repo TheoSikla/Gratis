@@ -18,9 +18,8 @@
 """
 
 import sys
-from tkinter import filedialog, Label, StringVar, BooleanVar, PhotoImage, Button, TclError, Scrollbar, Text, FLAT, \
-    NORMAL, DISABLED, Frame
-
+from tkinter import filedialog, StringVar, BooleanVar, PhotoImage, TclError, Text, FLAT, \
+    NORMAL, DISABLED
 from tkinter import ttk
 
 from analyze.analyze import *
@@ -28,7 +27,7 @@ from analyze.betweenness_centrality import betweenness_centrality
 from analyze.centrality import closeness_centrality
 from analyze.geodesic_paths import find_geodesics
 from analyze.paths import find_all_paths, find_shortest_paths
-from conf.base import MAIN_FRAME_BACKGROUND, BUTTON_FONT, FRAME_BACKGROUND, LABEL_BACKGROUND, LABEL_FONT_LARGE, \
+from conf.base import BUTTON_FONT, LABEL_FONT_LARGE, \
     LABEL_FONT_MEDIUM, SCROLLABLE_FRAME_BACKGROUND, SCROLLABLE_FRAME_FONT, \
     ANALYZE_PAGE_MAIN_LABEL_TEXT, ANALYZE_PAGE_SELECT_FILE_TYPE_LABEL_TEXT, \
     ANALYZE_PAGE_CLASSPATH_LABEL_TEXT, GRAPH_TYPE_MATRIX_TEXT, GRAPH_TYPE_LIST_TEXT, \
@@ -46,7 +45,6 @@ from conf.base import MAIN_FRAME_BACKGROUND, BUTTON_FONT, FRAME_BACKGROUND, LABE
 from graphs.graph import GraphRepresentationType
 from gui.pages.mousewheel import MousewheelSupport
 from gui.pages.page import Page
-from os_recon.define_os import transform
 from support_folders.multithreading import StoppableThread
 from support_folders.run_length_encoder import RunLengthEncoder
 from utils.file import locate_latest_file
@@ -57,7 +55,6 @@ class GraphAnalyzePage(Page):
         super(GraphAnalyzePage, self).__init__(parent)
 
         # Graph Analyze Frame configuration
-        self.configure(bg=MAIN_FRAME_BACKGROUND)
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
         self.rowconfigure(0, weight=1)
@@ -72,43 +69,43 @@ class GraphAnalyzePage(Page):
 
         # Define Frames
         # Parameter's Frame
-        self.parameters_frame = Frame(self, bg=FRAME_BACKGROUND, width=300)
+        self.parameters_frame = ttk.Frame(self, width=300)
         self.parameters_frame.grid_propagate(0)
         self.parameters_frame.columnconfigure(0, weight=1)
         self.parameters_frame.columnconfigure(1, weight=1)
         self.parameters_frame.rowconfigure(4, weight=1)
         self.parameters_frame.grid(row=0, column=0, sticky="news")
 
-        self.parameters_frame_row_0_column_0 = Frame(self.parameters_frame, height=170, bg=FRAME_BACKGROUND)
+        self.parameters_frame_row_0_column_0 = ttk.Frame(self.parameters_frame, height=170)
         self.parameters_frame_row_0_column_0.grid_propagate(0)
         self.parameters_frame_row_0_column_0.columnconfigure(0, weight=1)
         self.parameters_frame_row_0_column_0.grid(row=0, column=0, columnspan=2, padx=5, pady=5, sticky='news')
 
-        self.parameters_frame_row_1_column_0 = Frame(self.parameters_frame, width=30, height=50, bg=FRAME_BACKGROUND)
+        self.parameters_frame_row_1_column_0 = ttk.Frame(self.parameters_frame, width=30, height=50)
         self.parameters_frame_row_1_column_0.grid_propagate(0)
         self.parameters_frame_row_1_column_0.columnconfigure(0, weight=1)
         self.parameters_frame_row_1_column_0.rowconfigure(0, weight=1)
         self.parameters_frame_row_1_column_0.grid(row=1, column=0, padx=5, sticky='news')
 
-        self.parameters_frame_row_1_column_1 = Frame(self.parameters_frame, width=30, height=50, bg=FRAME_BACKGROUND)
+        self.parameters_frame_row_1_column_1 = ttk.Frame(self.parameters_frame, width=30, height=50)
         self.parameters_frame_row_1_column_1.grid_propagate(0)
         self.parameters_frame_row_1_column_1.columnconfigure(0, weight=1)
         self.parameters_frame_row_1_column_1.rowconfigure(0, weight=1)
         self.parameters_frame_row_1_column_1.grid(row=1, column=1, padx=5, sticky='news')
 
-        self.parameters_frame_row_2_column_0 = Frame(self.parameters_frame, bg=FRAME_BACKGROUND)
+        self.parameters_frame_row_2_column_0 = ttk.Frame(self.parameters_frame)
         self.parameters_frame_row_2_column_0.columnconfigure(0, weight=1)
         self.parameters_frame_row_2_column_0.grid(row=2, column=0, columnspan=2, sticky='news')
 
-        self.parameters_frame_row_3_column_0 = Frame(self.parameters_frame, bg=FRAME_BACKGROUND)
+        self.parameters_frame_row_3_column_0 = ttk.Frame(self.parameters_frame)
         self.parameters_frame_row_3_column_0.columnconfigure(0, weight=1)
         self.parameters_frame_row_3_column_0.grid(row=3, column=0, padx=5, pady=5, sticky='news')
 
-        self.parameters_frame_row_3_column_1 = Frame(self.parameters_frame, bg=FRAME_BACKGROUND)
+        self.parameters_frame_row_3_column_1 = ttk.Frame(self.parameters_frame)
         self.parameters_frame_row_3_column_1.columnconfigure(0, weight=1)
         self.parameters_frame_row_3_column_1.grid(row=3, column=1, padx=5, pady=5, sticky='news')
 
-        self.buttons_frame = Frame(self.parameters_frame, bg=FRAME_BACKGROUND)
+        self.buttons_frame = ttk.Frame(self.parameters_frame)
         self.buttons_frame.columnconfigure(0, weight=1)
         self.buttons_frame.columnconfigure(1, weight=1)
         self.buttons_frame.rowconfigure(0, weight=1)
@@ -121,13 +118,13 @@ class GraphAnalyzePage(Page):
         self.scroll_area_frame.grid(row=0, column=1, sticky='news')
 
         # Main Label
-        self.main_label = Label(self.parameters_frame_row_0_column_0, bg=LABEL_BACKGROUND,
-                                text=ANALYZE_PAGE_MAIN_LABEL_TEXT, font=LABEL_FONT_LARGE)
+        self.main_label = ttk.Label(self.parameters_frame_row_0_column_0,
+                                    text=ANALYZE_PAGE_MAIN_LABEL_TEXT, font=LABEL_FONT_LARGE)
         self.main_label.grid(row=0, column=0, pady=self.widget_pady)
 
         # Type Label
-        self.main_label = Label(self.parameters_frame_row_0_column_0, bg=LABEL_BACKGROUND,
-                                text=ANALYZE_PAGE_SELECT_FILE_TYPE_LABEL_TEXT, font=LABEL_FONT_MEDIUM)
+        self.main_label = ttk.Label(self.parameters_frame_row_0_column_0,
+                                    text=ANALYZE_PAGE_SELECT_FILE_TYPE_LABEL_TEXT, font=LABEL_FONT_MEDIUM)
         self.main_label.grid(row=1, column=0, pady=self.widget_pady)
 
         # Type of graph being generated
@@ -140,8 +137,8 @@ class GraphAnalyzePage(Page):
                                      command=self.show_parameters)
         self.graphs.grid(row=2, column=0, pady=self.widget_pady)
 
-        self.classpath_label = Label(self.parameters_frame_row_0_column_0, bg=LABEL_BACKGROUND,
-                                     text=ANALYZE_PAGE_CLASSPATH_LABEL_TEXT, font=self.button_font)
+        self.classpath_label = ttk.Label(self.parameters_frame_row_0_column_0,
+                                         text=ANALYZE_PAGE_CLASSPATH_LABEL_TEXT, font=self.button_font)
 
         self.classpath_result = StringVar()
         self.classpath_entry_box = ttk.Entry(self.parameters_frame_row_1_column_0, textvariable=self.classpath_result,
@@ -158,8 +155,8 @@ class GraphAnalyzePage(Page):
         self.list.grid(row=3, column=0)
         # ==============================================================================================================
 
-        self.metrics_label = Label(self.parameters_frame_row_2_column_0, bg=LABEL_BACKGROUND,
-                                   text=ANALYZE_PAGE_CALCULATE_METRICS_LABEL_TEXT, font=LABEL_FONT_MEDIUM)
+        self.metrics_label = ttk.Label(self.parameters_frame_row_2_column_0,
+                                       text=ANALYZE_PAGE_CALCULATE_METRICS_LABEL_TEXT, font=LABEL_FONT_MEDIUM)
         self.metrics_label.grid(row=0, column=0, pady=self.widget_pady)
 
         # Geodesic path, closeness centrality, betweenness centrality
@@ -213,24 +210,26 @@ class GraphAnalyzePage(Page):
         # Browse Button
         try:
             browse_icon = PhotoImage(file=BROWSE_IMAGE_PATH)
-            self.browse_button = Button(self.parameters_frame_row_1_column_1, image=browse_icon,
-                                        command=lambda: self.browse())
+            self.browse_button = ttk.Button(self.parameters_frame_row_1_column_1, image=browse_icon,
+                                            command=self.browse)
             self.browse_button.image = browse_icon
-            self.browse_button.config(bg=MAIN_FRAME_BACKGROUND, relief='flat', borderwidth=0,
-                                      highlightbackground=MAIN_FRAME_BACKGROUND)
         except TclError:
-            self.browse_button = Button(self.parameters_frame_row_1_column_1,
-                                        text=ANALYZE_PAGE_BROWSE_BUTTON_FALLBACK_TEXT, command=lambda: self.browse())
-            self.browse_button.config(bg=MAIN_FRAME_BACKGROUND, relief='flat', borderwidth=1)
+            self.browse_button = ttk.Button(self.parameters_frame_row_1_column_1,
+                                            text=ANALYZE_PAGE_BROWSE_BUTTON_FALLBACK_TEXT, command=self.browse)
 
         # Text Area Frame
         # create a Scrollbar and associate it with txt
-        self.my_scroll = Scrollbar(self.scroll_area_frame, orient='vertical')
+        self.my_scroll = ttk.Scrollbar(self.scroll_area_frame, orient='vertical')
         # create a Text widget
         self.text_area = Text(self.scroll_area_frame, background=SCROLLABLE_FRAME_BACKGROUND,
                               yscrollcommand=self.my_scroll.set, relief=FLAT, width=35)
         self.text_area.bind("<FocusIn>", self.defocus)
         self.text_area.config(font=SCROLLABLE_FRAME_FONT, undo=True, wrap='word')
+
+        # TODO: configure text style inserted in text areas like so:
+        # text_area.insert(END, f"message ", 'warning')
+        # self.text_area.tag_configure('warning', background="yellow", foreground="red")
+
         self.my_scroll.config(command=self.text_area.yview)
         MousewheelSupport(self).add_support_to(self.text_area, yscrollbar=self.my_scroll, what="units")
 
@@ -557,3 +556,11 @@ class GraphAnalyzePage(Page):
         self.text_area.update()
 
         controller.show_frame(self.retrieve_frame(controller, 'MainPage'), MAIN_WINDOW_DIMENSIONS_STR)
+
+    def refresh_widget_style(self, style):
+        super(GraphAnalyzePage, self).refresh_widget_style(style=style)
+        self.text_area.configure(bg=style['scrollable_frame']['bg'], font=(
+            style['scrollable_frame']['font']['family'],
+            style['scrollable_frame']['font']['size'],
+            style['scrollable_frame']['font']['style']
+        ))

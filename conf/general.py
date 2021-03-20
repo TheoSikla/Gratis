@@ -24,3 +24,5 @@ STRINGS_PATH = os.path.join('conf', 'fixtures', 'strings.json') if not os.enviro
     os.path.join(BASE_DIR, 'conf', 'fixtures', 'strings.json')
 STYLES_PATH = os.path.join('conf', 'fixtures', 'styles.json') if not os.environ.get('DEV', None) else \
     os.path.join(BASE_DIR, 'conf', 'fixtures', 'styles.json')
+SETTINGS_PATH = os.path.join('conf', 'fixtures', 'settings.json') if not os.environ.get('DEV', None) else \
+    os.path.join(BASE_DIR, 'conf', 'fixtures', 'settings.json')

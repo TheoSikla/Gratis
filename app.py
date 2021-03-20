@@ -58,6 +58,7 @@ class App(Tk):
         self.button_font = BUTTON_FONT
         self.style = ttk.Style()
         self.style.configure('TButton', background=BUTTON_BACKGROUND, foreground=BUTTON_FOREGROUND,
+                             highlightbackground=BUTTON_IMAGE_BACKGROUND,
                              relief=BUTTON_RELIEF, width=BUTTON_WIDTH)
         self.style.configure('TFrame', background=FRAME_BACKGROUND)
         self.style.configure('TRadiobutton', background=RADIOBUTTON_BACKGROUND, foreground=RADIOBUTTON_FOREGROUND,
@@ -65,17 +66,22 @@ class App(Tk):
         self.style.configure('TCheckbutton', background=CHECKBUTTON_BACKGROUND, foreground=CHECKBUTTON_FOREGROUND,
                              relief=CHECKBUTTON_RELIEF, font=self.button_font)
         self.style.configure('TLabel', background=LABEL_BACKGROUND, foreground=LABEL_FOREGROUND)
+        self.style.configure('HistoryPage.Counter.TLabel', background=LABEL_BACKGROUND,
+                             foreground=LABEL_FOREGROUND, width=5, height=10)
+        self.style.configure('HistoryPage.Content.TLabel', background=LABEL_BACKGROUND,
+                             foreground=LABEL_FOREGROUND, width=10, justify="left", anchor="nw")
 
         # Build main menu
         # File menu
         file_menu = Menu(bg=MENU_ITEMS_BACKGROUND, tearoff=False)
         file_menu.add_command(label=FILE_SETTINGS_LABEL_TEXT, font=MENU_ITEMS_FONT,
                               command=lambda: spawn_top_level([SettingsPage], kwargs={
+                                'master': self,
                                 'title': FILE_SETTINGS_LABEL_TEXT,
                                 'width': SETTINGS_WINDOW_WIDTH,
                                 'height': SETTINGS_WINDOW_HEIGHT,
                                 'bg': MAIN_FRAME_BACKGROUND
-                              }))
+                              }, topmost=True))
         file_menu.add_command(label=FILE_EXIT_LABEL_TEXT, font=MENU_ITEMS_FONT, command=self.destroy)
 
         # Main menu
@@ -103,6 +109,34 @@ class App(Tk):
 
         # Initiate the MainFrame
         self.show_frame(MainPage, MAIN_WINDOW_DIMENSIONS_STR)
+
+    def load_style(self):
+        style = reload()
+        # ttk style configuration
+        self.button_font = (
+            style['button']['font']['family'],
+            style['button']['font']['size'],
+            style['button']['font']['style']
+        )
+        self.config(bg=style['main_frame_bg'])
+        self.style = ttk.Style()
+        self.style.configure('TButton', background=style['button']['bg'], foreground=style['button']['fg'],
+                             relief=style['button']['relief'], width=style['button']['width'])
+        self.style.configure('TFrame', background=style['frame']['bg'])
+        self.style.configure('TRadiobutton', background=style['radiobutton']['bg'],
+                             foreground=style['radiobutton']['fg'],
+                             relief=style['radiobutton']['relief'], font=self.button_font)
+        self.style.configure('TCheckbutton', background=style['checkbutton']['bg'],
+                             foreground=style['checkbutton']['fg'],
+                             relief=style['checkbutton']['relief'], font=self.button_font)
+        self.style.configure('TLabel', background=style['label']['bg'], foreground=style['label']['fg'])
+        self.style.configure('HistoryPage.Counter.TLabel', background=style['label']['bg'],
+                             foreground=style['label']['fg'], width=5, height=10)
+        self.style.configure('HistoryPage.Content.TLabel', background=style['label']['bg'],
+                             foreground=style['label']['fg'], width=10, justify="left", anchor="nw")
+
+        for frame in self.frames.values():
+            frame.refresh_widget_style(style=style)
 
     def show_frame(self, cont, size):
         self.geometry(size)
