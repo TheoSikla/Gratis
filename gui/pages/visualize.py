@@ -29,7 +29,7 @@ from conf.base import MAIN_FRAME_BACKGROUND, BUTTON_FONT, LABEL_FONT_LARGE, \
     VISUALIZE_PAGE_VISUALIZATION_FAILED_ERROR, VISUALIZE_PAGE_3D_VISUALIZATION_VIA_MATRIX_LIST_ERROR, \
     VISUALIZE_PAGE_PLOTLY_FAILED_ERROR, VISUALIZE_PAGE_PLOTLY_WAIT_INFO, VISUALIZE_PAGE_PLOTLY_GRAPH_CREATE_SUCCESS, \
     VISUALIZE_PAGE_PLOTLY_FAILED_NO_GRAPH_GENERATED_ERROR, MAIN_WINDOW_DIMENSIONS_STR, LOGIN_WINDOW_WIDTH, \
-    LOGIN_WINDOW_HEIGHT
+    LOGIN_WINDOW_HEIGHT, SCROLLABLE_FRAME_TEXT_FOREGROUND
 from gui.pages.custom_pop_up import CustomPopUp
 from gui.pages.login_creads import LoginCreds
 from gui.pages.page import Page
@@ -65,6 +65,7 @@ class GraphVisualizePage(Page):
         self.text_area.bind("<FocusIn>", self.defocus)
         self.text_area.config(font=SCROLLABLE_FRAME_FONT, undo=True, wrap='word')
         self.my_scroll.config(command=self.text_area.yview)
+        self.text_area.tag_configure('custom', foreground=SCROLLABLE_FRAME_TEXT_FOREGROUND)
 
         self.my_frame_inner.grid(row=1, column=2, rowspan=13, columnspan=2, sticky='nesw')
         self.text_area.grid(row=1, column=2, rowspan=13)
@@ -152,7 +153,7 @@ class GraphVisualizePage(Page):
             if root2.username_entry_result == "" or root2.api_key_entry_result == "":
                 self.text_area.delete('1.0', END)
                 self.text_area.update()
-                self.text_area.insert(END, VISUALIZE_PAGE_PLOTLY_FAILED_ERROR)
+                self.text_area.insert(END, VISUALIZE_PAGE_PLOTLY_FAILED_ERROR, 'custom')
                 self.text_area.update()
             else:
                 self.plotly_visualize(root2.username_entry_result, root2.api_key_entry_result,
@@ -166,7 +167,7 @@ class GraphVisualizePage(Page):
         start = time()
 
         self.text_area.delete('1.0', END)
-        self.text_area.insert(END, VISUALIZE_PAGE_PLOTLY_WAIT_INFO)
+        self.text_area.insert(END, VISUALIZE_PAGE_PLOTLY_WAIT_INFO, 'custom')
         self.text_area.update()
 
         try:
@@ -179,9 +180,9 @@ class GraphVisualizePage(Page):
 
             if plot_result is True:
                 end_3d = time() - start
-                self.text_area.insert(END, VISUALIZE_PAGE_PLOTLY_GRAPH_CREATE_SUCCESS)
+                self.text_area.insert(END, VISUALIZE_PAGE_PLOTLY_GRAPH_CREATE_SUCCESS, 'custom')
                 message3 = "[+] Elapsed time: {:>.2f} sec\n".format(end_3d)
-                self.text_area.insert(END, message3)
+                self.text_area.insert(END, message3, 'custom')
                 self.text_area.update()
                 self.Spawn_Custom_Popup(plotly_visualizer.link)
             elif plot_result == "File not found":
@@ -190,13 +191,13 @@ class GraphVisualizePage(Page):
             else:
                 self.text_area.delete('1.0', END)
                 self.text_area.update()
-                self.text_area.insert(END, VISUALIZE_PAGE_PLOTLY_FAILED_ERROR)
+                self.text_area.insert(END, VISUALIZE_PAGE_PLOTLY_FAILED_ERROR, 'custom')
                 self.text_area.update()
                 self.spawn_login_creds()
         except TypeError:
             self.text_area.delete('1.0', END)
             self.text_area.update()
-            self.text_area.insert(END, VISUALIZE_PAGE_PLOTLY_FAILED_ERROR)
+            self.text_area.insert(END, VISUALIZE_PAGE_PLOTLY_FAILED_ERROR, 'custom')
             self.text_area.update()
 
     def Plot_2D(self):
@@ -232,3 +233,4 @@ class GraphVisualizePage(Page):
             style['scrollable_frame']['font']['size'],
             style['scrollable_frame']['font']['style']
         ))
+        self.text_area.tag_configure('custom', foreground=SCROLLABLE_FRAME_TEXT_FOREGROUND)

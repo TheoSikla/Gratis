@@ -121,14 +121,18 @@
           "size": 11,
           "style": ""
         },
+        "inserted_text": {
+          "fg": "#000000"
+        },
         "bg": "#ffffff",
         "scrollbar_bg": null
       },
       "notebook": {
+        "bg": "#f0f0f0",
         "tab": {
-          "background": "#ffffff",
-          "background_selected": "#ffffff",
-          "foreground": "#000000",
+          "bg": "#f0f0f0",
+          "bg_selected": "#ffffff",
+          "fg": "#000000",
           "font": {
             "family": "consolas",
             "size": 11,
@@ -214,14 +218,18 @@
           "size": 11,
           "style": ""
         },
+        "inserted_text": {
+          "fg": "#ffffff"
+        },
         "bg": "#2e2e2e",
         "scrollbar_bg": null
       },
       "notebook": {
+        "bg": "#f0f0f0",
         "tab": {
-          "background": "#2e2e2e",
-          "background_selected": "#2e2e2e",
-          "foreground": "#f0f0f0",
+          "bg": "#2e2e2e",
+          "bg_selected": "#2e2e2e",
+          "fg": "#f0f0f0",
           "font": {
             "family": "consolas",
             "size": 11,

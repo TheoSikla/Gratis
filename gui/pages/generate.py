@@ -50,7 +50,8 @@ from conf.base import BUTTON_FONT, LABEL_FONT_LARGE, \
     GENERATE_PAGE_CUSTOM_SCALE_FREE_INITIAL_NODES_NON_ZERO_ERROR, \
     GENERATE_PAGE_CUSTOM_SCALE_FREE_INITIAL_CONNECTIONS_PER_NODE_NON_ZERO_ERROR, \
     GENERATE_PAGE_CUSTOM_SCALE_FREE_VERTICES_INITIAL_NODES_NUMBER_EQUAL_ONE_ERROR, \
-    GENERATE_PAGE_CUSTOM_SCALE_FREE_VERTICES_LESS_THAN_INITIAL_NODES_ERROR, MAIN_WINDOW_DIMENSIONS_STR
+    GENERATE_PAGE_CUSTOM_SCALE_FREE_VERTICES_LESS_THAN_INITIAL_NODES_ERROR, MAIN_WINDOW_DIMENSIONS_STR, \
+    SCROLLABLE_FRAME_TEXT_FOREGROUND
 from graphs.graph import GraphRepresentationType, AVAILABLE_GRAPH_TYPES, GraphType
 from gui.pages.page import Page
 from os_recon.define_os import platform_type
@@ -58,7 +59,6 @@ from support_folders.multithreading import StoppableThread
 
 
 class GraphGeneratePage(Page):
-
     def __init__(self, parent, controller):
         super(GraphGeneratePage, self).__init__(parent)
 
@@ -104,6 +104,7 @@ class GraphGeneratePage(Page):
         self.text_area.bind("<FocusIn>", self.defocus)
         self.text_area.config(font=SCROLLABLE_FRAME_FONT, undo=True, wrap='word')
         self.my_scroll.config(command=self.text_area.yview)
+        self.text_area.tag_configure('custom', foreground=SCROLLABLE_FRAME_TEXT_FOREGROUND)
 
         self.my_frame_inner.grid(row=2, column=2, rowspan=13, columnspan=2, sticky='nesw')
         self.text_area.grid(row=2, column=2, rowspan=13)
@@ -538,13 +539,13 @@ class GraphGeneratePage(Page):
 
     def cancel(self):
         if self.thread.is_alive():
-            self.text_area.insert(END, GENERATE_PAGE_GRAPH_CREATION_CANCEL_IN_PROGRESS_INFO)
+            self.text_area.insert(END, GENERATE_PAGE_GRAPH_CREATION_CANCEL_IN_PROGRESS_INFO, 'custom')
             self.text_area.update()
 
             while self.thread.is_alive():
                 self.thread.stop()
 
-            self.text_area.insert(END, GENERATE_PAGE_GRAPH_CREATION_CANCEL_COMPLETED_INFO)
+            self.text_area.insert(END, GENERATE_PAGE_GRAPH_CREATION_CANCEL_COMPLETED_INFO, 'custom')
             self.text_area.update()
 
             self.cancel_button.configure(state=DISABLED)
@@ -618,7 +619,7 @@ class GraphGeneratePage(Page):
                 message1 = "[+] Please wait while {} graph is being generated...\n\n".format(self.chosen_graph.get())
 
             if self.chosen_graph.get() == GraphType.HOMOGENEOUS.value:
-                self.text_area.insert(END, message1)
+                self.text_area.insert(END, message1, 'custom')
                 self.text_area.update()
 
                 from graphs.homogeneous import Homogeneous
@@ -644,7 +645,7 @@ class GraphGeneratePage(Page):
                     messagebox.showerror("Error", message)
 
                 else:
-                    self.text_area.insert(END, message1)
+                    self.text_area.insert(END, message1, 'custom')
                     self.text_area.update()
                     from graphs.random_fixed_graph import RandomFixed
                     self.cancel_button.configure(state=NORMAL)
@@ -676,7 +677,7 @@ class GraphGeneratePage(Page):
                         message = GENERATE_PAGE_SCALE_FREE_VERTICES_GREATER_THAN_ONE_ERROR
                         messagebox.showerror("Error", message)
                     else:
-                        self.text_area.insert(END, message1)
+                        self.text_area.insert(END, message1, 'custom')
                         self.text_area.update()
                         from graphs.scale_free_graph_pa import ScaleFreePA
                         self.cancel_button.configure(state=NORMAL)
@@ -705,7 +706,7 @@ class GraphGeneratePage(Page):
                         message = GENERATE_PAGE_SCALE_FREE_VERTICES_LESS_THAN_INITIAL_NODES_ERROR
                         messagebox.showerror("Error", message)
                     else:
-                        self.text_area.insert(END, message1)
+                        self.text_area.insert(END, message1, 'custom')
                         self.text_area.update()
                         from graphs.full_scale_free_graph import FullScaleFree
                         self.cancel_button.configure(state=NORMAL)
@@ -730,7 +731,7 @@ class GraphGeneratePage(Page):
                     messagebox.showerror("Error", message)
 
                 else:
-                    self.text_area.insert(END, message1)
+                    self.text_area.insert(END, message1, 'custom')
                     self.text_area.update()
                     from graphs.er_graph import ErdosRenyi
                     self.cancel_button.configure(state=NORMAL)
@@ -767,7 +768,7 @@ class GraphGeneratePage(Page):
 
                     message1 = GENERATE_PAGE_CUSTOM_ER_INVALID_NUMBER_OF_EDGES_ERROR
 
-                    self.text_area.insert(END, message1)
+                    self.text_area.insert(END, message1, 'custom')
                     self.text_area.update()
 
                     self.cancel()
@@ -779,14 +780,14 @@ class GraphGeneratePage(Page):
                     message4 = GENERATE_PAGE_CUSTOM_ER_HOMOGENEOUS_WARNING
 
                     try:
-                        self.text_area.insert(END, message4)
+                        self.text_area.insert(END, message4, 'custom')
                         self.text_area.update()
 
                     except (UnboundLocalError, NameError):
                         pass
                     self.text_area.update()
 
-                self.text_area.insert(END, message1)
+                self.text_area.insert(END, message1, 'custom')
                 self.text_area.update()
 
                 from graphs.er_graph import ErdosRenyi
@@ -836,7 +837,7 @@ class GraphGeneratePage(Page):
 
                     else:
 
-                        self.text_area.insert(END, message1)
+                        self.text_area.insert(END, message1, 'custom')
                         self.text_area.update()
                         from graphs.scale_free_graph_pa import ScaleFreePA
                         self.cancel_button.configure(state=NORMAL)
@@ -883,7 +884,7 @@ class GraphGeneratePage(Page):
                         messagebox.showerror("Error", message)
 
                     else:
-                        self.text_area.insert(END, message1)
+                        self.text_area.insert(END, message1, 'custom')
                         self.text_area.update()
                         from graphs.full_scale_free_graph import FullScaleFree
                         self.cancel_button.configure(state=NORMAL)
@@ -964,8 +965,8 @@ class GraphGeneratePage(Page):
 
                 else:
                     message3 = "[+] Elapsed time: {:>.2f} sec\n".format(end)
-                    self.text_area.insert(END, GENERATE_PAGE_GRAPH_CREATION_SUCCESS)
-                    self.text_area.insert(END, message3)
+                    self.text_area.insert(END, GENERATE_PAGE_GRAPH_CREATION_SUCCESS, 'custom')
+                    self.text_area.insert(END, message3, 'custom')
                     self.text_area.update()
 
             except NameError:
@@ -978,3 +979,4 @@ class GraphGeneratePage(Page):
             style['scrollable_frame']['font']['size'],
             style['scrollable_frame']['font']['style']
         ))
+        self.text_area.tag_configure('custom', foreground=SCROLLABLE_FRAME_TEXT_FOREGROUND)

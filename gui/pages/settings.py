@@ -22,29 +22,15 @@ from tkinter import ttk
 from conf.settings import Themes, commit_settings, load_settings
 from conf.strings import SETTINGS_PAGE_THEMES_TAB_TEXT, SETTINGS_PAGE_LIGHT_THEME_BUTTON_TEXT, \
     SETTINGS_PAGE_DARK_THEME_BUTTON_TEXT
-from conf.styles import BUTTON_BACKGROUND, BUTTON_FOREGROUND, BUTTON_WIDTH, BUTTON_RELIEF, \
-    NOTEBOOK_TAB_BACKGROUND, NOTEBOOK_TAB_FOREGROUND, NOTEBOOK_TAB_FONT, NOTEBOOK_TAB_BACKGROUND_SELECTED, \
-    BUTTON_INTERNAL_PAD_Y, FRAME_BACKGROUND
+from conf.styles import BUTTON_INTERNAL_PAD_Y
 from gui.pages.page import Page
 
 
 class SettingsPage(Page):
-
     def __init__(self, parent, controller):
         super(SettingsPage, self).__init__(parent)
 
         self.controller = controller
-
-        self.style = ttk.Style()
-        self.style.configure('settings.TButton', background=BUTTON_BACKGROUND, foreground=BUTTON_FOREGROUND,
-                             relief=BUTTON_RELIEF, width=BUTTON_WIDTH)
-        self.style.configure('settings.TFrame', background=FRAME_BACKGROUND)
-        self.style.configure('settings.TNotebook', tabmargins=[5, 10, 1, 1])
-        self.style.configure('settings.TNotebook.Tab', padding=[5, 5, 5, 5], borderwidth=0,
-                             background=NOTEBOOK_TAB_BACKGROUND, foreground=NOTEBOOK_TAB_FOREGROUND,
-                             font=NOTEBOOK_TAB_FONT)
-        self.style.map('settings.TNotebook.Tab', background=[("selected", NOTEBOOK_TAB_BACKGROUND_SELECTED)],
-                       expand=[("selected", [0, 0, 0, 0])])
 
         # Settings Frame configuration
         self.grid_rowconfigure(0, weight=1)
@@ -52,10 +38,10 @@ class SettingsPage(Page):
 
         # Create setting tabs
         tab_internal_pad = 10
-        tab_control = ttk.Notebook(self, style='settings.TNotebook')
+        tab_control = ttk.Notebook(self)
 
         # Themes tab
-        themes_tab_frame = ttk.Frame(tab_control, style='settings.TFrame')
+        themes_tab_frame = ttk.Frame(tab_control)
 
         for i in range(5):
             themes_tab_frame.grid_rowconfigure(i, weight=1)
@@ -73,11 +59,11 @@ class SettingsPage(Page):
             dark_theme_frame.grid_columnconfigure(i, weight=1)
 
         light_theme_button = ttk.Button(master=light_theme_frame, text=SETTINGS_PAGE_LIGHT_THEME_BUTTON_TEXT,
-                                        style='settings.TButton', command=self.light_theme_button_on_click)
+                                        command=self.light_theme_button_on_click)
         light_theme_button.grid(row=1, column=1, ipady=BUTTON_INTERNAL_PAD_Y)
 
         dark_theme_button = ttk.Button(master=dark_theme_frame, text=SETTINGS_PAGE_DARK_THEME_BUTTON_TEXT,
-                                       style='settings.TButton', command=self.dark_theme_button_on_click)
+                                       command=self.dark_theme_button_on_click)
         dark_theme_button.grid(row=1, column=1, ipady=BUTTON_INTERNAL_PAD_Y)
 
         tab_control.add(themes_tab_frame, text=f'{SETTINGS_PAGE_THEMES_TAB_TEXT: ^{tab_internal_pad}s}')
@@ -97,5 +83,3 @@ class SettingsPage(Page):
 
     def refresh_gui(self):
         self.controller.master.load_style()
-        # self.controller.master.update()
-        # self.controller.master.update()

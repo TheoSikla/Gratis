@@ -47,9 +47,9 @@ def find_geodesics(edges, num_of_vertices, text_area, thread):
                     geo_paths[str(j)][str(i)] = hops
 
                     path_str = str(path_pajek)
-                    text_area.insert(END, f"\nv{i + 1} ==> v{j + 1}: ")
-                    text_area.insert(END, path_str)
-                    text_area.insert(END, "\n")
+                    text_area.insert(END, f"\nv{i + 1} ==> v{j + 1}: ", 'custom')
+                    text_area.insert(END, path_str, 'custom')
+                    text_area.insert(END, "\n", 'custom')
                     text_area.see("end")
                     sleep(.01)  # Do not remove this.
 
@@ -62,9 +62,9 @@ def find_geodesics(edges, num_of_vertices, text_area, thread):
                     geo_paths[str(i)][str(j)] = 0
                     geo_paths[str(j)][str(i)] = 0
 
-                    text_area.insert(END, f"\nv{i + 1} ==> v{j + 1}: ")
-                    text_area.insert(END, "None")
-                    text_area.insert(END, "\n")
+                    text_area.insert(END, f"\nv{i + 1} ==> v{j + 1}: ", 'custom')
+                    text_area.insert(END, "None", 'custom')
+                    text_area.insert(END, "\n", 'custom')
                     text_area.see("end")
                     sleep(.01)  # Do not remove this.
 
@@ -72,7 +72,8 @@ def find_geodesics(edges, num_of_vertices, text_area, thread):
     #     for j in range(num_of_vertices):
     #         print(f"{i} ==> {j}: {geo_paths[str(i)][str(j)]}")
 
-    text_area.insert(END, f"\nGraph Diameter: From node v{start_node + 1} to node v{end_node + 1} with {graph_diameter} hops.\n")
+    text_area.insert(END, f"\nGraph Diameter: From node v{start_node + 1} to "
+                          f"node v{end_node + 1} with {graph_diameter} hops.\n", 'custom')
     text_area.see("end")
     sleep(.01)  # Do not remove this.
 

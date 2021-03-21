@@ -26,7 +26,6 @@ from os_recon.define_os import platform_type
 
 
 class CustomPopUp:
-
     def __init__(self, master):
         self.master = master
         self.label_font = ("Dialog", 11, "bold italic")

@@ -119,7 +119,7 @@ class Analyze:
         try:
             with open(join(OUTPUT_FILES_DIRECTORY, f'graph_analysis_{adjacency_type.lower()}.txt'), 'r') as f:
                 for line in f:
-                    text_area.insert(END, line)
+                    text_area.insert(END, line, 'custom')
                 text_area.update()
         except FileNotFoundError:
             message = f"Please generate a graph first!"
@@ -251,13 +251,13 @@ class Analyze:
 
                     text = f"Node {node_names[counter]:<{len(node_names[-1])}} has {int(v):<{len(str(v))}} edges.\n"
                     
-                    text_area.insert(END, text)
+                    text_area.insert(END, text, 'custom')
                     text_area.update()
                     counter += 1
 
                 text = f"\nNode {node_names[node_most_edges]} has the most edges ({max_edges})!\n\n"
 
-                text_area.insert(END, text)
+                text_area.insert(END, text, 'custom')
                 text_area.update()
 
                 return True

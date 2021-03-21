@@ -70,6 +70,11 @@ class App(Tk):
                              foreground=LABEL_FOREGROUND, width=5, height=10)
         self.style.configure('HistoryPage.Content.TLabel', background=LABEL_BACKGROUND,
                              foreground=LABEL_FOREGROUND, width=10, justify="left", anchor="nw")
+        self.style.configure('TNotebook', tabmargins=[5, 10, 1, 1], padding=[-1], background=NOTEBOOK_BACKGROUND)
+        self.style.configure('TNotebook.Tab', padding=[5, 5, 5, 5], borderwidth=0, background=NOTEBOOK_TAB_BACKGROUND,
+                             foreground=NOTEBOOK_TAB_FOREGROUND, font=NOTEBOOK_TAB_FONT)
+        self.style.map('TNotebook.Tab', background=[("selected", NOTEBOOK_TAB_BACKGROUND_SELECTED)],
+                       expand=[("selected", [0, 0, 0, 0])])
 
         # Build main menu
         # File menu
@@ -134,6 +139,16 @@ class App(Tk):
                              foreground=style['label']['fg'], width=5, height=10)
         self.style.configure('HistoryPage.Content.TLabel', background=style['label']['bg'],
                              foreground=style['label']['fg'], width=10, justify="left", anchor="nw")
+        self.style.configure('TNotebook', tabmargins=[5, 10, 1, 1], background=style['notebook']['bg'])
+        self.style.configure('TNotebook.Tab', padding=[5, 5, 5, 5], borderwidth=0,
+                             background=style['notebook']['tab']['bg'],
+                             foreground=style['notebook']['tab']['fg'], font=(
+                STYLE['notebook']['tab']['font']['family'],
+                STYLE['notebook']['tab']['font']['size'],
+                STYLE['notebook']['tab']['font']['style'],
+            ))
+        self.style.map('TNotebook.Tab', background=[("selected", style['notebook']['tab']['bg_selected'])],
+                       expand=[("selected", [0, 0, 0, 0])])
 
         for frame in self.frames.values():
             frame.refresh_widget_style(style=style)

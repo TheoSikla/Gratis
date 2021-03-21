@@ -26,7 +26,6 @@ from gui.pages.page import Page
 
 
 class MainPage(Page):
-
     def __init__(self, parent, controller):
         super(MainPage, self).__init__(parent)
 

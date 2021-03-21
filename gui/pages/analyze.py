@@ -41,7 +41,7 @@ from conf.base import BUTTON_FONT, LABEL_FONT_LARGE, \
     ANALYZE_PAGE_CALCULATE_BETWEENNESS_CENTRALITY_INFO, ANALYZE_PAGE_GRAPH_ANALYSIS_CANCEL_IN_PROGRESS_INFO, \
     ANALYZE_PAGE_GRAPH_ANALYSIS_CANCEL_COMPLETED_INFO, ANALYZE_PAGE_NO_AVAILABLE_OUTPUT_ERROR, \
     ANALYZE_PAGE_LAST_GENERATED_GRAPH_ANALYSIS_SUCCESS, ANALYZE_PAGE_EITHER_ADJACENCY_MATRIX_OR_LIST_ERROR, \
-    MAIN_WINDOW_DIMENSIONS_STR
+    MAIN_WINDOW_DIMENSIONS_STR, SCROLLABLE_FRAME_TEXT_FOREGROUND
 from graphs.graph import GraphRepresentationType
 from gui.pages.mousewheel import MousewheelSupport
 from gui.pages.page import Page
@@ -225,10 +225,7 @@ class GraphAnalyzePage(Page):
                               yscrollcommand=self.my_scroll.set, relief=FLAT, width=35)
         self.text_area.bind("<FocusIn>", self.defocus)
         self.text_area.config(font=SCROLLABLE_FRAME_FONT, undo=True, wrap='word')
-
-        # TODO: configure text style inserted in text areas like so:
-        # text_area.insert(END, f"message ", 'warning')
-        # self.text_area.tag_configure('warning', background="yellow", foreground="red")
+        self.text_area.tag_configure('custom', foreground=SCROLLABLE_FRAME_TEXT_FOREGROUND)
 
         self.my_scroll.config(command=self.text_area.yview)
         MousewheelSupport(self).add_support_to(self.text_area, yscrollbar=self.my_scroll, what="units")
@@ -262,7 +259,7 @@ class GraphAnalyzePage(Page):
     def calculate_geodesic_paths(self):
         geodesic_paths = None
 
-        self.text_area.insert(END, ANALYZE_PAGE_CALCULATE_GEODESIC_PATHS_INFO)
+        self.text_area.insert(END, ANALYZE_PAGE_CALCULATE_GEODESIC_PATHS_INFO, 'custom')
         self.text_area.update()
 
         if self.adjacency_type_selected.get() == "Matrix":
@@ -270,35 +267,35 @@ class GraphAnalyzePage(Page):
 
                 geodesic_paths = find_geodesics(self.Edges, self.Vertices, self.text_area, self.thread_analyze)
 
-                self.text_area.insert(END, ANALYZE_PAGE_CALCULATE_GEODESIC_PATHS_SUCCESS)
+                self.text_area.insert(END, ANALYZE_PAGE_CALCULATE_GEODESIC_PATHS_SUCCESS, 'custom')
                 self.text_area.update()
 
             except FileNotFoundError:
                 messagebox.showerror("Error!", ANALYZE_PAGE_GENERATE_GRAPH_ERROR)
 
-                self.text_area.insert(END, ANALYZE_PAGE_ANALYSIS_FAILED_ERROR)
+                self.text_area.insert(END, ANALYZE_PAGE_ANALYSIS_FAILED_ERROR, 'custom')
                 self.text_area.update()
 
         elif self.adjacency_type_selected.get() == "List":
             geodesic_paths = find_geodesics(self.Edges, self.Vertices, self.text_area, self.thread_analyze)
 
-            self.text_area.insert(END, ANALYZE_PAGE_CALCULATE_GEODESIC_PATHS_SUCCESS)
+            self.text_area.insert(END, ANALYZE_PAGE_CALCULATE_GEODESIC_PATHS_SUCCESS, 'custom')
             self.text_area.update()
 
         return geodesic_paths
 
     def calculate_closeness_centrality(self, geodesic_paths):
-        self.text_area.insert(END, ANALYZE_PAGE_CALCULATE_CLOSENESS_CENTRALITY_INFO)
+        self.text_area.insert(END, ANALYZE_PAGE_CALCULATE_CLOSENESS_CENTRALITY_INFO, 'custom')
         self.text_area.update()
 
         closeness_centrality(self.Vertices, geodesic_paths, self.text_area, self.thread_analyze)
 
-        self.text_area.insert(END, ANALYZE_PAGE_CALCULATE_CLOSENESS_CENTRALITY_SUCCESS)
+        self.text_area.insert(END, ANALYZE_PAGE_CALCULATE_CLOSENESS_CENTRALITY_SUCCESS, 'custom')
         self.text_area.see("end")
         self.text_area.update()
 
     def calculate_betweenness_centrality(self):
-        self.text_area.insert(END, ANALYZE_PAGE_CALCULATE_BETWEENNESS_CENTRALITY_INFO)
+        self.text_area.insert(END, ANALYZE_PAGE_CALCULATE_BETWEENNESS_CENTRALITY_INFO, 'custom')
         self.text_area.see("end")
         self.text_area.update()
 
@@ -343,13 +340,13 @@ class GraphAnalyzePage(Page):
 
     def cancel(self):
         if self.thread_analyze.is_alive():
-            self.text_area.insert(END, ANALYZE_PAGE_GRAPH_ANALYSIS_CANCEL_IN_PROGRESS_INFO)
+            self.text_area.insert(END, ANALYZE_PAGE_GRAPH_ANALYSIS_CANCEL_IN_PROGRESS_INFO, 'custom')
             self.text_area.update()
 
             while self.thread_analyze.is_alive():
                 self.thread_analyze.stop()
 
-            self.text_area.insert(END, ANALYZE_PAGE_GRAPH_ANALYSIS_CANCEL_COMPLETED_INFO)
+            self.text_area.insert(END, ANALYZE_PAGE_GRAPH_ANALYSIS_CANCEL_COMPLETED_INFO, 'custom')
             self.text_area.see("end")
             self.text_area.update()
 
@@ -468,7 +465,7 @@ class GraphAnalyzePage(Page):
                         except FileNotFoundError:
                             messagebox.showerror("Error!", ANALYZE_PAGE_GENERATE_GRAPH_ERROR)
 
-                            self.text_area.insert(END, ANALYZE_PAGE_ANALYSIS_FAILED_ERROR)
+                            self.text_area.insert(END, ANALYZE_PAGE_ANALYSIS_FAILED_ERROR, 'custom')
                             self.text_area.update()
                     else:
                         try:
@@ -481,7 +478,7 @@ class GraphAnalyzePage(Page):
                         except FileNotFoundError:
                             messagebox.showerror("Error!", ANALYZE_PAGE_GENERATE_GRAPH_ERROR)
 
-                            self.text_area.insert(END, ANALYZE_PAGE_ANALYSIS_FAILED_ERROR)
+                            self.text_area.insert(END, ANALYZE_PAGE_ANALYSIS_FAILED_ERROR, 'custom')
                             self.text_area.update()
 
                     if self.Edges is not None and self.Vertices is not None:
@@ -505,7 +502,7 @@ class GraphAnalyzePage(Page):
                         elif self.betweenness_centrality_selected.get() is True:
                             self.calculate_betweenness_centrality()
 
-                        self.text_area.insert(END, ANALYZE_PAGE_LAST_GENERATED_GRAPH_ANALYSIS_SUCCESS)
+                        self.text_area.insert(END, ANALYZE_PAGE_LAST_GENERATED_GRAPH_ANALYSIS_SUCCESS, 'custom')
                         self.text_area.see("end")
                         self.text_area.update()
 
@@ -543,7 +540,7 @@ class GraphAnalyzePage(Page):
                         elif self.betweenness_centrality_selected.get() is True:
                             self.calculate_betweenness_centrality()
 
-                        self.text_area.insert(END, ANALYZE_PAGE_LAST_GENERATED_GRAPH_ANALYSIS_SUCCESS)
+                        self.text_area.insert(END, ANALYZE_PAGE_LAST_GENERATED_GRAPH_ANALYSIS_SUCCESS, 'custom')
                         self.text_area.see("end")
                         self.text_area.update()
 
@@ -564,3 +561,4 @@ class GraphAnalyzePage(Page):
             style['scrollable_frame']['font']['size'],
             style['scrollable_frame']['font']['style']
         ))
+        self.text_area.tag_configure('custom', foreground=SCROLLABLE_FRAME_TEXT_FOREGROUND)
