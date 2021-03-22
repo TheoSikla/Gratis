@@ -17,8 +17,9 @@
     along with GRATIS. If not, see <https://www.gnu.org/licenses/>.
 """
 
-from tkinter import ttk
+from tkinter import ttk, PhotoImage, TclError
 
+from conf.base import LIGHT_THEME_IMAGE_PATH, DARK_THEME_IMAGE_PATH
 from conf.settings import Themes, commit_settings, load_settings
 from conf.strings import SETTINGS_PAGE_THEMES_TAB_TEXT, SETTINGS_PAGE_LIGHT_THEME_BUTTON_TEXT, \
     SETTINGS_PAGE_DARK_THEME_BUTTON_TEXT
@@ -58,13 +59,33 @@ class SettingsPage(Page):
             dark_theme_frame.grid_rowconfigure(i, weight=1)
             dark_theme_frame.grid_columnconfigure(i, weight=1)
 
-        light_theme_button = ttk.Button(master=light_theme_frame, text=SETTINGS_PAGE_LIGHT_THEME_BUTTON_TEXT,
-                                        command=self.light_theme_button_on_click)
-        light_theme_button.grid(row=1, column=1, ipady=BUTTON_INTERNAL_PAD_Y)
+        try:
+            light_theme_label = ttk.Label(master=light_theme_frame, text=SETTINGS_PAGE_LIGHT_THEME_BUTTON_TEXT)
+            light_theme_label.grid(row=0, column=1, sticky='s')
+            light_theme_image = PhotoImage(file=LIGHT_THEME_IMAGE_PATH)
+            light_theme_button = ttk.Button(master=light_theme_frame, text=SETTINGS_PAGE_LIGHT_THEME_BUTTON_TEXT,
+                                            command=self.light_theme_button_on_click, image=light_theme_image,
+                                            style='Settings.TButton')
+            light_theme_button.image = light_theme_image
+            light_theme_button.grid(row=1, column=1)
 
-        dark_theme_button = ttk.Button(master=dark_theme_frame, text=SETTINGS_PAGE_DARK_THEME_BUTTON_TEXT,
-                                       command=self.dark_theme_button_on_click)
-        dark_theme_button.grid(row=1, column=1, ipady=BUTTON_INTERNAL_PAD_Y)
+            dark_theme_label = ttk.Label(master=dark_theme_frame, text=SETTINGS_PAGE_DARK_THEME_BUTTON_TEXT)
+            dark_theme_label.grid(row=0, column=1, sticky='s')
+            dark_theme_image = PhotoImage(file=DARK_THEME_IMAGE_PATH)
+            dark_theme_button = ttk.Button(master=dark_theme_frame, text=SETTINGS_PAGE_DARK_THEME_BUTTON_TEXT,
+                                           command=self.dark_theme_button_on_click, image=dark_theme_image,
+                                           style='Settings.TButton')
+            dark_theme_button.image = dark_theme_image
+            dark_theme_button.grid(row=1, column=1)
+        except TclError:
+            light_theme_button = ttk.Button(master=light_theme_frame, text=SETTINGS_PAGE_LIGHT_THEME_BUTTON_TEXT,
+                                            command=self.light_theme_button_on_click)
+            light_theme_button.grid(row=1, column=1, ipady=BUTTON_INTERNAL_PAD_Y)
+
+            dark_theme_image = PhotoImage(file=DARK_THEME_IMAGE_PATH)
+            dark_theme_button = ttk.Button(master=dark_theme_frame, text=SETTINGS_PAGE_DARK_THEME_BUTTON_TEXT,
+                                           command=self.dark_theme_button_on_click)
+            dark_theme_button.grid(row=1, column=1, ipady=BUTTON_INTERNAL_PAD_Y)
 
         tab_control.add(themes_tab_frame, text=f'{SETTINGS_PAGE_THEMES_TAB_TEXT: ^{tab_internal_pad}s}')
         tab_control.grid(row=0, column=0, sticky="nsew")

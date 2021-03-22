@@ -20,7 +20,7 @@
 import argparse
 import sys
 from argparse import RawTextHelpFormatter
-from tkinter import Tk, ttk, Menu
+from tkinter import Tk, ttk, Menu, FLAT
 
 from colorama import init
 
@@ -60,6 +60,11 @@ class App(Tk):
         self.style.configure('TButton', background=BUTTON_BACKGROUND, foreground=BUTTON_FOREGROUND,
                              highlightbackground=BUTTON_IMAGE_BACKGROUND,
                              relief=BUTTON_RELIEF, width=BUTTON_WIDTH)
+        self.style.map('TButton', borderwidth=[('pressed', 0)], relief=[('pressed', FLAT)])
+        self.style.configure('Settings.TButton', background=MAIN_FRAME_BACKGROUND, foreground=MAIN_FRAME_BACKGROUND,
+                             relief=BUTTON_RELIEF)
+        self.style.map('Settings.TButton', background=[('active', MAIN_FRAME_BACKGROUND)], borderwidth=[('pressed', 0)],
+                       relief=[('pressed', FLAT)],)
         self.style.configure('TFrame', background=FRAME_BACKGROUND)
         self.style.configure('TRadiobutton', background=RADIOBUTTON_BACKGROUND, foreground=RADIOBUTTON_FOREGROUND,
                              relief=RADIOBUTTON_RELIEF, font=self.button_font)
@@ -129,6 +134,11 @@ class App(Tk):
         self.style = ttk.Style()
         self.style.configure('TButton', background=style['button']['bg'], foreground=style['button']['fg'],
                              relief=style['button']['relief'], width=style['button']['width'])
+        self.style.map('TButton', borderwidth=[('pressed', 0)], relief=[('pressed', FLAT)])
+        self.style.configure('Settings.TButton', background=style['main_frame_bg'], foreground=style['main_frame_bg'],
+                             relief=style['button']['relief'])
+        self.style.map('Settings.TButton', background=[('active', style['main_frame_bg'])],
+                       borderwidth=[('pressed', 0)], relief=[('pressed', FLAT)])
         self.style.configure('TFrame', background=style['frame']['bg'])
         self.style.configure('TRadiobutton', background=style['radiobutton']['bg'],
                              foreground=style['radiobutton']['fg'],
