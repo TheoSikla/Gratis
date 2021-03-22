@@ -12,11 +12,11 @@ class UtilsTests(TestCase):
     """
 
     class MockArgs:
-        def __init__(self, model=None, adjacency_type=None, number_of_vertices=None, number_of_edges=None,
+        def __init__(self, model=None, graph_representation=None, number_of_vertices=None, number_of_edges=None,
                      number_of_initial_nodes=None, graph_degree=None, initial_connections_per_node=None,
                      probability=None, seed=None):
             self.model = model
-            self.adjacency_type = adjacency_type
+            self.graph_representation = graph_representation
             self.number_of_vertices = number_of_vertices
             self.number_of_edges = number_of_edges
             self.number_of_initial_nodes = number_of_initial_nodes

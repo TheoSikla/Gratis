@@ -90,6 +90,7 @@
         },
         "bg": "#ffffff",
         "fg": "#000000",
+        "active_bg": "#f0f0f0",
         "relief": "flat"
       },
       "checkbutton": {
@@ -100,6 +101,7 @@
         },
         "bg": "#ffffff",
         "fg": "#000000",
+        "active_bg": "#f0f0f0",
         "relief": "flat"
       },
       "label": {
@@ -187,6 +189,7 @@
         },
         "bg": "#2e2e2e",
         "fg": "#f0f0f0",
+        "active_bg": "#4d4d4d",
         "relief": "flat"
       },
       "checkbutton": {
@@ -197,6 +200,7 @@
         },
         "bg": "#2e2e2e",
         "fg": "#f0f0f0",
+        "active_bg": "#4d4d4d",
         "relief": "flat"
       },
       "label": {

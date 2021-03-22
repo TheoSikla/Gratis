@@ -38,8 +38,6 @@ class LoginCreds(Page):
         self.button_font = ("Dialog", 9, "bold italic")
 
         self.controller.protocol('WM_DELETE_WINDOW', self.x_button)
-        self.controller["padx"] = 10
-        self.controller["pady"] = 10
 
         self.main_label = ttk.Label(self, text="Enter your plotly credentials in order to generate a 3D Graph.",
                                     font=("Arial", 13, "bold"))

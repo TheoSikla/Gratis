@@ -63,8 +63,10 @@ class App(Tk):
         self.style.configure('TFrame', background=FRAME_BACKGROUND)
         self.style.configure('TRadiobutton', background=RADIOBUTTON_BACKGROUND, foreground=RADIOBUTTON_FOREGROUND,
                              relief=RADIOBUTTON_RELIEF, font=self.button_font)
+        self.style.map("TRadiobutton", background=[('active', RADIOBUTTON_ACTIVE_BACKGROUND)])
         self.style.configure('TCheckbutton', background=CHECKBUTTON_BACKGROUND, foreground=CHECKBUTTON_FOREGROUND,
                              relief=CHECKBUTTON_RELIEF, font=self.button_font)
+        self.style.map("TCheckbutton", background=[('active', CHECKBUTTON_ACTIVE_BACKGROUND)])
         self.style.configure('TLabel', background=LABEL_BACKGROUND, foreground=LABEL_FOREGROUND)
         self.style.configure('HistoryPage.Counter.TLabel', background=LABEL_BACKGROUND,
                              foreground=LABEL_FOREGROUND, width=5, height=10)
@@ -131,9 +133,11 @@ class App(Tk):
         self.style.configure('TRadiobutton', background=style['radiobutton']['bg'],
                              foreground=style['radiobutton']['fg'],
                              relief=style['radiobutton']['relief'], font=self.button_font)
+        self.style.map("TRadiobutton", background=[('active', style['radiobutton']['active_bg'])])
         self.style.configure('TCheckbutton', background=style['checkbutton']['bg'],
                              foreground=style['checkbutton']['fg'],
                              relief=style['checkbutton']['relief'], font=self.button_font)
+        self.style.map("TCheckbutton", background=[('active', style['checkbutton']['active_bg'])])
         self.style.configure('TLabel', background=style['label']['bg'], foreground=style['label']['fg'])
         self.style.configure('HistoryPage.Counter.TLabel', background=style['label']['bg'],
                              foreground=style['label']['fg'], width=5, height=10)

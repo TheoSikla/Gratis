@@ -90,6 +90,7 @@ RADIOBUTTON_FONT = (
     STYLE['radiobutton']['font']['family'], STYLE['radiobutton']['font']['size'], STYLE['radiobutton']['font']['style']
 )
 RADIOBUTTON_BACKGROUND = STYLE['radiobutton']['bg']
+RADIOBUTTON_ACTIVE_BACKGROUND = STYLE['radiobutton']['active_bg']
 RADIOBUTTON_FOREGROUND = STYLE['radiobutton']['fg']
 RADIOBUTTON_RELIEF = STYLE['radiobutton']['relief']
 
@@ -98,6 +99,7 @@ CHECKBUTTON_FONT = (
     STYLE['checkbutton']['font']['family'], STYLE['checkbutton']['font']['size'], STYLE['checkbutton']['font']['style']
 )
 CHECKBUTTON_BACKGROUND = STYLE['checkbutton']['bg']
+CHECKBUTTON_ACTIVE_BACKGROUND = STYLE['checkbutton']['active_bg']
 CHECKBUTTON_FOREGROUND = STYLE['checkbutton']['fg']
 CHECKBUTTON_RELIEF = STYLE['checkbutton']['relief']
 

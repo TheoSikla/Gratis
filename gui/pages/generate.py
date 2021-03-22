@@ -974,9 +974,4 @@ class GraphGeneratePage(Page):
 
     def refresh_widget_style(self, style):
         super(GraphGeneratePage, self).refresh_widget_style(style=style)
-        self.text_area.configure(bg=style['scrollable_frame']['bg'], font=(
-            style['scrollable_frame']['font']['family'],
-            style['scrollable_frame']['font']['size'],
-            style['scrollable_frame']['font']['style']
-        ))
-        self.text_area.tag_configure('custom', foreground=SCROLLABLE_FRAME_TEXT_FOREGROUND)
+        self.handle_text_widget_style_refresh(text_area=self.text_area, style=style)

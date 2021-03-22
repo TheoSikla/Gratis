@@ -17,7 +17,7 @@
     along with GRATIS. If not, see <https://www.gnu.org/licenses/>.
 """
 
-from tkinter import ttk
+from tkinter import ttk, END
 
 
 class Page(ttk.Frame):
@@ -29,3 +29,15 @@ class Page(ttk.Frame):
 
     def refresh_widget_style(self, style):
         pass
+
+    @staticmethod
+    def handle_text_widget_style_refresh(text_area, style):
+        text_area.configure(bg=style['scrollable_frame']['bg'], font=(
+            style['scrollable_frame']['font']['family'],
+            style['scrollable_frame']['font']['size'],
+            style['scrollable_frame']['font']['style']
+        ))
+        text_area.tag_configure('custom', foreground=style['scrollable_frame']['inserted_text']['fg'])
+        existing_text = text_area.get("1.0", END)
+        text_area.delete('1.0', END)
+        text_area.insert(END, existing_text, 'custom')
