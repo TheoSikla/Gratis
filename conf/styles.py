@@ -114,6 +114,14 @@ LABEL_BACKGROUND = STYLE['label']['bg']
 LABEL_FOREGROUND = STYLE['label']['fg']
 LABEL_RELIEF = STYLE['label']['relief']
 
+# Label link
+LABEL_LINK_FONT = (
+    STYLE['label_link']['font']['family'], STYLE['label_link']['font']['size'], STYLE['label_link']['font']['style']
+)
+LABEL_LINK_BACKGROUND = STYLE['label_link']['bg']
+LABEL_LINK_FOREGROUND = STYLE['label_link']['fg']
+LABEL_LINK_CURSOR = STYLE['label_link']['cursor']
+
 # Scrollable frame
 SCROLLABLE_FRAME_FONT = (
     STYLE['scrollable_frame']['font']['family'],

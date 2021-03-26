@@ -28,7 +28,7 @@ from gui.pages.page import Page
 
 
 class SettingsPage(Page):
-    def __init__(self, parent, controller):
+    def __init__(self, parent, controller, kwargs=None):
         super(SettingsPage, self).__init__(parent)
 
         self.controller = controller

@@ -19,7 +19,7 @@
 
 import sys
 from time import time
-from tkinter import ttk, Text, FLAT, StringVar, END, messagebox, Toplevel
+from tkinter import ttk, Text, FLAT, StringVar, END, messagebox
 
 from conf.base import MAIN_FRAME_BACKGROUND, BUTTON_FONT, LABEL_FONT_LARGE, \
     SCROLLABLE_FRAME_BACKGROUND, SCROLLABLE_FRAME_FONT, VISUALIZE_PAGE_MAIN_LABEL_TEXT, \
@@ -34,6 +34,7 @@ from gui.pages.custom_pop_up import CustomPopUp
 from gui.pages.login_creads import LoginCreds
 from gui.pages.page import Page
 from gui.pages.utils import spawn_top_level
+from visualize import plot_2d as pl2d
 
 
 class GraphVisualizePage(Page):
@@ -98,7 +99,7 @@ class GraphVisualizePage(Page):
 
         # 2D Matplotlib Visualize Button
         self.matplotlib_visualize_button = ttk.Button(self.buttons_frames, text=VISUALIZE_PAGE_MATPLOTLIB_BUTTON_TEXT,
-                                                      command=self.Plot_2D)
+                                                      command=self.plot_2d)
         self.matplotlib_visualize_button.grid(row=2, column=0, ipady=10, ipadx=15, pady=10)
 
         # Back Button
@@ -184,7 +185,7 @@ class GraphVisualizePage(Page):
                 message3 = "[+] Elapsed time: {:>.2f} sec\n".format(end_3d)
                 self.text_area.insert(END, message3, 'custom')
                 self.text_area.update()
-                self.Spawn_Custom_Popup(plotly_visualizer.link)
+                self.spawn_custom_popup(plotly_visualizer.link)
             elif plot_result == "File not found":
                 self.text_area.delete('1.0', END)
                 messagebox.showerror("Error", VISUALIZE_PAGE_PLOTLY_FAILED_NO_GRAPH_GENERATED_ERROR)
@@ -200,10 +201,8 @@ class GraphVisualizePage(Page):
             self.text_area.insert(END, VISUALIZE_PAGE_PLOTLY_FAILED_ERROR, 'custom')
             self.text_area.update()
 
-    def Plot_2D(self):
-        import visualize.plot_2d
-
-        plot = visualize.plot_2d.Plot2D()
+    def plot_2d(self):
+        plot = pl2d.Plot2D()
 
         if self.adjacency_type_selected.get() == "":
             messagebox.showerror('Error!', VISUALIZE_PAGE_VISUALIZATION_VIA_MATRIX_LIST_ERROR)
@@ -220,11 +219,19 @@ class GraphVisualizePage(Page):
             else:
                 messagebox.showerror("Error", VISUALIZE_PAGE_VISUALIZATION_FAILED_ERROR)
 
-    def Spawn_Custom_Popup(self, url):
-        root3 = Toplevel()
-        custom_popup = CustomPopUp(root3)
-        custom_popup.plotly_popup(url)
-        self.master.wait_window(root3)
+    def spawn_custom_popup(self, url):
+        return spawn_top_level([CustomPopUp], kwargs={
+            'master': self,
+            'title': "Plotly 3D",
+            'width': LOGIN_WINDOW_WIDTH,
+            'height': LOGIN_WINDOW_HEIGHT,
+            'bg': MAIN_FRAME_BACKGROUND,
+            'frames_kwargs': {
+                CustomPopUp: {
+                    'url': url
+                }
+            }
+        }, return_top_level=True, topmost=True).frames[CustomPopUp]
 
     def refresh_widget_style(self, style):
         super(GraphVisualizePage, self).refresh_widget_style(style=style)

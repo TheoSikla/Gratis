@@ -34,6 +34,9 @@ def get_top_level(frames, kwargs=None):
     title = kwargs.pop('title')
     width = kwargs.get('width')
     height = kwargs.get('height')
+    frames_kwargs = None
+    if 'frames_kwargs' in kwargs.keys():
+        frames_kwargs = kwargs.pop('frames_kwargs')
 
     top_level = Toplevel(master=master, **kwargs)
     # Hide the toplevel
@@ -52,7 +55,7 @@ def get_top_level(frames, kwargs=None):
     # Render all the other frames
     top_level_frames = {}
     for frame in frames:
-        _frame = frame(parent=container, controller=top_level)
+        _frame = frame(parent=container, controller=top_level, kwargs=frames_kwargs[frame] if frames_kwargs else None)
         top_level_frames[frame] = _frame
         _frame.grid(row=0, column=0, sticky='nsew')
 

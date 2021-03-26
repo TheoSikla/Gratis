@@ -27,7 +27,6 @@ import matplotlib.pyplot as plt
 
 from conf.base import OUTPUT_FILES_DIRECTORY
 from graphs.graph import GraphRepresentationType
-from os_recon.define_os import path_escape
 from support_folders.run_length_encoder import RunLengthEncoder
 from utils.file import locate_latest_file
 

@@ -73,6 +73,8 @@ class App(Tk):
                              relief=CHECKBUTTON_RELIEF, font=self.button_font)
         self.style.map("TCheckbutton", background=[('active', CHECKBUTTON_ACTIVE_BACKGROUND)])
         self.style.configure('TLabel', background=LABEL_BACKGROUND, foreground=LABEL_FOREGROUND)
+        self.style.configure('Link.TLabel', background=LABEL_LINK_BACKGROUND, foreground=LABEL_LINK_FOREGROUND,
+                             font=LABEL_LINK_FONT)
         self.style.configure('HistoryPage.Counter.TLabel', background=LABEL_BACKGROUND,
                              foreground=LABEL_FOREGROUND, width=5, height=10)
         self.style.configure('HistoryPage.Content.TLabel', background=LABEL_BACKGROUND,
@@ -149,6 +151,12 @@ class App(Tk):
                              relief=style['checkbutton']['relief'], font=self.button_font)
         self.style.map("TCheckbutton", background=[('active', style['checkbutton']['active_bg'])])
         self.style.configure('TLabel', background=style['label']['bg'], foreground=style['label']['fg'])
+        self.style.configure('Link.TLabel', background=style['label_link']['bg'], foreground=style['label_link']['fg'],
+                             font=(
+                                 style['label_link']['font']['family'],
+                                 style['label_link']['font']['size'],
+                                 style['label_link']['font']['style']
+                             ))
         self.style.configure('HistoryPage.Counter.TLabel', background=style['label']['bg'],
                              foreground=style['label']['fg'], width=5, height=10)
         self.style.configure('HistoryPage.Content.TLabel', background=style['label']['bg'],

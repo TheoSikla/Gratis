@@ -26,7 +26,7 @@ from sqlite3_db.database import User
 
 
 class LoginCreds(Page):
-    def __init__(self, parent, controller):
+    def __init__(self, parent, controller, kwargs=None):
         super(LoginCreds, self).__init__(parent)
 
         self.controller = controller
