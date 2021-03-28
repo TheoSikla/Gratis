@@ -30,6 +30,7 @@ from conf.base import MAIN_FRAME_BACKGROUND, BUTTON_FONT, LABEL_FONT_LARGE, \
     VISUALIZE_PAGE_PLOTLY_FAILED_ERROR, VISUALIZE_PAGE_PLOTLY_WAIT_INFO, VISUALIZE_PAGE_PLOTLY_GRAPH_CREATE_SUCCESS, \
     VISUALIZE_PAGE_PLOTLY_FAILED_NO_GRAPH_GENERATED_ERROR, MAIN_WINDOW_DIMENSIONS_STR, LOGIN_WINDOW_WIDTH, \
     LOGIN_WINDOW_HEIGHT, SCROLLABLE_FRAME_TEXT_FOREGROUND
+from graphs.graph import GraphRepresentationType
 from gui.pages.custom_pop_up import CustomPopUp
 from gui.pages.login_creads import LoginCreds
 from gui.pages.page import Page
@@ -79,11 +80,13 @@ class GraphVisualizePage(Page):
         self.buttons_frames.grid(row=2, column=1, padx=10)
 
         self.adjacency_type_selected = StringVar()
-        self.matrix = ttk.Radiobutton(self.buttons_frames, text=GRAPH_TYPE_MATRIX_TEXT, value="Matrix",
+        self.matrix = ttk.Radiobutton(self.buttons_frames, text=GRAPH_TYPE_MATRIX_TEXT,
+                                      value=GraphRepresentationType.MATRIX.value,
                                       variable=self.adjacency_type_selected)
         self.matrix.grid(row=0, column=0, padx=30, pady=10, sticky="w")
 
-        self.list = ttk.Radiobutton(self.buttons_frames, text=GRAPH_TYPE_LIST_TEXT, value="List",
+        self.list = ttk.Radiobutton(self.buttons_frames, text=GRAPH_TYPE_LIST_TEXT,
+                                    value=GraphRepresentationType.LIST.value,
                                     variable=self.adjacency_type_selected)
         self.list.grid(row=0, column=1, padx=30, pady=10, sticky="w")
 
@@ -128,12 +131,12 @@ class GraphVisualizePage(Page):
 
         if self.adjacency_type_selected.get() == "":
             messagebox.showerror('Error!', VISUALIZE_PAGE_VISUALIZATION_VIA_MATRIX_LIST_ERROR)
-        elif self.adjacency_type_selected.get() == "Matrix":
+        elif self.adjacency_type_selected.get() == GraphRepresentationType.MATRIX.value:
             if Visualizer.pajek_visualize_matrix():
                 messagebox.showinfo('Success!', VISUALIZE_PAGE_VISUALIZATION_COMPLETED_SUCCESS)
             else:
                 messagebox.showerror("Error", VISUALIZE_PAGE_VISUALIZATION_FAILED_ERROR)
-        elif self.adjacency_type_selected.get() == "List":
+        elif self.adjacency_type_selected.get() == GraphRepresentationType.LIST.value:
             if Visualizer.pajek_visualize_list():
                 messagebox.showinfo('Success!', VISUALIZE_PAGE_VISUALIZATION_COMPLETED_SUCCESS)
             else:
@@ -174,9 +177,9 @@ class GraphVisualizePage(Page):
         try:
             plot_result = False
 
-            if self.adjacency_type_selected.get() == "Matrix":
+            if self.adjacency_type_selected.get() == GraphRepresentationType.MATRIX.value:
                 plot_result = plotly_visualizer.plotly_visualize_matrix(username, api_key, output_filename)
-            elif self.adjacency_type_selected.get() == "List":
+            elif self.adjacency_type_selected.get() == GraphRepresentationType.LIST.value:
                 plot_result = plotly_visualizer.plotly_visualize_list(username, api_key, output_filename)
 
             if plot_result is True:
@@ -206,13 +209,13 @@ class GraphVisualizePage(Page):
 
         if self.adjacency_type_selected.get() == "":
             messagebox.showerror('Error!', VISUALIZE_PAGE_VISUALIZATION_VIA_MATRIX_LIST_ERROR)
-        elif self.adjacency_type_selected.get() == "Matrix":
+        elif self.adjacency_type_selected.get() == GraphRepresentationType.MATRIX.value:
             if plot.graph_topology_matrix():
                 plot.extract_possibilities()
                 plot.plot_2d("Matrix")
             else:
                 messagebox.showerror("Error", VISUALIZE_PAGE_VISUALIZATION_FAILED_ERROR)
-        elif self.adjacency_type_selected.get() == "List":
+        elif self.adjacency_type_selected.get() == GraphRepresentationType.LIST.value:
             if plot.graph_topology_list():
                 plot.extract_possibilities()
                 plot.plot_2d("List")

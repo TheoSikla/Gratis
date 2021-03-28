@@ -135,8 +135,11 @@ class Graph(Connection):
         return graph_objects
 
     def count(self):
-        number_of_graph_objects = self.cursor.execute("SELECT COUNT(*) FROM `graph_history`").fetchone()[0]
-        return(number_of_graph_objects)
+        return self.cursor.execute("SELECT COUNT(*) FROM `graph_history`").fetchone()[0]
+
+    def chunk(self, start, size, _reversed=False):
+        return self.cursor.execute(f"SELECT * FROM `graph_history` order by {'-' if _reversed else ''}`id` "
+                                   f"limit {start},{size}")
 
     def populate(self, N):
         import random

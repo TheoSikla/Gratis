@@ -69,7 +69,7 @@ class MainPage(Page):
                                              ),
                                                  controller.frames[
                                                      self.retrieve_frame(controller, 'GraphHistoryPage')
-                                                 ].fecth_fresh_data()]
+                                                 ].on_raise()]
                                              )
         self.graph_history_area.grid(row=2, column=4, ipady=self.ipady, padx=30)
 
