@@ -36,6 +36,7 @@ from gui.pages.main import MainPage
 from gui.pages.settings import SettingsPage
 from gui.pages.utils import spawn_top_level
 from gui.pages.visualize import GraphVisualizePage
+from version import __version__
 
 
 class App(Tk):
@@ -205,6 +206,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(formatter_class=RawTextHelpFormatter)
 
     integer_metavar = '{1,2...}'
+    parser.add_argument('-v', '--version', action='store_true', help=ARGPARSE_HELP_STRINGS['version'])
     parser.add_argument('-g', '--generate', action='store_true', help=ARGPARSE_HELP_STRINGS['generate'])
     parser.add_argument('-m', '--model', type=int, metavar=integer_metavar,
                         help=ARGPARSE_HELP_STRINGS['model'],
@@ -234,6 +236,8 @@ if __name__ == "__main__":
         if system() == 'Windows':
             init(convert=True)
         App.create_directories()
+        if args.version:
+            communicate_cli_message(message=__version__, _type=MessageType.SUCCESS.value)
         if args.generate and args.model:
             args.model = AVAILABLE_GRAPH_TYPES_NUMBERED[args.model]
             args.graph_representation = AVAILABLE_GRAPH_REPRESENTATION_TYPES_NUMBERED[args.graph_representation]

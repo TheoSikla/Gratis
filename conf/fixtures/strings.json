@@ -160,6 +160,7 @@
   },
   "cli": {
     "help": {
+      "version": "Shows the version of the application",
       "generate": "Indicates that the cli is used for graph creation",
       "model": "The graph model.\nAvailable models:\n  1. Homogeneous\n  2. Erdos Renyi\n  3. Custom Erdos Renyi\n  4. Random Fixed\n  5. Scale Free\n  6. Custom Scale Free",
       "graph_representation": "The graph representation.\nAvailable representations:\n  1. Adjacency Matrix\n  2. Adjacency List",
