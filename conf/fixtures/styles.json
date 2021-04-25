@@ -1,0 +1,268 @@
+{
+  "dimensions": {
+    "main": {
+      "default": {
+        "width": 1000,
+        "height": 600
+      },
+      "linux": {
+        "width": 1100,
+        "height": 600
+      },
+      "windows": {
+        "width": 1000,
+        "height": 600
+      }
+    },
+    "settings": {
+      "default": {
+        "width": 1000,
+        "height": 600
+      },
+      "linux": {
+        "width": 1100,
+        "height": 600
+      },
+      "windows": {
+        "width": 1000,
+        "height": 600
+      }
+    },
+    "login": {
+      "default": {
+        "width": 525,
+        "height": 300
+      },
+      "linux": {
+        "width": 525,
+        "height": 300
+      },
+      "windows": {
+        "width": 525,
+        "height": 300
+      }
+    }
+  },
+  "styles": {
+    "light": {
+      "menu": {
+        "bg": "#f0f0f0",
+        "fg": "#000000",
+        "relief": "flat",
+        "font": {
+          "family": "Dialog",
+          "size": 9,
+          "style": ""
+        },
+        "items": {
+          "bg": "#ffffff",
+          "fg": "#000000",
+          "relief": "flat",
+          "font": {
+            "family": "Dialog",
+            "size": 9,
+            "style": ""
+          }
+        }
+      },
+      "main_frame_bg": "#ffffff",
+      "button": {
+        "font": {
+          "family": "Dialog",
+          "size": 9,
+          "style": "bold italic"
+        },
+        "bg": "#ebebeb",
+        "image_bg": "#ffffff",
+        "fg": "#000000",
+        "relief": "flat",
+        "width": 15,
+        "internal_pad_y": 10
+      },
+      "frame": {
+        "bg": "#ffffff"
+      },
+      "radiobutton": {
+        "font": {
+          "family": "Dialog",
+          "size": 9,
+          "style": "bold italic"
+        },
+        "bg": "#ffffff",
+        "fg": "#000000",
+        "active_bg": "#f0f0f0",
+        "relief": "flat"
+      },
+      "checkbutton": {
+        "font": {
+          "family": "Dialog",
+          "size": 9,
+          "style": "bold italic"
+        },
+        "bg": "#ffffff",
+        "fg": "#000000",
+        "active_bg": "#f0f0f0",
+        "relief": "flat"
+      },
+      "label": {
+        "font": {
+          "family": "Arial",
+          "size": {
+            "large": 20,
+            "medium": 10
+          },
+          "style": "bold"
+        },
+        "bg": "#ffffff",
+        "fg": "#000000",
+        "relief": "flat"
+      },
+      "label_link": {
+        "font": {
+          "family": "Dialog",
+          "size": 11,
+          "style": "bold italic"
+        },
+        "bg": "#ffffff",
+        "fg": "#58b8cc",
+        "relief": "flat",
+        "cursor": "hand2"
+      },
+      "scrollable_frame": {
+        "font": {
+          "family": "consolas",
+          "size": 11,
+          "style": ""
+        },
+        "inserted_text": {
+          "fg": "#000000"
+        },
+        "bg": "#ffffff",
+        "scrollbar_bg": null
+      },
+      "notebook": {
+        "bg": "#f0f0f0",
+        "tab": {
+          "bg": "#f0f0f0",
+          "bg_selected": "#ffffff",
+          "fg": "#000000",
+          "font": {
+            "family": "consolas",
+            "size": 11,
+            "style": ""
+          }
+        }
+      }
+    },
+    "dark": {
+      "menu": {
+        "bg": "#f0f0f0",
+        "fg": "#000000",
+        "relief": "flat",
+        "font": {
+          "family": "Dialog",
+          "size": 9,
+          "style": ""
+        },
+        "items": {
+          "bg": "#ffffff",
+          "fg": "#000000",
+          "relief": "flat",
+          "font": {
+            "family": "Dialog",
+            "size": 9,
+            "style": ""
+          }
+        }
+      },
+      "main_frame_bg": "#2e2e2e",
+      "button": {
+        "font": {
+          "family": "Dialog",
+          "size": 9,
+          "style": "bold italic"
+        },
+        "bg": "#ebebeb",
+        "image_bg": "#2e2e2e",
+        "fg": "#000000",
+        "relief": "flat",
+        "width": 15,
+        "internal_pad_y": 10
+      },
+      "frame": {
+        "bg": "#2e2e2e"
+      },
+      "radiobutton": {
+        "font": {
+          "family": "Dialog",
+          "size": 9,
+          "style": "bold italic"
+        },
+        "bg": "#2e2e2e",
+        "fg": "#f0f0f0",
+        "active_bg": "#4d4d4d",
+        "relief": "flat"
+      },
+      "checkbutton": {
+        "font": {
+          "family": "Dialog",
+          "size": 9,
+          "style": "bold italic"
+        },
+        "bg": "#2e2e2e",
+        "fg": "#f0f0f0",
+        "active_bg": "#4d4d4d",
+        "relief": "flat"
+      },
+      "label": {
+        "font": {
+          "family": "Arial",
+          "size": {
+            "large": 20,
+            "medium": 10
+          },
+          "style": "bold"
+        },
+        "bg": "#2e2e2e",
+        "fg": "#f0f0f0",
+        "relief": "flat"
+      },
+      "label_link": {
+        "font": {
+          "family": "Dialog",
+          "size": 11,
+          "style": "bold italic"
+        },
+        "bg": "#2e2e2e",
+        "fg": "#73959c",
+        "relief": "flat",
+        "cursor": "hand2"
+      },
+      "scrollable_frame": {
+        "font": {
+          "family": "consolas",
+          "size": 11,
+          "style": ""
+        },
+        "inserted_text": {
+          "fg": "#ffffff"
+        },
+        "bg": "#2e2e2e",
+        "scrollbar_bg": null
+      },
+      "notebook": {
+        "bg": "#f0f0f0",
+        "tab": {
+          "bg": "#2e2e2e",
+          "bg_selected": "#2e2e2e",
+          "fg": "#f0f0f0",
+          "font": {
+            "family": "consolas",
+            "size": 11,
+            "style": ""
+          }
+        }
+      }
+    }
+  }
+}
