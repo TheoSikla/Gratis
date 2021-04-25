@@ -11,6 +11,7 @@ plotly = "==3.10.0"
 cryptography = "==2.7"
 python-igraph = "==0.8.3"
 numpy = "==1.19.3"
+colorama = "==0.4.4"
 
 [requires]
 python_version = "3.6"

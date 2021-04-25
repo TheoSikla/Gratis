@@ -17,95 +17,103 @@
     along with GRATIS. If not, see <https://www.gnu.org/licenses/>.
 """
 
+import sys
 from time import time
-from gui.pages.page import *
-from gui.pages.login_creads import LoginCreds
+from tkinter import ttk, Text, FLAT, StringVar, END, messagebox
+
+from conf.base import MAIN_FRAME_BACKGROUND, BUTTON_FONT, LABEL_FONT_LARGE, \
+    SCROLLABLE_FRAME_BACKGROUND, SCROLLABLE_FRAME_FONT, VISUALIZE_PAGE_MAIN_LABEL_TEXT, \
+    GRAPH_TYPE_MATRIX_TEXT, GRAPH_TYPE_LIST_TEXT, VISUALIZE_PAGE_PAJEK_BUTTON_TEXT, VISUALIZE_PAGE_PLOTLY_BUTTON_TEXT, \
+    VISUALIZE_PAGE_MATPLOTLIB_BUTTON_TEXT, VISUALIZE_PAGE_BACK_BUTTON_TEXT, VISUALIZE_PAGE_EXIT_BUTTON_TEXT, \
+    VISUALIZE_PAGE_VISUALIZATION_VIA_MATRIX_LIST_ERROR, VISUALIZE_PAGE_VISUALIZATION_COMPLETED_SUCCESS, \
+    VISUALIZE_PAGE_VISUALIZATION_FAILED_ERROR, VISUALIZE_PAGE_3D_VISUALIZATION_VIA_MATRIX_LIST_ERROR, \
+    VISUALIZE_PAGE_PLOTLY_FAILED_ERROR, VISUALIZE_PAGE_PLOTLY_WAIT_INFO, VISUALIZE_PAGE_PLOTLY_GRAPH_CREATE_SUCCESS, \
+    VISUALIZE_PAGE_PLOTLY_FAILED_NO_GRAPH_GENERATED_ERROR, MAIN_WINDOW_DIMENSIONS_STR, LOGIN_WINDOW_WIDTH, \
+    LOGIN_WINDOW_HEIGHT, SCROLLABLE_FRAME_TEXT_FOREGROUND
+from graphs.graph import GraphRepresentationType
 from gui.pages.custom_pop_up import CustomPopUp
+from gui.pages.login_creads import LoginCreds
+from gui.pages.page import Page
+from gui.pages.utils import spawn_top_level
+from visualize import plot_2d as pl2d
 
 
 class GraphVisualizePage(Page):
     def __init__(self, parent, controller):
-        Frame.__init__(self, parent)
+        super(GraphVisualizePage, self).__init__(parent)
 
-        # MainPage Frame configuration
-        self.configure(bg="azure3")
+        self.controller = controller
+
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(20, weight=1)
         self.grid_columnconfigure(20, weight=1)
-        # ================================
 
         # Button font
-        self.button_font = ("Dialog", 9, "bold italic")
-        # ================================
+        self.button_font = BUTTON_FONT
 
         # Main Label
-        self.main_label = Label(self, bg="azure3", text="Visualize a graph\n",
-                                font=("Arial", 20, "bold"))
+        self.main_label = ttk.Label(self, text=VISUALIZE_PAGE_MAIN_LABEL_TEXT, font=LABEL_FONT_LARGE)
         self.main_label.grid(row=1, column=1, padx=20)
-        # ================================
 
         # Text Area Frame
         # create a Frame for the Text and Scrollbar
         self.my_frame_inner = ttk.Frame(self)
         # create a Scrollbar and associate it with txt
-        self.my_scroll = Scrollbar(self.my_frame_inner, orient='vertical')
+        self.my_scroll = ttk.Scrollbar(self.my_frame_inner, orient='vertical')
         # create a Text widget
-        self.text_area = Text(self.my_frame_inner, background="lavender blush", yscrollcommand=self.my_scroll.set,
-                              width=35,
-                              height=23, relief=FLAT, borderwidth=5)
+        self.text_area = Text(self.my_frame_inner, background=SCROLLABLE_FRAME_BACKGROUND,
+                              yscrollcommand=self.my_scroll.set, width=35, height=23, relief=FLAT, borderwidth=5)
         self.text_area.bind("<FocusIn>", self.defocus)
-        self.text_area.config(font=("consolas", 11), undo=True, wrap='word')
+        self.text_area.config(font=SCROLLABLE_FRAME_FONT, undo=True, wrap='word')
         self.my_scroll.config(command=self.text_area.yview)
+        self.text_area.tag_configure('custom', foreground=SCROLLABLE_FRAME_TEXT_FOREGROUND)
 
         self.my_frame_inner.grid(row=1, column=2, rowspan=13, columnspan=2, sticky='nesw')
         self.text_area.grid(row=1, column=2, rowspan=13)
         self.my_scroll.grid(row=1, column=3, rowspan=13, columnspan=2, sticky='nesw')
-        # ================================
 
         # Buttons Frame
-        self.buttons_frames = Frame(self, bg="azure3")
+        self.buttons_frames = ttk.Frame(self)
         self.buttons_frames.grid_propagate(0)
         self.buttons_frames.configure(height=250, width=400)
         self.buttons_frames.grid(row=2, column=1, padx=10)
-        # ================================
 
         self.adjacency_type_selected = StringVar()
-        self.matrix = ttk.Radiobutton(self.buttons_frames, text="Adjacency Matrix", value="Matrix",
+        self.matrix = ttk.Radiobutton(self.buttons_frames, text=GRAPH_TYPE_MATRIX_TEXT,
+                                      value=GraphRepresentationType.MATRIX.value,
                                       variable=self.adjacency_type_selected)
         self.matrix.grid(row=0, column=0, padx=30, pady=10, sticky="w")
 
-        self.list = ttk.Radiobutton(self.buttons_frames, text="Adjacency List", value="List",
+        self.list = ttk.Radiobutton(self.buttons_frames, text=GRAPH_TYPE_LIST_TEXT,
+                                    value=GraphRepresentationType.LIST.value,
                                     variable=self.adjacency_type_selected)
         self.list.grid(row=0, column=1, padx=30, pady=10, sticky="w")
 
         # Pajek Visualize Button
-        self.pajek_visualize_button = ttk.Button(self.buttons_frames, text="Pajek Visualize",
+        self.pajek_visualize_button = ttk.Button(self.buttons_frames, text=VISUALIZE_PAGE_PAJEK_BUTTON_TEXT,
                                                  command=self.pajek_visualize)
         self.pajek_visualize_button.grid(row=1, column=0, ipady=10, ipadx=15)
-        # ============================================
 
         # Plotly Visualize Button
-        self.plotly_visualize_button = ttk.Button(self.buttons_frames, text="Plotly 3D Visualize",
-                                                  command=self.Spawn_Login_Creds)
+        self.plotly_visualize_button = ttk.Button(self.buttons_frames, text=VISUALIZE_PAGE_PLOTLY_BUTTON_TEXT,
+                                                  command=self.spawn_login_creds)
         self.plotly_visualize_button.grid(row=1, column=1, ipady=10, ipadx=15)
-        # ============================================
 
         # 2D Matplotlib Visualize Button
-        self.matplotlib_visualize_button = ttk.Button(self.buttons_frames, text="2D Matplotlib\nVisualize",
-                                                      command=self.Plot_2D)
+        self.matplotlib_visualize_button = ttk.Button(self.buttons_frames, text=VISUALIZE_PAGE_MATPLOTLIB_BUTTON_TEXT,
+                                                      command=self.plot_2d)
         self.matplotlib_visualize_button.grid(row=2, column=0, ipady=10, ipadx=15, pady=10)
-        # ============================================
 
         # Back Button
-        self.back_button = ttk.Button(self.buttons_frames, text="Back", command=lambda: self.back(controller))
+        self.back_button = ttk.Button(self.buttons_frames, text=VISUALIZE_PAGE_BACK_BUTTON_TEXT,
+                                      command=lambda: self.back(controller))
         self.back_button.grid(row=3, column=0, ipady=10, ipadx=15, pady=10)
-        # ================================
 
         # Exit Button
-        self.exit_button = ttk.Button(self.buttons_frames, text="Exit", command=lambda: sys.exit(0))
+        self.exit_button = ttk.Button(self.buttons_frames, text=VISUALIZE_PAGE_EXIT_BUTTON_TEXT,
+                                      command=lambda: sys.exit(0))
         self.exit_button.grid(row=3, column=1, ipady=10, ipadx=15, pady=10, padx=45)
-        # ================================
 
     @staticmethod
     def defocus(event):
@@ -115,148 +123,119 @@ class GraphVisualizePage(Page):
         self.text_area.delete('1.0', END)
         self.text_area.update()
 
-        controller.show_frame(self.retrieve_frame(controller, 'MainPage'), transform)
+        controller.show_frame(self.retrieve_frame(controller, 'MainPage'), MAIN_WINDOW_DIMENSIONS_STR)
 
     def pajek_visualize(self):
         """ Visualizes the generated graph with the appropriate file format that pajek needs. """
-        from Visualize.Pajek_Visualize import Visualizer
+        from visualize.pajek_visualize import Visualizer
 
         if self.adjacency_type_selected.get() == "":
-            message = "You must choose visualisation via matrix or list generated!"
-            messagebox.showerror('Error!', message)
-
-        elif self.adjacency_type_selected.get() == "Matrix":
+            messagebox.showerror('Error!', VISUALIZE_PAGE_VISUALIZATION_VIA_MATRIX_LIST_ERROR)
+        elif self.adjacency_type_selected.get() == GraphRepresentationType.MATRIX.value:
             if Visualizer.pajek_visualize_matrix():
-                message = "Visualization was successfully completed!"
-                messagebox.showinfo('Success!', message)
+                messagebox.showinfo('Success!', VISUALIZE_PAGE_VISUALIZATION_COMPLETED_SUCCESS)
             else:
-                message = "Visualization failed!\n" \
-                          "Make sure that you have generated a graph."
-                messagebox.showerror("Error", message)
-
-        elif self.adjacency_type_selected.get() == "List":
+                messagebox.showerror("Error", VISUALIZE_PAGE_VISUALIZATION_FAILED_ERROR)
+        elif self.adjacency_type_selected.get() == GraphRepresentationType.LIST.value:
             if Visualizer.pajek_visualize_list():
-                message = "Visualization was successfully completed!"
-                messagebox.showinfo('Success!', message)
+                messagebox.showinfo('Success!', VISUALIZE_PAGE_VISUALIZATION_COMPLETED_SUCCESS)
             else:
-                message = "Visualization failed!\n" \
-                          "Make sure that you have generated a graph."
-                messagebox.showerror("Error", message)
+                messagebox.showerror("Error", VISUALIZE_PAGE_VISUALIZATION_FAILED_ERROR)
 
-    def Spawn_Login_Creds(self):
-
+    def spawn_login_creds(self):
         if self.adjacency_type_selected.get() == "":
-            message = "You must choose 3D visualisation via matrix or list generated!"
-            messagebox.showerror("Error", message)
-
+            messagebox.showerror("Error", VISUALIZE_PAGE_3D_VISUALIZATION_VIA_MATRIX_LIST_ERROR)
         else:
-            root2 = Toplevel()
-            creds_GUI = LoginCreds(root2)
-            self.master.wait_window(root2)
+            root2 = spawn_top_level([LoginCreds], kwargs={
+                'master': self,
+                'title': "Login",
+                'width': LOGIN_WINDOW_WIDTH,
+                'height': LOGIN_WINDOW_HEIGHT,
+                'bg': MAIN_FRAME_BACKGROUND
+            }, return_top_level=True).frames[LoginCreds]
 
-            if creds_GUI.username_entry_result == "" or creds_GUI.api_key_entry_result == "":
+            if root2.username_entry_result == "" or root2.api_key_entry_result == "":
                 self.text_area.delete('1.0', END)
                 self.text_area.update()
-
-                message1 = "[-] Failed to create 3D Graph with Plotly.\n\n"
-                self.text_area.insert(END, message1)
+                self.text_area.insert(END, VISUALIZE_PAGE_PLOTLY_FAILED_ERROR, 'custom')
                 self.text_area.update()
-
             else:
-                self.plotly_visualize(creds_GUI.username_entry_result, creds_GUI.api_key_entry_result,
-                                      creds_GUI.filename_entry_result)
+                self.plotly_visualize(root2.username_entry_result, root2.api_key_entry_result,
+                                      root2.filename_entry_result)
 
     def plotly_visualize(self, username, api_key, output_filename):
         """ Visualizes the generated graph in 3D form with the appropriate file format that plotly needs. """
 
-        from Visualize.Plotly3D import Plotly3D
+        from visualize.plotly_3d import Plotly3D
         plotly_visualizer = Plotly3D(edges_pixels=5)
         start = time()
 
         self.text_area.delete('1.0', END)
-        message1 = "[+] Please wait while 3D Plotly Graph is being created.\n" \
-                   "This will probably take a moment...\n\n"
-        self.text_area.insert(END, message1)
+        self.text_area.insert(END, VISUALIZE_PAGE_PLOTLY_WAIT_INFO, 'custom')
         self.text_area.update()
 
         try:
             plot_result = False
 
-            if self.adjacency_type_selected.get() == "Matrix":
+            if self.adjacency_type_selected.get() == GraphRepresentationType.MATRIX.value:
                 plot_result = plotly_visualizer.plotly_visualize_matrix(username, api_key, output_filename)
-
-            elif self.adjacency_type_selected.get() == "List":
+            elif self.adjacency_type_selected.get() == GraphRepresentationType.LIST.value:
                 plot_result = plotly_visualizer.plotly_visualize_list(username, api_key, output_filename)
 
             if plot_result is True:
-
                 end_3d = time() - start
-                message2 = "[+] The 3D Plotly Graph was generated successfully!\n\n"
-                self.text_area.insert(END, message2)
-
+                self.text_area.insert(END, VISUALIZE_PAGE_PLOTLY_GRAPH_CREATE_SUCCESS, 'custom')
                 message3 = "[+] Elapsed time: {:>.2f} sec\n".format(end_3d)
-                self.text_area.insert(END, message3)
+                self.text_area.insert(END, message3, 'custom')
                 self.text_area.update()
-
-                self.Spawn_Custom_Popup(plotly_visualizer.link)
-
+                self.spawn_custom_popup(plotly_visualizer.link)
             elif plot_result == "File not found":
-
                 self.text_area.delete('1.0', END)
-
-                message = "3D Visualization failed!\n" \
-                          "Make sure that you have generated a graph."
-                messagebox.showerror("Error", message)
-
+                messagebox.showerror("Error", VISUALIZE_PAGE_PLOTLY_FAILED_NO_GRAPH_GENERATED_ERROR)
             else:
                 self.text_area.delete('1.0', END)
                 self.text_area.update()
-
-                message1 = "[-] Failed to create 3D Graph with Plotly.\n\n"
-                self.text_area.insert(END, message1)
+                self.text_area.insert(END, VISUALIZE_PAGE_PLOTLY_FAILED_ERROR, 'custom')
                 self.text_area.update()
-
-                self.Spawn_Login_Creds()
-
+                self.spawn_login_creds()
         except TypeError:
             self.text_area.delete('1.0', END)
             self.text_area.update()
-
-            message1 = "[-] Failed to create 3D Graph with Plotly.\n\n"
-            self.text_area.insert(END, message1)
+            self.text_area.insert(END, VISUALIZE_PAGE_PLOTLY_FAILED_ERROR, 'custom')
             self.text_area.update()
 
-    def Plot_2D(self):
-        import Visualize.Plot_2D
-
-        plot = Visualize.Plot_2D.Plot2D()
+    def plot_2d(self):
+        plot = pl2d.Plot2D()
 
         if self.adjacency_type_selected.get() == "":
-            message = "You must choose visualisation via matrix or list generated!"
-            messagebox.showerror('Error!', message)
-
-        elif self.adjacency_type_selected.get() == "Matrix":
+            messagebox.showerror('Error!', VISUALIZE_PAGE_VISUALIZATION_VIA_MATRIX_LIST_ERROR)
+        elif self.adjacency_type_selected.get() == GraphRepresentationType.MATRIX.value:
             if plot.graph_topology_matrix():
                 plot.extract_possibilities()
                 plot.plot_2d("Matrix")
-
             else:
-                message = "Visualization failed!\n" \
-                          "Make sure that you have generated a graph."
-                messagebox.showerror("Error", message)
-
-        elif self.adjacency_type_selected.get() == "List":
+                messagebox.showerror("Error", VISUALIZE_PAGE_VISUALIZATION_FAILED_ERROR)
+        elif self.adjacency_type_selected.get() == GraphRepresentationType.LIST.value:
             if plot.graph_topology_list():
                 plot.extract_possibilities()
                 plot.plot_2d("List")
-
             else:
-                message = "Visualization failed!\n" \
-                          "Make sure that you have generated a graph."
-                messagebox.showerror("Error", message)
+                messagebox.showerror("Error", VISUALIZE_PAGE_VISUALIZATION_FAILED_ERROR)
 
-    def Spawn_Custom_Popup(self, url):
-        root3 = Toplevel()
-        custom_popup = CustomPopUp(root3)
-        custom_popup.plotly_popup(url)
-        self.master.wait_window(root3)
+    def spawn_custom_popup(self, url):
+        return spawn_top_level([CustomPopUp], kwargs={
+            'master': self,
+            'title': "Plotly 3D",
+            'width': LOGIN_WINDOW_WIDTH,
+            'height': LOGIN_WINDOW_HEIGHT,
+            'bg': MAIN_FRAME_BACKGROUND,
+            'frames_kwargs': {
+                CustomPopUp: {
+                    'url': url
+                }
+            }
+        }, return_top_level=True, topmost=True).frames[CustomPopUp]
+
+    def refresh_widget_style(self, style):
+        super(GraphVisualizePage, self).refresh_widget_style(style=style)
+        self.handle_text_widget_style_refresh(text_area=self.text_area, style=style)

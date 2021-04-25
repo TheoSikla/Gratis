@@ -1,0 +1,176 @@
+{
+  "gui": {
+    "menu": {
+        "file_label_text": "File",
+        "file_settings_label_text": "Settings",
+        "file_exit_label_text": "Exit"
+      },
+    "pages": {
+      "main": {
+        "widgets": {
+          "generate_area_button_text": "Generate",
+          "analyze_area_button_text": "Analyze",
+          "visualize_area_button_text":  "Visualize",
+          "history_area_button_text": "History",
+          "exit_button_text":  "Exit"
+        }
+      },
+      "generate": {
+        "widgets": {
+          "main_label_text": "Generate a graph\n",
+          "select_graph_label_text": "Select type of graph:\n",
+          "incremental_growth_text": "Incremental Growth",
+          "preferential_attachment_text": "Preferential Attachment",
+          "number_of_vertices_label_text": "Number of Vertices:",
+          "graph_degree_label_text": "Graph Degree:",
+          "number_of_edges_label_text": "Number of Edges:",
+          "number_of_initial_nodes_label_text": "Number of Initial Nodes:",
+          "initial_connections_per_node_label_text": "Initial Connections per Node:",
+          "probability_label_text": "Probability:",
+          "seed_label_text": "Seed:",
+          "classpath_label_text": "Classpath:",
+          "generate_button_text": "GENERATE",
+          "back_button_text": "BACK",
+          "exit_button_text": "EXIT",
+          "cancel_button_text": "Cancel"
+        },
+        "messages": {
+          "error": {
+            "vertices_non_zero":  "- Number of vertices must be non zero!",
+            "vertices_greater_than_one": "- Number of vertices must be greater than one!",
+            "adjacency_type_select":  "- You must select either adjacency matrix or adjacency list!",
+            "graph_degree_greater_than_zero": "- Graph degree must be greater than 0\n",
+            "incremental_growth_only": "- Incremental growth cannot be solely selected!",
+            "initial_nodes_non_zero":  "- Number of initial nodes must be non zero!",
+            "vertices_initial_nodes_number_equal_one": "- Number of vertices and number of initial node cannot be simultaneously equal to 1.",
+            "vertices_less_than_initial_nodes": "- Number of vertices must not be less than the number of initial nodes.",
+            "scale_free_properties": "- You must either create a Scale-Free graph with preferential attachment or a Scale-Free graph with incremental growth and preferential attachment!",
+            "scale_free_vertices_greater_than_one": "- Number of vertices must be greater than 1 in order\n to generate a Scale-Free Graph.",
+            "probability_greater_than_zero": "- Probability must be greater than 0.0!",
+            "custom_er_edges_greater_than_zero": "- Number of edges must be greater than 0.",
+            "custom_er_invalid_number_of_edges": "[-] Critical error: Cannot have that much edges with this number of nodes.\n",
+            "custom_scale_free_properties": "- You must either create a Custom Scale-Free graph with preferential attachment or a Custom Scale-Free graph with incremental growth and preferential attachment!",
+            "custom_scale_free_vertices_greater_than_one": "- Number of vertices must be greater than 1 in order\nto generate a Custom Scale-Free Graph.",
+            "custom_scale_free_max_number_of_edges_greater_than_zero": "- Number of maximum edges that the graph can have must be greater than 0.",
+            "custom_scale_free_invalid_number_of_edges": "- Cannot have that much edges with this number of Vertices.",
+            "custom_scale_free_initial_connections_per_node_non_zero": "- Number of initial connections per node must be non zero!"
+          },
+          "info": {
+            "graph_creation_cancel_in_progress":  "[+] Terminating graph creation...\n",
+            "graph_creation_cancel_completed": "[!] Graph creation was canceled!\n",
+            "full_scale_free_generate":  "[+] Please wait while Full Scale-Free graph is being generated...\n\n",
+            "custom_full_scale_free_generate": "[+] Please wait while Custom Full Scale-Free graph is being generated...\n\n"
+          },
+          "success": {
+            "graph_creation": "[+] The graph was generated successfully!\n\n"
+          },
+          "warning": {
+            "custom_er_homogeneous": "[!] Warning: You will end up with a Homogeneous graph!\n\n"
+          }
+        }
+      },
+      "analyze": {
+        "widgets": {
+          "main_label_text": "Analyze a graph",
+          "select_file_type_label_text": "Select type of file",
+          "classpath_label_text": "Classpath:",
+          "calculate_metrics_label_text": "Calculate metrics",
+          "geodesic_paths_checkbutton_text": "Geodesic Paths",
+          "closeness_centrality_checkbutton_text": "Closeness Centrality",
+          "betweenness_centrality_checkbutton_text": "Betweenness Centrality",
+          "analyze_button_text": "Analyze",
+          "save_output_button_text": "Save output",
+          "back_button_text": "Back",
+          "exit_button_text": "Exit",
+          "cancel_button_text": "Cancel",
+          "browse_button_fallback_text": "Browse"
+        },
+        "messages": {
+          "error": {
+            "generate_graph": "Please make sure that you have generated a graph!",
+            "analysis_failed": "\n[-] Failed to perform analysis.\n",
+            "no_available_output": "No available output to save!",
+            "either_adjacency_matrix_or_list": "You must choose either adjacency matrix or adjacency list!"
+          },
+          "info": {
+            "calculate_geodesic_paths": "[*] Calculating Geodesic path for each node...\n",
+            "calculate_closeness_centrality": "\n[*] Calculating Closeness Centrality of the graph...\n",
+            "calculate_betweenness_centrality": "\n[*] Calculating Betweenness Centrality of each node...\n",
+            "graph_analysis_cancel_in_progress":  "[+] Terminating graph analysis...\n",
+            "graph_analysis_cancel_completed": "[!] Graph analysis was canceled!\n"
+          },
+          "success": {
+            "calculate_geodesic_paths": "\n[+] Finished Geodesic path analysis.\n",
+            "calculate_closeness_centrality": "\n[+] Finished Closeness Centrality analysis.\n",
+            "calculate_betweenness_centrality": "\n[+] Finished Betweenness Centrality analysis.\n",
+            "last_generated_graph_analysis": "\n[+] Finished last generated graph analysis!\n"
+          },
+          "warning": {}
+        }
+      },
+      "visualize": {
+        "widgets": {
+          "main_label_text": "Visualize a graph\n",
+          "pajek_button_text": "Pajek Visualize",
+          "plotly_button_text": "Plotly 3D Visualize",
+          "matplotlib_button_text": "2D Matplotlib\nVisualize",
+          "back_button_text": "Back",
+          "exit_button_text": "Exit"
+        },
+        "messages": {
+          "error": {
+            "visualization_via_matrix_list": "You must choose visualisation via matrix or list generated!",
+            "3d_visualization_via_matrix_list": "You must choose 3D visualisation via matrix or list generated!",
+            "visualization_failed": "Visualization failed!\nMake sure that you have generated a graph.",
+            "plotly_failed": "[-] Failed to create 3D Graph with Plotly.\n\n",
+            "plotly_failed_no_graph_generated": "3D Visualization failed!\nMake sure that you have generated a graph."
+          },
+          "info": {
+            "plotly_wait": "[+] Please wait while 3D Plotly Graph is being created.\nThis will probably take a moment...\n\n"
+          },
+          "success": {
+            "visualization_completed": "Visualization was successfully completed!",
+            "plotly_graph_create": "[+] The 3D Plotly Graph was generated successfully!\n\n"
+          },
+          "warning": {}
+        }
+      },
+      "history": {
+        "widgets": {
+          "delete_button_fallback_text": "Delete",
+          "more_button_fallback_text": "More",
+          "less_button_fallback_text": "Less",
+          "back_button_text": "Back"
+        },
+        "messages": {
+          "error": {},
+          "info": {},
+          "success": {},
+          "warning": {}
+        }
+      },
+      "settings": {
+        "widgets": {
+          "themes_tab_text": "Themes",
+          "light_theme_button_text": "Light",
+          "dark_theme_button_text": "Dark"
+        }
+      }
+    }
+  },
+  "cli": {
+    "help": {
+      "version": "Shows the version of the application",
+      "generate": "Indicates that the cli is used for graph creation",
+      "model": "The graph model.\nAvailable models:\n  1. Homogeneous\n  2. Erdos Renyi\n  3. Custom Erdos Renyi\n  4. Random Fixed\n  5. Scale Free\n  6. Custom Scale Free",
+      "graph_representation": "The graph representation.\nAvailable representations:\n  1. Adjacency Matrix\n  2. Adjacency List",
+      "number_of_vertices": "The number of vertices that the graph will have",
+      "number_of_edges": "Total number of edges that the graph will have",
+      "number_of_initial_nodes": "The number of initial nodes that the graph will have",
+      "graph_degree": "The maximum number of edges that a node can have",
+      "initial_connections_per_node": "The number of initial connections that each initial node will have",
+      "probability": "The probability of creating an edge between two nodes",
+      "seed": "The number of pseudo-randomness"
+    }
+  }
+}
