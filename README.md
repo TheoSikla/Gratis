@@ -53,7 +53,7 @@ Graph creation examples:
   - `python app.py -g -m 6 -nov 10 -noin 3 -icpn 2 -s 7`
 
 The default graph representation is as an Adjacency Matrix. This can be changed by using the `-gr` flag
-which stands for `graph representation` e.g.:
+which stands for `graph representation` e.g.:  
 `python app.py -g -m 3 -nov 10 -p 0.5 -noe 12 -s 7 -gr 2`
 
 Available graph representations:
@@ -63,7 +63,7 @@ Available graph representations:
 | Adjacency Matrix | 1  |
 | Adjacency List   | 2  |
 
-Note: The `python app.py` should be replaced by the corresponding gratis executable/binary file e.g.:
+Note: The `python app.py` should be replaced by the corresponding gratis executable/binary file e.g.:  
 `./gratis -g -m 3 -nov 10 -p 0.5 -noe 12 -s 7`
 
 ### Development setup
@@ -75,7 +75,7 @@ Note: The `python app.py` should be replaced by the corresponding gratis executa
    1. Clone or download zip and extract the project.
    2. `cd Gratis/`
    3. `sudo ./install-dependencies.sh`
-   4. `python3 App.py`
+   4. `python3 app.py`
    
    2.2. Windows systems:
     1. Download and install python3 and above from [https://www.python.org/](https://www.python.org/) (python3.6 is the safe choice)  
@@ -84,7 +84,7 @@ Note: The `python app.py` should be replaced by the corresponding gratis executa
     4. Clone or download zip and extract the project.  
     5. `cd Gratis\`  
     6. `python -m pip install -r requirements.txt`  
-    7. `python App.py`  
+    7. `python app.py`  
 
 3. To install and run through pipenv:
    1. Download and install python3 or above.
@@ -92,6 +92,4 @@ Note: The `python app.py` should be replaced by the corresponding gratis executa
    3. `cd Gratis`
    4. `pipenv install`
    5. `pipenv shell`
-   6. `python App.py`
-
-* Note: For a stable version of the tool work with the master branch.
+   6. `python app.py`
