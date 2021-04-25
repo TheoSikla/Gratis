@@ -105,7 +105,6 @@ class App(Tk):
         file_menu.master = menu
         self.config(menu=menu)
         menu.add_cascade(label=FILE_LABEL_TEXT, menu=file_menu)
-        menu.add_command(label='')
 
         # Main container for Frames
         container = ttk.Frame(self)
